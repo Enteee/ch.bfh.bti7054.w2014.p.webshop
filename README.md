@@ -50,7 +50,7 @@ We're selling source code on our webshop. People can upload source code and othe
 
 | Id | Primary actor | Description | Precondition | Postcondition | Flow |
 | -- | ------------- | ----------- | ------------ | ------------- | ---- |
-| 1  | 1             |   1         | 1            | 1             |  1   |
+| 1  | 1             | 1           | 1            | 1             | 1    |
 
 
 | First Header  | Second Header |

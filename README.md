@@ -72,11 +72,11 @@ Intention:      Marc want's to sell source code
 Preconditions:  Marc has a account
 Postconditions: Source code of marc is ready for purchase
 
-1. Tommy logs in
-2. Tommy goes to 'his codes' page
-3. Tommy uploads a project
-4. Tommy adds information. Description, language, version
-5. Tommy adds tags
-6. Tommy publishes source code
+1. Marc logs in
+2. Marc goes to 'his codes' page
+3. Marc uploads a project
+4. Marc adds information. Description, language, version
+5. Marc adds tags
+6. Marc publishes source code
 
 ### Requirements

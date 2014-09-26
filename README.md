@@ -1,4 +1,5 @@
 # ch.bfh.bti7054.w2014.p.webshop
+---
 
 ## Task 1.1
 
@@ -6,7 +7,6 @@
 Source code
 
 ### Idea
----
 We're selling source code on our webshop. People can upload source code and other people can buy source code from them. The basis for trading is a virtual currency which is only valid on our page.
 
 ### Categories
@@ -27,7 +27,7 @@ We're selling source code on our webshop. People can upload source code and othe
 - Hello world
 - Bubble sort
 - Quick sort
-...
+- ...
 
 ### Target users
 - Tommy
@@ -73,10 +73,29 @@ Preconditions:  Marc has a account
 Postconditions: Source code of marc is ready for purchase
 
 1. Marc logs in
-2. Marc goes to 'his codes' page
+2. Marc goes to 'my code'-page
 3. Marc uploads a project
 4. Marc adds information. Description, language, version
 5. Marc adds tags
 6. Marc publishes source code
 
 ### Requirements
+
+UC1
+
+1. Login form
+3. Text search input
+4. Search results page
+5. Expand result
+6. Shopping basket
+7. Checkout page
+8. 'my code'-page
+
+UC2
+
+1. Project upload
+2. Project information add page
+3. Project tagging
+4. Project publishing
+
+### Design princibles

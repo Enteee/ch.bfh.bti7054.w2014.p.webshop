@@ -53,6 +53,7 @@ Intention:      Tommy want's to buy source code
 Preconditions:  Tommy has virtual money 
 Postconditions: Tommy gets source code as archive 
 Flow:
+
 1. Tommy logs in 
 2. Tommy enters a search text in the search field 
 3. Tommy gets a list of search results 

@@ -50,9 +50,8 @@ We're selling source code on our webshop. People can upload source code and othe
 UC1
 Actors:         Tommy, Shop
 Intention:      Tommy want's to buy source code
-Preconditions:  Tommy has virtual money 
-Postconditions: Tommy gets source code as archive 
-Flow:
+Preconditions:  Tommy has virtual money
+Postconditions: Tommy gets source code as archive
 
 1. Tommy logs in 
 2. Tommy enters a search text in the search field 
@@ -70,7 +69,7 @@ Flow:
 UC2
 Actors:         Marc, Shop
 Intention:      Marc want's to sell source code
-Preconditions:  Marc has a account 
+Preconditions:  Marc has a account
 Postconditions: Source code of marc is ready for purchase
 
 1. Tommy logs in

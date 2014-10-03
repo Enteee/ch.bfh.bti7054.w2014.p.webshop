@@ -99,3 +99,24 @@ UC2
 4. Project publishing
 
 ### Design princibles
+
+
+## Task 2.1
+
+Name: CodeShop
+Address: codeshop.com
+
+Site map:
+
+- item overview
+  - my code
+  - search results
+  - special offers
+  - shopping cart
+- profile, load credits
+- add code
+- contact/agb
+
+
+## Taks 2.2
+

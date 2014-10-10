@@ -4,7 +4,7 @@
 *   ducksource@duckpond.ch
 *   Version:1.0
 *
-*   a sample page
+*   a sample page. use this as template
 *   Require:
 *       - Requirement
 *

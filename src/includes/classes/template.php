@@ -74,7 +74,8 @@ class Template{
         return htmlentities($string,ENT_QUOTES);
     }
 
-    function render(){ // render the template
+    // render the template
+    function render(){
         //first include doctype
         $this->inc->doinclude($this->doctype);
         // now include the template

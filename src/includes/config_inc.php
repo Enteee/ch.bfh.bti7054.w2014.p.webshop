@@ -21,7 +21,7 @@
 *   !!Wo0t!!
 */
 
-//General configuration
+/*General configuration*/
 $config['title'] = 'CodeShop';                          // The pagetitel
 $config['subtitle'] = 'never code again';               // The subtitel
 $config['logo'] = 'layout/img/logo.png';                // The logo
@@ -29,24 +29,24 @@ $config['author'] = 'winki,dbigler,ente';               // The authors
 $config['page_url'] = 'http://www.codeshop.ch';         // the url to the page
 $config['mail'] = 'ducksource@duckpond.ch';             // admin email
 
-// DEFINES
+/*DEFINES*/
 $config['debug'] = TRUE;                                // Debug mode?
 $config['timezone'] = 'Europe/Zurich';                  // The Server Timezone
 
-//Database access
+/*Database access*/
 $config['db_host'] = 'localhost';
 $config['db_user'] = 'webshop';
 $config['db_password'] = 'gggggg';
 $config['db_database'] = 'duckpond_webshop';
 
-//Paths for includes
+/*Paths for includes*/
 $config['includes'][] = './';
 $config['includes'][] = 'includes/';
 $config['includes'][] = 'includes/classes/';
 $config['includes'][] = 'includes/javascript/';
 $config['includes'][] = 'layout/includes/';
 
-//Special includes
+/*Special includes*/
 $config['css'][] = 'layout/css/reset.css';              // reset css
 $config['css'][] = 'layout/css/fonts.css';              // fints css
 $config['css'][] = 'layout/css/layout.css';             // layouting css
@@ -57,4 +57,7 @@ $config['scriptinc'] = 'script_inc.php';                // where is the script i
 $config['defaultjs'][] = 'utils.js';                    // wait until page load then do some basic js..
 $config['defaultjs'][] = 'dojs.js';                     // wait until page load then do some basic js..
 $config['defaultjs'][] = 'read_meta.js';                // read metadata of page
+
+/*PHP modules*/
+$config['modules'][] = 'pdo_mysql';                  // the pdo mysql module
 ?>

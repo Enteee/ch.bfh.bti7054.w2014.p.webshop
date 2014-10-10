@@ -24,26 +24,50 @@
 /*Include configuration file*/
 require_once('includes/config_inc.php');
 
+/*Debug settings*/
+if($config['debug']){
+    ini_set('implicit_flush',1);            // flush stdout after each "echo"
+    ini_set('display_errors',1);            // show errors
+    ini_set('display_startup_errors',1);    // show starup errors
+    error_reporting(-1);                    // be verbose as fuck: http://php.net/manual/de/errorfunc.constants.php
+}
+
+/*Load needed php modules*/
+foreach($config['modules'] as $module){
+    if (!extension_loaded($module)){
+        if(function_exists('dl')){
+            if (!dl($module)){
+                print('[Error] : Module loading failed');
+                exit;
+            }
+        }else{
+            // this happens with PHP > 5.3
+            print('[Error] : Can not load module (dl missing)');
+            exit;
+        }
+    }
+}
+
 /*Setup include handler*/
 require_once('includes/include_handler_inc.php');
 $inc = new Include_handler($config['includes']);
 
-/*do includes*/
+/*Do includes*/
 $inc->dorequire('savevars.php');        // save variable layer
-//$inc->dorequire('db.php');              // database handler
+$inc->dorequire('db.php');              // database handler
 $inc->dorequire('template.php');        // the template system
 
-/*Setup SaveVar environment (No direct access to superglobals)*/
+/*Set up SaveVar environment (No direct access to superglobals)*/
 $save = new SaveVars();
 
-/*setup database connection*/
+/*Set up database connection*/
 //$db = new DB(DB::DRIVER_MYSQL,
 //                $config['db_host'],
 //                $config['db_user'],
 //                $config['db_password'],
 //                $config['db_database']);
 
-/*setup the template system*/
+/*Set up template system*/
 $page = new Template($inc,$config['doctype'],
                         array( 
                             'title' => $config['title'],
@@ -73,7 +97,7 @@ switch($action){
     break;
 }
 
-/* render the page initialized */
+/* Render the page initialized */
 $page->render();
 
 ?>

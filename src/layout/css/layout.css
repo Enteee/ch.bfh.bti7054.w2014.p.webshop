@@ -1,0 +1,24 @@
+.clear {
+    clear: both;
+}
+
+div  {border: 1px solid #000000;}
+
+
+div#header {height: 200px;}
+
+    div#logo {float:left;}
+    div#account {float: right;}
+
+div#navigation {height: 200px;}
+    div#buttons {float: left;}
+
+    div#search {float: right;}
+    
+div#categories {float: left; height:200px;}
+    
+div#main {}
+
+
+
+div#footer {}

@@ -21,10 +21,10 @@
 *   !!Wo0t!!
 */
 
-/*Include configuration file*/
+/* Include configuration file */
 require_once('includes/config_inc.php');
 
-/*Debug settings*/
+/* Debug settings */
 if($config['debug']){
     ini_set('implicit_flush',1);            // flush stdout after each "echo"
     ini_set('display_errors',1);            // show errors
@@ -32,7 +32,7 @@ if($config['debug']){
     error_reporting(-1);                    // be verbose as fuck: http://php.net/manual/de/errorfunc.constants.php
 }
 
-/*Load needed php modules*/
+/* Load needed php modules */
 foreach($config['modules'] as $module){
     if (!extension_loaded($module)){
         if(function_exists('dl')){
@@ -48,26 +48,26 @@ foreach($config['modules'] as $module){
     }
 }
 
-/*Setup include handler*/
+/* Setup include handler */
 require_once('includes/include_handler_inc.php');
 $inc = new Include_handler($config['includes']);
 
-/*Do includes*/
+/* Do includes */
 $inc->dorequire('savevars.php');        // save variable layer
 $inc->dorequire('db.php');              // database handler
 $inc->dorequire('template.php');        // the template system
 
-/*Set up SaveVar environment (No direct access to superglobals)*/
+/* Set up SaveVar environment (No direct access to superglobals) */
 $save = new SaveVars();
 
-/*Set up database connection*/
+/* Set up database connection */
 //$db = new DB(DB::DRIVER_MYSQL,
 //                $config['db_host'],
 //                $config['db_user'],
 //                $config['db_password'],
 //                $config['db_database']);
 
-/*Set up template system*/
+/* Set up template system */
 $page = new Template($inc,$config['doctype'],
                         array( 
                             'title' => $config['title'],
@@ -81,7 +81,7 @@ $page = new Template($inc,$config['doctype'],
                             'jincludes' => $config['defaultjs']
                         ));
 
-/*Select the page*/
+/* Select the page */
 $action='';
 if($save->save_global('action',SaveVars::T_STRING,SaveVars::G_GET)){
     $action = $save->action;

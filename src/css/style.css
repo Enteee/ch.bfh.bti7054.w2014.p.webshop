@@ -1,0 +1,95 @@
+/* ---------- global ---------- */
+
+/* body */
+body {
+	background: #fff;
+}
+
+/* fonts */
+html, body, div, span, input, table {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 1em;
+	color: #222;
+}
+html {
+	font-size: 16px;
+}
+
+/* headers */
+h1, h2, h3, h4, h5, h6 {
+	color: #ff3500;
+}
+h1 {
+	font-size: 2em;
+}
+h2 {
+	font-size: 1.6em;
+}
+h3 {
+	font-size: 1.2em;
+}
+h4 {
+	font-size: 1em;
+}
+h5 {
+	font-size: 0.9em;
+}
+h6 {
+	font-size: 0.8em;
+}
+/* links */
+a {
+	text-decoration: none;
+	color: #ff3500;
+}
+a:hover {
+	text-decoration: underline;
+}
+
+/* forms */
+input[type=text] {
+	padding: 2px;
+	border: 1px solid #bbb;
+	font-size: 0.6em;
+}
+
+/* ---------- specific elements ---------- */
+
+/* header */
+#header {
+	
+}
+
+/* navigation */
+#navigation {
+	background: #eee;
+}
+
+/* categories */
+#categories ul {
+
+}
+#categories ul li {
+	display: block;
+	background: #eee;
+	border-bottom: 1px solid #fff;
+	font-size: 0.9em;
+}
+#categories ul li:hover {
+}
+#categories a {
+	display: block;
+	padding: 3px;
+	color: #999;
+}
+#categories a:hover {
+	color: #000;
+	text-decoration: none;
+}
+
+
+/* footer */
+#footer {
+	background: #eee;
+}
+

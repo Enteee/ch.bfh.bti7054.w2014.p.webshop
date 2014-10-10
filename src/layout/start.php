@@ -17,7 +17,7 @@
             </ul>
         </div>
         <div id="search">
-            <input type="text"></input>
+            <input type="text"/>
         </div>
         <div class="clear"></div>
     </div>
@@ -70,12 +70,12 @@
                 <select>
                     <option>alpha</option>
                     <option>1.0</option>
-                    <option>1.1</option>                    
+                    <option>1.1</option>
                 </select>
                 Comments:
-                <input type="checkbox" checked="checked"></input>
+                <input type="checkbox" checked="checked"/>
                 Support:
-                <input type="checkbox"></input>             
+                <input type="checkbox"/>
             </div>
         </div>
     </div>

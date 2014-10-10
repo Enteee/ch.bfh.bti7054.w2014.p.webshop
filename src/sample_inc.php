@@ -4,7 +4,7 @@
 *   ducksource@duckpond.ch
 *   Version:1.0
 *
-*   sample include subfile
+*   a sample page
 *   Require:
 *       - Requirement
 *
@@ -26,14 +26,16 @@ if(!defined('INCLUDED')){
     exit('Go away!');
 }
 
-// do PHP stuff
+/* Do fancy PHP shizzle */
 
-
-// initialize page template variables
-$this->page->init(  'layout/holdit.php',array(    'title' => $this->page->var_get('title').'- HoldIt',
-                        'status' => $new_hold['status'],
-                        'message' => $new_hold['message'],
-                        'access_id' => $new_hold['access_id']));
-// render the page
-$this->page->render();
+/* Initialize template */
+$this->page->init('layout/sample_page.php',
+                    /* tempalte variables, used for rendering */
+                    array(
+                        'title' => $this->page->var_get('title').' - sample_page',
+                    ),
+                    /* metadata variables, used in <meta> */
+                    array(
+                        'sample' => 'sample metadata'
+                    ));
 ?>

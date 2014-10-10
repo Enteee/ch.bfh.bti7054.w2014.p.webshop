@@ -6,7 +6,6 @@
 *
 *   Template class for proper html / php separation
 *   Require:
-*       -
 *
 *   Licence:
 *   You're allowed to edit and publish my source in all of your free and open-source projects.

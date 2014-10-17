@@ -1,5 +1,5 @@
 .clear {
-	clear: both;
+    clear: both;
 }
 
 body {
@@ -12,9 +12,10 @@ body {
 
 div#header {}
 
-	div#logo {float:left;}
-	div#account {float: right;}
+    div#logo {float:left;}
+    div#account {float: right;}
 
+<<<<<<< HEAD:src/css/layout.css
 div#navigation {}
 	div#buttons {float: left;}
 
@@ -29,6 +30,16 @@ div#navigation {}
 div#categories {float: left; width: 15%;}
 	
 div#main {float: right; width: 83%;}
+=======
+div#navigation {height: 200px;}
+    div#buttons {float: left;}
+
+    div#search {float: right;}
+    
+div#categories {float: left; height:200px;}
+    
+div#main {}
+>>>>>>> origin/master:src/layout/css/layout.css
 
 
 

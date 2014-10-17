@@ -4,16 +4,19 @@
 /* body */
 body {
 	background: #fff;
+	margin-top: 15px;
 }
 
 /* fonts */
 html, body, div, span, input, table {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 1em;
+	line-height: 1em;
 	color: #222;
 }
 html {
 	font-size: 16px;
+	line-height: 20px;
 }
 
 /* headers */
@@ -22,21 +25,27 @@ h1, h2, h3, h4, h5, h6 {
 }
 h1 {
 	font-size: 2em;
+	line-height: 2em;
 }
 h2 {
 	font-size: 1.6em;
+	line-height: 1.6em;
 }
 h3 {
 	font-size: 1.2em;
+	line-height: 1.2em;
 }
 h4 {
 	font-size: 1em;
+	line-height: 1em;
 }
 h5 {
 	font-size: 0.9em;
+	line-height: 0.9em;
 }
 h6 {
 	font-size: 0.8em;
+	line-height: 0.8em;
 }
 /* links */
 a {
@@ -149,7 +158,7 @@ a.button.down {
 input[type=text] {
 	padding: 2px;
 	border: 1px solid #bbb;
-	font-size: 0.6em;
+	font-size: 0.8em;
 }
 
 /* utils */
@@ -167,7 +176,15 @@ input[type=text] {
 /* navigation */
 #navigation {
 	background: #eee;
+	padding: 5px;
 }
+#navigation ul li {
+}
+#navigation ul li a {
+	background: #fff;
+	border-right: 1px solid #eee;
+}
+
 
 /* categories */
 #categories ul {

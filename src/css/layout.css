@@ -2,22 +2,33 @@
 	clear: both;
 }
 
-div  {border: 1px solid #000000;}
+body {
+	width: 90%;
+	margin: auto;
+}
+
+/*div  {border: 1px dotted #ccc;}*/
 
 
-div#header {height: 200px;}
+div#header {}
 
 	div#logo {float:left;}
 	div#account {float: right;}
 
-div#navigation {height: 200px;}
+div#navigation {}
 	div#buttons {float: left;}
 
 	div#search {float: right;}
 	
-div#categories {float: left; height:200px;}
+	div#navigation ul li {
+		display: block;
+		float: left;
+		list-style: none;
+	}
+
+div#categories {float: left; width: 15%;}
 	
-div#main {}
+div#main {float: right; width: 83%;}
 
 
 

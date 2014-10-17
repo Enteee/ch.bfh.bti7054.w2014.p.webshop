@@ -15,7 +15,7 @@
 *   Warranty:
 *       Warranty void if signet is broken
 *   ================== / /===================
-*   [   Waranty       / /   Signet          ]
+*   [   Waranty   / /   Signet      ]
 *   =================/ /=====================   
 *   !!Wo0t!!
 */

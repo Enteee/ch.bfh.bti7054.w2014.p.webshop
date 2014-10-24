@@ -56,6 +56,11 @@ $inc = new Include_handler($config['includes']);
 $inc->dorequire('savevars.php');        // save variable layer
 $inc->dorequire('db.php');              // database handler
 $inc->dorequire('template.php');        // the template system
+$inc->dorequire('language.php');        // the language handler
+
+/* Create language object */
+$langCode = $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+$lang = new Language($langCode);
 
 /* Set up SaveVar environment (No direct access to superglobals) */
 $save = new SaveVars();
@@ -70,8 +75,8 @@ $save = new SaveVars();
 /* Set up template system */
 $page = new Template($inc,$config['doctype'],
                         array( 
-                            'title' => $config['title'],
-                            'subtitle' => $config['subtitle'],
+                            'title' => $lang->title,
+                            'subtitle' => $lang->subtitle,
                             'logo' => $config['logo'],
                             'author' => $config['author'], 
                             'mail' => $config['mail'],
@@ -80,7 +85,7 @@ $page = new Template($inc,$config['doctype'],
                             'scriptinc' => $config['scriptinc'],
                             'jincludes' => $config['defaultjs']
                         ));
-
+								
 /* Select the page */
 $action='';
 if($save->save_global('action',SaveVars::T_STRING,SaveVars::G_GET)){

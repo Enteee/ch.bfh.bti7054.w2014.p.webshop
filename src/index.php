@@ -92,6 +92,9 @@ switch($action){
     case 'start':
         $inc->dorequire('start_inc.php');
     break;
+    case 'layout':
+        $inc->dorequire('layout_inc.php');
+    break;
     case 'sample':
         $inc->dorequire('sample_inc.php');
     break;

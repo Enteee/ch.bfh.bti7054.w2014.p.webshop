@@ -1,12 +1,11 @@
 <?php
-/*  start_inc.php
+/*  language.php
 *   Mischa Lehmann
 *   ducksource@duckpond.ch
 *   Version:1.0
 *
-*   start page
+*   Language selector
 *   Require:
-*       - Requirement
 *
 *
 *   Licence:
@@ -18,20 +17,20 @@
 *       Warranty void if signet is broken
 *   ================== / /===================
 *   [   Waranty       / /   Signet          ]
-*   =================/ /=====================   
+*   =================/ /=====================
 *   !!Wo0t!!
 */
 
-if(!defined('INCLUDED')){
-    exit('Go away!');
+class Language{
+    const L_DE = 0;
+    const L_EN = 1;
+
+    function __construct($inc,$language){
+        if(isset($language)){
+            
+        }
+    }
+
 }
 
-
-/* Initialize template */
-$this->page->init('layout/start.php',
-                array( 
-                    'template_var' => 'a VArIABLE',
-                ),
-                array(
-                ));
 ?>

@@ -26,11 +26,30 @@ if(!defined('INCLUDED')){
     exit('Go away!');
 }
 
+/* Load relevant GET's */
+$searchstring = NULL;
+if($this->save->save_global('searchstring',SaveVars::T_STRING,SaveVars::G_GET)){
+    $searchstring = $this->save->searchstring;
+}
+$category_id = NULL;
+if($this->save->save_global('category_id',SaveVars::T_STRING,SaveVars::G_GET)){
+    $category_id = $this->save->category_id;
+}
+
+/* Load data */
+$categories = $this->repos->get_all_categories();
+$products = array();
+if(isset($category_id)){
+    $products = $this->repos->get_products_by_category($category_id,$searchstring);
+}else{
+    $products = $this->repos->get_products($searchstring);
+}
 
 /* Initialize template */
 $this->page->init('layout/start.php',
                 array( 
-                    'template_var' => 'a VArIABLE',
+                    'categories' => $categories,
+                    'products' => $products,
                 ),
                 array(
                 ));

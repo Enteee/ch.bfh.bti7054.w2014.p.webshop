@@ -6,15 +6,11 @@
         <meta name="contact" content="<?php echo $this->mail;?>" />
         <!-- Stylesheet -->
         <meta http-equiv="content-style-type" content="text/css" />
-<?php   foreach($this->css as $css){ ?>
+<?php   foreach($this->css as $css): ?>
         <link rel="stylesheet" type="text/css" href="<?php echo $css;?>" />
-<?php
-    }
-?>
+<?php   endforeach; ?>
         <!-- Additional metadata -->
-<?php   foreach($this->metadata as $key => $val){ ?>
+<?php   foreach($this->metadata as $key => $val): ?>
         <meta name="<?php echo $key;?>" content="<?php echo $val;?>" /> 
-<?php
-    }
-?>
+<?php   endforeach; ?>
     </head>

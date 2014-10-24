@@ -56,6 +56,7 @@ $inc = new Include_handler($config['includes']);
 $inc->dorequire('savevars.php');        // save variable layer
 $inc->dorequire('db.php');              // database handler
 $inc->dorequire('template.php');        // the template system
+$inc->dorequire('repository.php');      // the repository
 
 /* Set up SaveVar environment (No direct access to superglobals) */
 $save = new SaveVars();
@@ -66,6 +67,8 @@ $save = new SaveVars();
 //                $config['db_user'],
 //                $config['db_password'],
 //                $config['db_database']);
+
+/* Set up repository */
 
 /* Set up template system */
 $page = new Template($inc,$config['doctype'],

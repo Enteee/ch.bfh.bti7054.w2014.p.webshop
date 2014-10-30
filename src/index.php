@@ -109,6 +109,34 @@ switch($action){
     break;
 }
 
+/* test propel */
+
+/*
+// Include the main Propel script
+require_once './lib/propelorm/runtime/lib/Propel.php';
+
+// Initialize Propel with the runtime configuration
+Propel::init("./conf/propel-codeshop-conf.php");
+
+// Add the generated 'classes' directory to the include path
+set_include_path("./includes/classes/model" . PATH_SEPARATOR . get_include_path());
+
+
+// insert test
+//$product = new Product();
+//$product->setTitle('test');
+//$product->setDescription('test jkfgh lsdkfjgh sdk');
+//$product->save();
+
+// select test
+$products = ProductQuery::create()
+  ->find();
+foreach ($products as $product) {
+  echo $product->getTitle() . '<br />';
+}
+
+*/
+
 /* Render the page initialized */
 $page->render();
 

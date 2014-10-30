@@ -1,0 +1,80 @@
+/* ---------- global ---------- */
+
+/* sticky footer styles */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	/* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+	padding-top: 70px;
+}
+footer {
+	margin: 50px 0;
+}
+
+/* ---------- changes on bootstrap style ---------- */
+
+
+/* ---------- custom definitions ---------- */
+
+.cs-footer {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	/* Set the fixed height of the footer here */
+	height: 60px;
+	background-color: #f5f5f5;
+	margin: 0;
+}
+
+.container .cs-copyright {
+	margin: 20px 0;
+}
+
+.cs-footer > .container {
+	padding-right: 15px;
+	padding-left: 15px;
+}
+
+img.cs-logo {
+	display: inline;
+}
+
+.navbar-brand {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+
+/* navigation text */
+@media (min-width: 0) {
+	.cs-nav-text {
+		display: inline;
+	}
+}
+@media (min-width: 768px) {
+	.cs-nav-text {
+		display: none;
+	}
+}
+@media (min-width: 992px) {
+	.cs-nav-text {
+		display: inline;
+	}
+}
+
+/* product picture */
+.cs-product-picture img {
+	width: 100%;
+}
+.cs-product-picture {
+	padding: 0;
+}
+.cs-product-picture .caption-full {
+	padding: 9px;
+	color: #333;
+}

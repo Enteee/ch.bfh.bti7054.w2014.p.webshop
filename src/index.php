@@ -66,6 +66,7 @@ $lang = new Language($langCode);
 
 /* Set up SaveVar environment (No direct access to superglobals) */
 $save = new SaveVars();
+$GLOBALS['save'] = $save;
 
 /* Set up database connection */
 //$db = new DB(DB::DRIVER_MYSQL,
@@ -89,7 +90,13 @@ $page = new Template($inc,$config['doctype'],
                             'scriptinc' => $config['scriptinc'],
                             'jincludes' => $config['defaultjs']
                         ));
-								
+
+
+/* Set up repository */
+$repos = new Repository($inc);
+$GLOBALS['repos'] = $repos;
+
+
 /* Select the page */
 $action='';
 if($save->save_global('action',SaveVars::T_STRING,SaveVars::G_GET)){

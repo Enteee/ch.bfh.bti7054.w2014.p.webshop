@@ -28,9 +28,11 @@
     
     <div id="categories">
         <ul>
-<?php   foreach($this->categories as $category):?>
-            <li><a href="#"><?php echo $category->get_name()?></a></li>
-<?php   endforeach; ?>
+            <li><a href="#">Snippets</a></li>
+            <li><a href="#">Scripts</a></li>
+            <li><a href="#">Full software</a></li>
+            <li><a href="#">Classes</a></li>
+            <li><a href="#">Frameworks</a></li>
         </ul>
     </div>
     <div id="main">
@@ -61,27 +63,24 @@ sdkjfhsjkfhsjkfhkjh kjh jkh
             <div class="clear">kjhgjhg</div>
             <em>emphasis</em>
         </div>
-<?php   foreach($this->products as $product): ?>
+    
         <div class="item">
-            <div class="name"><?php echo $product->get_name(); ?></div>
+            <div class="name">Name</div>
             <div class="tags">
-<?php       foreach($product->get_tags() as $tag):?> 
-                <a class="button"><?php echo $tag ?></a>
-<?php       endforeach; ?>
+                <a class="button">Tag 1</a><a class="button">Tag 2</a><a class="button">Tag 3</a>
             </div>
-            <div class="description"><?php echo $product->get_description() ?></div>
+            <div class="description">Description</div>
             <div class="options">
                 Language:
                 <select>
-<?php       foreach($product->get_languages() as $language): ?>
-                    <option><?php echo $language ?></option>
-<?php       endforeach;?>
+                    <option>C</option>
+                    <option>Java</option>
                 </select>
                 Version:
                 <select>
-<?php       foreach($product->get_versions() as $version): ?>
-                    <option><?php echo $version ?></option>
-<?php       endforeach;?>
+                    <option>alpha</option>
+                    <option>1.0</option>
+                    <option>1.1</option>                    
                 </select>
                 Comments:
                 <input type="checkbox" checked="checked"></input>
@@ -89,7 +88,6 @@ sdkjfhsjkfhsjkfhkjh kjh jkh
                 <input type="checkbox"></input>             
             </div>
         </div>
-<?php   endforeach; ?>
     </div>
     
     <div class="clear"></div>

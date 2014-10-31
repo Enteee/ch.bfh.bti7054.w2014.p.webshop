@@ -15,4 +15,8 @@
  */
 class Category extends BaseCategory
 {
+	public function getProductsCount() {
+		$repo = new Repository();
+		return $repo->get_product_count_by_category($this->getId());
+	}
 }

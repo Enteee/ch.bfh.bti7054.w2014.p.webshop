@@ -38,6 +38,7 @@ if($this->save->save_global('category_id',SaveVars::T_STRING,SaveVars::G_GET)){
 
 /* Load data */
 $categories = $this->repos->get_all_categories();
+
 $products = array();
 if(isset($category_id)){
     $products = $this->repos->get_products_by_category($category_id,$searchstring);

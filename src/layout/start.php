@@ -74,12 +74,12 @@
                                 <span class="badge">123</span>
                                 Active category TEST
                             </a>
-<?php   foreach($this->categories as $category):?>
+<?php   							foreach($this->categories as $category):?>
                             <a href="#" class="list-group-item">
-                                <span class="badge"><?php echo $category->get_products_count(); ?></span>
-                                <?php echo $category->get_name(); ?>
+                                <span class="badge"><?php echo $category->getProductsCount(); ?></span>
+                                <?php echo $category->getTitle(); ?>
                             </a>
-<?php   endforeach; ?>
+<?php   							endforeach; ?>
                         </div>
                     </nav>
                 </div>
@@ -90,8 +90,8 @@
                     <div class="list-group">
 <?php                   foreach($this->products as $product): ?>
                         <div href="#" class="list-group-item">
-                            <h4 class="list-group-item-heading"><?php echo $product->get_name(); ?></h4>
-                            <p class="list-group-item-text"><?php echo $product->get_description(); ?></p>
+                            <h4 class="list-group-item-heading"><?php echo $product->getTitle(); ?></h4>
+                            <p class="list-group-item-text"><?php echo $product->getDescription(); ?></p>
                         </div>
 <?php                   endforeach; ?>
                     </div>
@@ -101,9 +101,9 @@
                         <img class="img-responsive" src="http://soniqdesigns.com/wp/wp-content/uploads/2013/05/MarkupCode.gif" alt="">
                         <div class="caption-full">
                             <h4 class="pull-right">$24.99</h4>
-                            <h4><a href="#"><?php echo $product->get_name(); ?></a></h4>
+                            <h4><a href="#"><?php echo $product->getTitle(); ?></a></h4>
                             <div class="labels">
-<?php                       foreach($product->get_tags() as $tag):?> 
+<?php                       foreach($product->getTags() as $tag):?> 
                                 <span class="label label-default"><?php echo $tag; ?></span>
 <?php                       endforeach; ?>
                             </div>

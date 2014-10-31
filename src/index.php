@@ -118,12 +118,14 @@ switch($action){
 //$product->setDescription('test jkfgh lsdkfjgh sdk');
 //$product->save();
 
+/*
 // select test
 $products = ProductQuery::create()
   ->find();
 foreach ($products as $product) {
   echo $product->getTitle() . '<br />';
 }
+*/
 
 /* Render the page initialized */
 $page->render();

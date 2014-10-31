@@ -129,11 +129,12 @@ Propel::init("./conf/propel-codeshop-conf.php");
 set_include_path("./includes/classes/model" . PATH_SEPARATOR . get_include_path());
 
 
+
 // insert test
-//$product = new Product();
-//$product->setTitle('test');
-//$product->setDescription('test jkfgh lsdkfjgh sdk');
-//$product->save();
+$product = new Product();
+$product->setTitle('test');
+$product->setDescription('test jkfgh lsdkfjgh sdk');
+$product->save();
 
 // select test
 $products = ProductQuery::create()
@@ -141,8 +142,8 @@ $products = ProductQuery::create()
 foreach ($products as $product) {
   echo $product->getTitle() . '<br />';
 }
-
 */
+
 
 /* Render the page initialized */
 $page->render();

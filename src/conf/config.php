@@ -33,18 +33,18 @@ $config['mail'] = 'ducksource@duckpond.ch';             // admin email
 $config['debug'] = TRUE;                                // Debug mode?
 $config['timezone'] = 'Europe/Zurich';                  // The Server Timezone
 
-/*Database access*/
-$config['db_host'] = 'localhost';
-$config['db_user'] = 'webshop';
-$config['db_password'] = 'gggggg';
-$config['db_database'] = 'duckpond_webshop';
+/*Propel conf*/
+$config['propel_conf'] = './conf/propel-codeshop-conf.php';
 
 /*Paths for includes*/
 $config['includes'][] = './';
+$config['includes'][] = 'conf/';
+$config['includes'][] = 'lib/propelorm/runtime/lib/';
 $config['includes'][] = 'includes/';
 $config['includes'][] = 'includes/classes/';
 $config['includes'][] = 'includes/classes/model/';
 $config['includes'][] = 'includes/classes/model/om/';
+$config['includes'][] = 'includes/classes/model/map/';
 $config['includes'][] = 'includes/classes/model/map/';
 $config['includes'][] = 'includes/javascript/';
 $config['includes'][] = 'layout/includes/';

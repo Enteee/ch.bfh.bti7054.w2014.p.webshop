@@ -54,6 +54,12 @@ class Include_handler{
         }
     }
 
+    // autoloader
+    static function autoload($class_name) {
+        global $inc;
+        $inc->dorequire($class_name . '.php');
+    }
+
     // set variables of a page
     function set_vars($page,$vars = array()){
         if ( $page !== "" 

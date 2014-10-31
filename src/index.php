@@ -51,18 +51,15 @@ foreach($config['modules'] as $module){
 /* Setup include handler */
 require_once('includes/include_handler_inc.php');
 $inc = new Include_handler($config['includes']);
-
-/* Do includes */
-$inc->dorequire('savevars.php');        // save variable layer
-$inc->dorequire('db.php');              // database handler
-$inc->dorequire('template.php');        // the template system
-$inc->dorequire('repository.php');      // the repository
-$inc->dorequire('language.php');        // the language handler
+// and configure autoload for classes
+function __autoload($class_name) {
+    global $inc;
+    $inc->dorequire($class_name . '.php');
+}
 
 /* Create language object */
 $langCode = $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
 $lang = new Language($langCode);
-
 
 /* Set up SaveVar environment (No direct access to superglobals) */
 $save = new SaveVars();

@@ -11,7 +11,7 @@ $conf = array (
       array (
         'dsn' => 'mysql:host=localhost;dbname=codeshop',
         'user' => 'codeshop',
-        'password' => 'codeshop',
+        'password' => 'gggggg',
       ),
     ),
     'default' => 'codeshop',

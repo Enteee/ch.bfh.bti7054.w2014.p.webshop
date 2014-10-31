@@ -32,7 +32,7 @@
  * @method array findByTitle(string $title) Return Product objects filtered by the title column
  * @method array findByDescription(string $description) Return Product objects filtered by the description column
  *
- * @package    propel.generator.codeshop.om
+ * @package    propel.generator./includes/classes/model.om
  */
 abstract class BaseProductQuery extends ModelCriteria
 {
@@ -399,6 +399,23 @@ abstract class BaseProductQuery extends ModelCriteria
         return $this
             ->joinProductCategory($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'ProductCategory', 'ProductCategoryQuery');
+    }
+
+    /**
+     * Filter the query by a related Category object
+     * using the product_category table as cross reference
+     *
+     * @param   Category $category the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   ProductQuery The current query, for fluid interface
+     */
+    public function filterByCategory($category, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useProductCategoryQuery()
+            ->filterByCategory($category, $comparison)
+            ->endUse();
     }
 
     /**

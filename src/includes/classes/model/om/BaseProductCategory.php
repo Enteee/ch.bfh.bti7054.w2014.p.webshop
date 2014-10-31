@@ -6,7 +6,7 @@
  *
  *
  *
- * @package    propel.generator.codeshop.om
+ * @package    propel.generator./includes/classes/model.om
  */
 abstract class BaseProductCategory extends BaseObject implements Persistent
 {

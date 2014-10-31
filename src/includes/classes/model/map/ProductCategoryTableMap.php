@@ -12,7 +12,7 @@
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
  *
- * @package    propel.generator.codeshop.map
+ * @package    propel.generator./includes/classes/model.map
  */
 class ProductCategoryTableMap extends TableMap
 {
@@ -20,7 +20,7 @@ class ProductCategoryTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'codeshop.map.ProductCategoryTableMap';
+    const CLASS_NAME = '/includes/classes/model.map.ProductCategoryTableMap';
 
     /**
      * Initialize the table attributes, columns and validators
@@ -35,8 +35,9 @@ class ProductCategoryTableMap extends TableMap
         $this->setName('product_category');
         $this->setPhpName('ProductCategory');
         $this->setClassname('ProductCategory');
-        $this->setPackage('codeshop');
+        $this->setPackage('/includes/classes/model');
         $this->setUseIdGenerator(true);
+        $this->setIsCrossRef(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('product_id', 'ProductId', 'INTEGER', 'product', 'id', true, null, null);

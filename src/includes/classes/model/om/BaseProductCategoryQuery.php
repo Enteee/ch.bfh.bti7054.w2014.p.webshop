@@ -36,7 +36,7 @@
  * @method array findByProductId(int $product_id) Return ProductCategory objects filtered by the product_id column
  * @method array findByCategoryId(int $category_id) Return ProductCategory objects filtered by the category_id column
  *
- * @package    propel.generator.codeshop.om
+ * @package    propel.generator./includes/classes/model.om
  */
 abstract class BaseProductCategoryQuery extends ModelCriteria
 {

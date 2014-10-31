@@ -45,18 +45,20 @@ $config['includes'][] = 'includes/';
 $config['includes'][] = 'includes/classes/';
 $config['includes'][] = 'includes/javascript/';
 $config['includes'][] = 'layout/includes/';
+$config['includes'][] = 'layout/bootstrap/js/';
 
 /*Special includes*/
-$config['css'][] = 'layout/css/reset.css';              // reset css
-$config['css'][] = 'layout/css/fonts.css';              // fints css
-$config['css'][] = 'layout/css/layout.css';             // layouting css
-$config['css'][] = 'layout/css/style.css';              // syling css
-$config['doctype'] = 'doctype_inc.html';                // where is the document type located
-$config['head'] = 'head_inc.php';                       // where is the header located
-$config['scriptinc'] = 'script_inc.php';                // where is the script includer located
-$config['defaultjs'][] = 'utils.js';                    // wait until page load then do some basic js..
-$config['defaultjs'][] = 'dojs.js';                     // wait until page load then do some basic js..
-$config['defaultjs'][] = 'read_meta.js';                // read metadata of page
+$config['css'][] = 'layout/bootstrap/css/bootstrap.min.css';    // bootstrap css
+$config['css'][] = 'layout/css/layout.main.css';                // layouting 
+$config['css'][] = 'layout/css/style.main.css';                 // syling css
+$config['doctype'] = 'doctype_inc.html';                        // where is the document type located
+$config['head'] = 'head_inc.php';                               // where is the header located
+$config['scriptinc'] = 'script_inc.php';                        // where is the script includer located
+$config['defaultjs'][] = 'jquery-1.11.0.js';                    // jquery
+$config['defaultjs'][] = 'bootstrap.min.js';                    // bootstrap
+$config['defaultjs'][] = 'utils.js';                            // wait until page load then do some basic js..
+$config['defaultjs'][] = 'dojs.js';                             // wait until page load then do some basic js..
+$config['defaultjs'][] = 'read_meta.js';                        // read metadata of page
 
 /*PHP modules*/
 $config['modules'][] = 'pdo_mysql';                  // the pdo mysql module

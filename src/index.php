@@ -93,7 +93,7 @@ $page = new Template($inc,$config['doctype'],
 
 
 /* Set up repository */
-$repos = new Repository($inc);
+$repos = new Repository();
 $GLOBALS['repos'] = $repos;
 
 

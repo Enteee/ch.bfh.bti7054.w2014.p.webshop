@@ -2,16 +2,6 @@
 
 class Repository {
 
-    function __construct($inc){
-        /* Load data classes */
-        $inc->dorequire('Product.php');
-		  $inc->dorequire('BaseProduct.php');
-		  $inc->dorequire('ProductQuery.php');		  
-        $inc->dorequire('Category.php');
-		  $inc->dorequire('BaseCategory.php');
-		  $inc->dorequire('CategoryQuery.php');
-    }
-
     public function get_all_categories() {
 			return CategoryQuery::create()
 				->find();

@@ -16,6 +16,6 @@
 class Product extends BaseProduct
 {
 	public function getTags() {
-		return array('sinep', 'sinep2', 'nigga');
+		return array('sinep', 'sinep2');
 	}
 }

@@ -50,13 +50,13 @@ foreach($config['modules'] as $module){
 
 /* Setup Propel */
 // Include the main Propel script
-require_once('./lib/propelorm/runtime/lib/Propel.php');
+require_once('lib/propelorm/runtime/lib/Propel.php');
 
 // Initialize Propel with the runtime configuration
 Propel::init($config['propel_conf']);
 
 // Add the generated 'classes' directory to the include path
-set_include_path('./includes/classes/model' . PATH_SEPARATOR . get_include_path());
+set_include_path('includes/classes/model' . PATH_SEPARATOR . get_include_path());
 
 /* Setup include handler */
 require_once('includes/include_handler_inc.php');

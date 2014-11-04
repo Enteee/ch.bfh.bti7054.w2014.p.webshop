@@ -74,8 +74,8 @@ $save = new SaveVars();
 $GLOBALS['save'] = $save;
 
 /* Set up repository */
-//$repos = new Repository();
-//$GLOBALS['repos'] = $repos;
+$repos = new Repository();
+$GLOBALS['repos'] = $repos;
 
 /* Set up template system */
 $page = new Template($inc,$config['doctype'],

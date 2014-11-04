@@ -43,7 +43,7 @@ $products = array();
 if(isset($category_id)){
 	$products = $this->repos->get_products_by_tag_id($category_id,$searchstring);
 }else{
-	//$products = $this->repos->get_products($searchstring);
+	$products = $this->repos->get_products($searchstring);
 }
 
 /* Initialize template */

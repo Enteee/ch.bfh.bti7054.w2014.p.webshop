@@ -29,7 +29,7 @@ if(!defined('INCLUDED')){
 /* Do fancy PHP shizzle */
 
 /* Initialize template */
-$this->page->init('layout/gitkit.php',
+$this->page->init('gitkit.php',
 	/* tempalte variables, used for rendering */
 	array(
 		'title' => $this->page->var_get('title').' - login_page',

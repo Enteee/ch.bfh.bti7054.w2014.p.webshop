@@ -1,10 +1,10 @@
 <?php
-/*	sample_inc.php
+/*	layout_inc.php
 *	Mischa Lehmann
 *	ducksource@duckpond.ch
 *	Version:1.0
 *
-*	a sample page. use this as template
+*	the layouting test page
 *	Require:
 *		- Requirement
 *
@@ -26,16 +26,15 @@ if(!defined('INCLUDED')){
 	exit('Go away!');
 }
 
-/* Do fancy PHP shizzle */
+if(!$this->config['debug']){
+	exit('Go away!');
+}
 
 /* Initialize template */
-$this->page->init('layout/sample_page.php',
-	/* tempalte variables, used for rendering */
-	array(
-		'title' => $this->page->var_get('title').' - sample_page',
+$this->page->init('layout.php',
+	array( 
 	),
-	/* metadata variables, used in <meta> */
 	array(
-		'sample' => 'sample metadata'
-	));
+	)
+);
 ?>

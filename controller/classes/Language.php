@@ -9,7 +9,7 @@ class Language {
 
 	const DE = 0;
 	const EN = 1;
-	const LANG_FILE = '../src/includes/lang/lang.json';
+	const LANG_FILE = '../resource/lang/lang.json';
 	const LABEL_NOT_FOUND_FALLBACK = '';
 	private $valid_languages = array('DE', 'EN');	
 	private $language;

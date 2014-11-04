@@ -54,7 +54,7 @@ if(isset($config['modules'])){
 require_once($config['composer']['autoload.php']);
 
 /* Set up include handler */
-require_once('../includes/include_handler_inc.php');
+require_once($config['include_handler']);
 $inc = new Include_handler($config['includes']);
 spl_autoload_register(array('Include_handler', 'autoload'));
 

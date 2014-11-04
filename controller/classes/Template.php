@@ -40,7 +40,6 @@ class Template{
 		if(is_string($ret)){ 
 			$ret = $this->stringtohtml($ret);
 		}
-
 		return $ret;
 	}
 
@@ -50,7 +49,6 @@ class Template{
 		if(array_key_exists($name,$this->vars)){
 			$ret = $this->vars[$name];
 		}
-
 		return $ret;
 	}
 
@@ -79,7 +77,7 @@ class Template{
 		//first include doctype
 		$this->inc->doinclude($this->doctype);
 		// now include the template
-		include($this->template);
+		$this->inc->doinclude($this->template);
 	}
 }
 ?>

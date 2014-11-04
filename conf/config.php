@@ -45,18 +45,18 @@ $config['gitkit']['server-config'] = '../conf/gitkit-server-config.json';
 //require_once('../conf/google_api_key.php');
 
 /*Paths for includes*/
+$config['include_handler'] = '../controller/include_handler_inc.php';
 $config['includes'][] = '../conf/';
-$config['includes'][] = '../includes/';
-$config['includes'][] = '../includes/classes/';
-$config['includes'][] = '../includes/classes/model/';
-$config['includes'][] = '../includes/classes/model/om/';
-$config['includes'][] = '../includes/classes/model/map/';
-$config['includes'][] = '../includes/classes/model/map/';
-$config['includes'][] = '../includes/javascript/';
-$config['includes'][] = '../layout/includes/';
-$config['includes'][] = '../layout/css/';
-$config['includes'][] = '../layout/bootstrap/js/';
-$config['includes'][] = '../layout/bootstrap/css/';
+$config['includes'][] = '../controller/';
+$config['includes'][] = '../controller/classes/';
+$config['includes'][] = '../model/';
+$config['includes'][] = '../model/om/';
+$config['includes'][] = '../model/map/';
+$config['includes'][] = '../model/map/';
+$config['includes'][] = '../www/js/';
+$config['includes'][] = '../www/css/';
+$config['includes'][] = '../www/bootstrap/js/';
+$config['includes'][] = '../www/bootstrap/css/';
 
 /*Special includes*/
 $config['doctype'] = 'doctype_inc.html';	// where is the document type located

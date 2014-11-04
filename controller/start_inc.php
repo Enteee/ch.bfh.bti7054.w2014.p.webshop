@@ -47,7 +47,7 @@ if(isset($category_id)){
 }
 
 /* Initialize template */
-$this->page->init('layout/start.php',
+$this->page->init('start.php',
 	array( 
 		'categories' => $categories,
 		'products' => $products,

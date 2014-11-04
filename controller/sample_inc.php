@@ -1,11 +1,12 @@
 <?php
-/*	Log.php
+/*	sample_inc.php
 *	Mischa Lehmann
 *	ducksource@duckpond.ch
 *	Version:1.0
 *
-*	Logging class for easy logging messages
+*	a sample page. use this as template
 *	Require:
+*		- Requirement
 *
 *
 *	Licence:
@@ -21,4 +22,20 @@
 *	!!Wo0t!!
 */
 
+if(!defined('INCLUDED')){
+	exit('Go away!');
+}
+
+/* Do fancy PHP shizzle */
+
+/* Initialize template */
+$this->page->init('sample_page.php',
+	/* tempalte variables, used for rendering */
+	array(
+		'title' => $this->page->var_get('title').' - sample_page',
+	),
+	/* metadata variables, used in <meta> */
+	array(
+		'sample' => 'sample metadata'
+	));
 ?>

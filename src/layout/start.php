@@ -54,19 +54,7 @@
                 <!-- left content -->
                 <div class="col-md-3">
                     <!-- login form -->
-                    <p class="lead">Login</p>
-                    <div id="navbar"></div>
-                    <form class="clearfix">
-                        <div class="form-group input-group-sm">
-                            <input type="email" class="form-control" id="inputEmail" placeholder="Email">
-                        </div>
-                        <div class="form-group input-group-sm">
-                            <input type="password" class="form-control" id="inputPassword" placeholder="Password">
-                        </div>
-                        <div class="btn-group pull-right">
-                            <button type="submit" class="btn btn-default btn-sm">Register</button>
-                            <button type="submit" class="btn btn-default btn-sm">Login</button> 
-                        </div>                  
+                    <div id="signin"></div>
                     <!-- category navigation -->
                     <p class="lead">Categories</p>
                     <nav>

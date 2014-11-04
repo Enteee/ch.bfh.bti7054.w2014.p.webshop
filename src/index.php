@@ -51,21 +51,17 @@ foreach($config['modules'] as $module){
 /* Set up composer autoload */
 require_once($config['composer']['autoload.php']);
 
-/* Set up Propel */
-// Initialize Propel with the runtime configuration
-Propel::init($config['propel_conf']);
-// Add the generated 'classes' directory to the include path
-set_include_path('includes/classes/model' . PATH_SEPARATOR . get_include_path());
-
-/* Set up google client */
-// Include autoloader
-$gitkitClient = Gitkit_Client::createFromFile($config['gitkit']['server-config']);
-$gitkitUser = $gitkitClient->getUserInRequest();
-
 /* Set up include handler */
 require_once('includes/include_handler_inc.php');
 $inc = new Include_handler($config['includes']);
 spl_autoload_register(array('Include_handler', 'autoload'));
+
+/* Set up Propel */
+Propel::init($config['propel_conf']);
+
+/* Set up google client */
+$gitkitClient = Gitkit_Client::createFromFile($config['gitkit']['server-config']);
+$gitkitUser = $gitkitClient->getUserInRequest();
 
 /* Create language object */
 $langCode = $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
@@ -91,7 +87,8 @@ $page = new Template($inc,$config['doctype'],
                             'css' => $config['css'],
                             'head' => $config['head'],
                             'scriptinc' => $config['scriptinc'],
-                            'jincludes' => $config['defaultjs']
+                            'jincludes' => $config['jincludes'],
+                            'external_jincludes' => $config['external_jincludes'],
                         ));
 
 /* Select the page */

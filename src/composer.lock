@@ -4,14 +4,14 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ef480649bab0817a21b224fa04328b4c",
+    "hash": "2375bdbadf4084326ff23b5c4c6366fa",
     "packages": [
         {
-            "name": "google/apiclient",
-            "version": "1.0.0",
+            "name": "enteee/identity-toolkit-php-client",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/google/google-api-php-client.git",
+                "url": "https://github.com/Enteee/identity-toolkit-php-client.git",
                 "reference": "master"
             },
             "type": "library",
@@ -19,30 +19,35 @@
                 "classmap": [
                     "src/"
                 ]
-            }
+            },
+            "time": "2014-11-04 14:36:59"
         },
         {
-            "name": "google/identity-toolkit-php-client",
-            "version": "dev-master",
+            "name": "google/apiclient",
+            "version": "1.0.6-beta",
             "source": {
                 "type": "git",
-                "url": "https://github.com/google/identity-toolkit-php-client.git",
-                "reference": "15ce05cc6ee4b65fdddd20410f2d019d363a9752"
+                "url": "https://github.com/google/google-api-php-client.git",
+                "reference": "a41a9dc0662e36420030eaab802dbb1f85459479"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/identity-toolkit-php-client/zipball/15ce05cc6ee4b65fdddd20410f2d019d363a9752",
-                "reference": "15ce05cc6ee4b65fdddd20410f2d019d363a9752",
+                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/a41a9dc0662e36420030eaab802dbb1f85459479",
+                "reference": "a41a9dc0662e36420030eaab802dbb1f85459479",
                 "shasum": ""
             },
             "require": {
-                "google/apiclient": "1.0.*",
                 "php": ">=5.2.1"
             },
             "require-dev": {
-                "phpunit/phpunit": "4.1.*"
+                "phpunit/phpunit": "3.7.*"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
             "autoload": {
                 "classmap": [
                     "src/"
@@ -55,12 +60,12 @@
             "license": [
                 "Apache-2.0"
             ],
-            "description": "Client library for Google Identity Toolkit APIs",
-            "homepage": "https://developers.google.com/identity-toolkit/v3/",
+            "description": "Client library for Google APIs",
+            "homepage": "http://developers.google.com/api-client-library/php",
             "keywords": [
-                "gitkit"
+                "google"
             ],
-            "time": "2014-10-09 20:40:49"
+            "time": "2014-09-30 19:33:59"
         },
         {
             "name": "phing/phing",
@@ -201,7 +206,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "google/identity-toolkit-php-client": 20
+        "google/apiclient": 10,
+        "enteee/identity-toolkit-php-client": 20
     },
     "prefer-stable": false,
     "platform": [],

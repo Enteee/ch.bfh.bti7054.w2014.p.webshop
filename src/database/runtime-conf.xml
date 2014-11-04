@@ -5,9 +5,9 @@
       <datasource id="codeshop">
         <adapter>mysql</adapter>
         <connection>
-          <dsn>mysql:host=localhost;dbname=codeshop</dsn>
+          <dsn>mysql:host=127.0.0.1;dbname=codeshop</dsn>
           <user>codeshop</user>
-          <password>codeshop</password>
+          <password>gggggg</password>
         </connection>
       </datasource>
     </datasources>

@@ -1,0 +1,12 @@
+{
+	"name": "Codeshop",
+	"description": "Codeshop: Never code again",
+	"license": "GPLv3",
+	"repositories" : [
+	],
+	"require": {
+		"google/apiclient": "1.0.*@beta",
+		"propel/propel1": "1.7.1",
+		"google/identity-toolkit-php-client": "dev-master"
+	}
+}

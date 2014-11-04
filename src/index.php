@@ -48,9 +48,10 @@ foreach($config['modules'] as $module){
     }
 }
 
+/* Set up composer autoload */
+require_once('vendor/autoload.php');
+
 /* Set up Propel */
-// Include the main Propel script
-require_once('lib/propelorm/runtime/lib/Propel.php');
 // Initialize Propel with the runtime configuration
 Propel::init($config['propel_conf']);
 // Add the generated 'classes' directory to the include path
@@ -85,6 +86,7 @@ $page = new Template($inc,$config['doctype'],
                             'title' => $lang->title,
                             'subtitle' => $lang->subtitle,
                             'logo' => $config['logo'],
+                            'favicon' => $config['favicon'],
                             'author' => $config['author'], 
                             'mail' => $config['mail'],
                             'css' => $config['css'],

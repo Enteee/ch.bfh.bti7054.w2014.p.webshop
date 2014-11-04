@@ -25,6 +25,7 @@
 $config['title'] = 'Codeshop';                          // The pagetitel
 $config['subtitle'] = 'never code again';               // The subtitel
 $config['logo'] = 'layout/img/logo.png';                // The logo
+$config['favicon'] = 'layout/img/favicon.gif';          // The favicon
 $config['author'] = 'winki,dbigler,ente';               // The authors
 $config['page_url'] = 'http://www.codeshop.ch';         // the url to the page
 $config['mail'] = 'ducksource@duckpond.ch';             // admin email

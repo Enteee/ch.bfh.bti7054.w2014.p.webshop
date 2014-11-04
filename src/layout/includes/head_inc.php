@@ -16,7 +16,7 @@
 <?php   endforeach; ?>
         
         <!-- favicon -->
-        <link rel="icon" type="image/gif" href="favicon.gif" />
+        <link rel="icon" type="image/gif" href="<?php echo $this->favicon;?>" />
 
         <!-- gitkit -->
         <script type="text/javascript" src="//www.gstatic.com/authtoolkit/js/gitkit.js"></script>

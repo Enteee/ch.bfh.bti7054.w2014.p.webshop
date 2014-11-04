@@ -5,15 +5,16 @@ create database `codeshop`;
 */
 use `codeshop`;
 
--- old tables
-drop table if exists `product_category`;
-drop table if exists `product`;
-drop table if exists `category`;
-
 -- current tables
+drop table if exists `offer_tag`;
 drop table if exists `product_tag`;
+
+drop table if exists `comment`;
+drop table if exists `code`;
+drop table if exists `order`;
 drop table if exists `tag`;
 drop table if exists `tag_type`;
+drop table if exists `offer`;
 drop table if exists `product`;
 drop table if exists `user`;
 
@@ -22,43 +23,91 @@ drop table if exists `user`;
 create table `user` (
 	`id` int not null primary key auto_increment,
 	`email` varchar(100) not null unique,
-	`password` char(40) not null -- sha1 hash
+	`token` varchar(100) not null,
+	`credits` int not null default 0,
+	`active` boolean not null default 1,
+	`created_at` datetime,
+    `updated_at` datetime
 );
 create table `product` (
 	`id` int not null primary key auto_increment,
-	`title` varchar(100),
-	`description` varchar(500)
+	`name` varchar(200) not null,
+	`description` varchar(1000) not null,
+	`active` boolean not null default 1,
+	`created_at` datetime,
+    `updated_at` datetime
 );
-create table `category` (
+create table `offer` (
 	`id` int not null primary key auto_increment,
-	`title` varchar(100)
+	`product_id` int not null,
+	`price` int not null default 0,
+	`active` boolean not null default 1,
+	`created_at` datetime,
+    `updated_at` datetime,
+
+    constraint `offer_product` foreign key (`product_id`) references `product` (`id`)
 );
 create table `tag_type` (
 	`id` int not null primary key auto_increment,
-	`name_de` varchar(100),
-	`name_en` varchar(100)
+	`name` varchar(200) not null,
+	`active` boolean not null default 1,
+	`created_at` datetime,
+    `updated_at` datetime
 );
 create table `tag` (
 	`id` int not null primary key auto_increment,
-	`name_de` varchar(100),
-	`name_en` varchar(100),
 	`type_id` int not null,
+	`parent_id` int,
+	`name` varchar(200) not null,
+	`active` boolean not null default 1,
+	`created_at` datetime,
+    `updated_at` datetime,
 
-    constraint `tag_tag_type` foreign key (`type_id`) references `tag_type` (`id`)	
+    constraint `tag_tag` foreign key (`parent_id`) references `tag` (`id`),
+    constraint `tag_tag_type` foreign key (`type_id`) references `tag_type` (`id`)
+);
+create table `order` (
+	`id` int not null primary key auto_increment,
+	`user_id` int not null,
+	`offer_id` int not null,
+	`paid_price` int not null default 0,
+	`active` boolean not null default 1,
+	`created_at` datetime,
+    `updated_at` datetime,
+
+    constraint `order_user` foreign key (`user_id`) references `user` (`id`),
+    constraint `order_offer` foreign key (`offer_id`) references `offer` (`id`)
 );
 create table `code` (
 	`id` int not null primary key auto_increment,
-	`code` blob
-);
--- cross tables
-create table `product_category` (
-	`id` int primary key auto_increment,
-	`product_id` int not null,
-	`category_id` int not null,
+	`user_id` int not null,
+	`offer_id` int not null,
+	`filename` varchar(200) not null,
+	`filesize` int not null default 0,
+	`mimetype` varchar(200) not null,
+	`content` blob not null,
+	`active` boolean not null default 1,
+	`created_at` datetime,
+    `updated_at` datetime,
 
-    constraint `product_category_product` foreign key (`product_id`) references `product` (`id`),
-    constraint `product_category_category` foreign key (`category_id`) references `category` (`id`)
+    constraint `code_user` foreign key (`user_id`) references `user` (`id`),
+    constraint `code_offer` foreign key (`offer_id`) references `offer` (`id`)
 );
+create table `comment` (
+	`id` int not null primary key auto_increment,
+	`user_id` int not null,
+	`product_id` int not null,
+	`text` varchar(500) not null,
+	`rating` int not null default 0,
+	`active` boolean not null default 1,
+	`created_at` datetime,
+    `updated_at` datetime,
+
+    constraint `comment_user` foreign key (`user_id`) references `user` (`id`),
+    constraint `comment_product` foreign key (`product_id`) references `product` (`id`)
+);
+
+-- cross tables
 create table `product_tag` (
 	`id` int primary key auto_increment,
 	`product_id` int not null,
@@ -67,43 +116,11 @@ create table `product_tag` (
     constraint `product_tag_product` foreign key (`product_id`) references `product` (`id`),
     constraint `product_tag_tag` foreign key (`tag_id`) references `tag` (`id`)
 );
+create table `offer_tag` (
+	`id` int primary key auto_increment,
+	`offer_id` int not null,
+	`tag_id` int not null,
 
-
--- inserts
-/*
-insert into `category` values
-(1,'Snippets'),
-(2,'Scripts'),
-(3,'Full Software'),
-(4,'Classes'),
-(5,'Frameworks');
-
-insert into `product` values
-(1,'Hello World','The famous hello world snippets'),
-(2,'Bubble sort','Basic sort method'),
-(3,'Quick sort','Basic sort method');
-
-insert into `tag` values
-(1,'Tag 1'),
-(2,'tag 2'),
-(3,'Tag 3');
-
-insert into `product_category` values
-(1,1,1),
-(2,1,2),
-(3,1,3),
-(4,2,4),
-(5,3,5),
-(6,3,1);
-
-insert into `product_tag` values
-(1,1,1),
-(2,1,2),
-(3,2,3),
-(4,2,1),
-(5,3,2),
-(6,3,1),
-(7,3,2),
-(8,3,3);
-*/
-
+    constraint `offer_tag_offer` foreign key (`offer_id`) references `offer` (`id`),
+    constraint `offer_tag_tag` foreign key (`tag_id`) references `tag` (`id`)
+);

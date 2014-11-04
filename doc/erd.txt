@@ -2,13 +2,13 @@ http://yuml.me/diagram/plain/class/draw
 
 
 
-[User|id;email;password_enc;credits;active;created_at;updated_at],
+[User|id;email;token;credits;active;created_at;updated_at],
 [Comment|id;user_id;product_id;text;rating;active;created_at;updated_at],
 
 // Name und Description mehrsprachig
 [Product|id;name;description;active;created_at;updated_at],
 
-[Code|id;user_id;offer_id;filename;size;content;version;active;created_at;updated_at],
+[Code|id;user_id;offer_id;filename;mimetype;size;content;version;active;created_at;updated_at],
 
 // Name mehrsprachig
 [Tag|id;type_id;parent_id;name;active;created_at;updated_at],
@@ -16,7 +16,7 @@ http://yuml.me/diagram/plain/class/draw
 // Name mehrsprachig
 [TagType|id;name;active;created_at;updated_at],
 
-[Order|id;user_id;code_id;paid_price;active;created_at;updated_at],
+[Order|id;user_id;offer_id;paid_price;active;created_at;updated_at],
 
 [Offer|id;product_id;price;active;created_at;updated_at]
 

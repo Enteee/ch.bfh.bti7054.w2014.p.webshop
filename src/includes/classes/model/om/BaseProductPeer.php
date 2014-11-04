@@ -6,7 +6,7 @@
  *
  *
  *
- * @package propel.generator./includes/classes/model.om
+ * @package propel.generator.includes/classes/model.om
  */
 abstract class BaseProductPeer
 {
@@ -24,22 +24,25 @@ abstract class BaseProductPeer
     const TM_CLASS = 'ProductTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 3;
+    const NUM_COLUMNS = 4;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 3;
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /** the column name for the id field */
     const ID = 'product.id';
 
-    /** the column name for the title field */
-    const TITLE = 'product.title';
+    /** the column name for the active field */
+    const ACTIVE = 'product.active';
 
-    /** the column name for the description field */
-    const DESCRIPTION = 'product.description';
+    /** the column name for the created_at field */
+    const CREATED_AT = 'product.created_at';
+
+    /** the column name for the updated_at field */
+    const UPDATED_AT = 'product.updated_at';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -53,6 +56,13 @@ abstract class BaseProductPeer
     public static $instances = array();
 
 
+    // i18n behavior
+
+    /**
+     * The default locale to use for translations
+     * @var        string
+     */
+    const DEFAULT_LOCALE = 'en_US';
     /**
      * holds an array of fieldnames
      *
@@ -60,12 +70,12 @@ abstract class BaseProductPeer
      * e.g. ProductPeer::$fieldNames[ProductPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Title', 'Description', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'title', 'description', ),
-        BasePeer::TYPE_COLNAME => array (ProductPeer::ID, ProductPeer::TITLE, ProductPeer::DESCRIPTION, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'TITLE', 'DESCRIPTION', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'title', 'description', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Active', 'CreatedAt', 'UpdatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'active', 'createdAt', 'updatedAt', ),
+        BasePeer::TYPE_COLNAME => array (ProductPeer::ID, ProductPeer::ACTIVE, ProductPeer::CREATED_AT, ProductPeer::UPDATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'ACTIVE', 'CREATED_AT', 'UPDATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'active', 'created_at', 'updated_at', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
     );
 
     /**
@@ -75,12 +85,12 @@ abstract class BaseProductPeer
      * e.g. ProductPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Title' => 1, 'Description' => 2, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'title' => 1, 'description' => 2, ),
-        BasePeer::TYPE_COLNAME => array (ProductPeer::ID => 0, ProductPeer::TITLE => 1, ProductPeer::DESCRIPTION => 2, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'TITLE' => 1, 'DESCRIPTION' => 2, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'title' => 1, 'description' => 2, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Active' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'active' => 1, 'createdAt' => 2, 'updatedAt' => 3, ),
+        BasePeer::TYPE_COLNAME => array (ProductPeer::ID => 0, ProductPeer::ACTIVE => 1, ProductPeer::CREATED_AT => 2, ProductPeer::UPDATED_AT => 3, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'ACTIVE' => 1, 'CREATED_AT' => 2, 'UPDATED_AT' => 3, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'active' => 1, 'created_at' => 2, 'updated_at' => 3, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
     );
 
     /**
@@ -155,12 +165,14 @@ abstract class BaseProductPeer
     {
         if (null === $alias) {
             $criteria->addSelectColumn(ProductPeer::ID);
-            $criteria->addSelectColumn(ProductPeer::TITLE);
-            $criteria->addSelectColumn(ProductPeer::DESCRIPTION);
+            $criteria->addSelectColumn(ProductPeer::ACTIVE);
+            $criteria->addSelectColumn(ProductPeer::CREATED_AT);
+            $criteria->addSelectColumn(ProductPeer::UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.title');
-            $criteria->addSelectColumn($alias . '.description');
+            $criteria->addSelectColumn($alias . '.active');
+            $criteria->addSelectColumn($alias . '.created_at');
+            $criteria->addSelectColumn($alias . '.updated_at');
         }
     }
 
@@ -365,6 +377,9 @@ abstract class BaseProductPeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in ProductI18nPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        ProductI18nPeer::clearInstancePool();
     }
 
     /**

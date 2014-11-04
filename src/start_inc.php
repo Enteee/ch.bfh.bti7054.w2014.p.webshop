@@ -42,7 +42,7 @@ $categories = array();
 
 $products = array();
 if(isset($category_id)){
-//    $products = $this->repos->get_products_by_category($category_id,$searchstring);
+    $products = $this->repos->get_products_by_tag_id($category_id,$searchstring);
 }else{
 //    $products = $this->repos->get_products($searchstring);
 }
@@ -52,6 +52,7 @@ $this->page->init('layout/start.php',
                 array( 
                     'categories' => $categories,
                     'products' => $products,
+                    'active_category' => $category_id
                 ),
                 array(
                 ));

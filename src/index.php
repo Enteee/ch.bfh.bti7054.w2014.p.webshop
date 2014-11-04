@@ -108,6 +108,9 @@ switch($action){
     case 'layout':
         $inc->dorequire('layout_inc.php');
     break;
+    case 'gitkit':
+        $inc->dorequire('gitkit_inc.php');
+    break;
     case 'sample':
         $inc->dorequire('sample_inc.php');
     break;

@@ -47,7 +47,7 @@
                 </div>
             </div>
         </nav>
-        
+
         <!-- page content -->
         <div class="container">
             <div class="row">
@@ -55,6 +55,7 @@
                 <div class="col-md-3">
                     <!-- login form -->
                     <p class="lead">Login</p>
+                    <div id="navbar"></div>
                     <form class="clearfix">
                         <div class="form-group input-group-sm">
                             <input type="email" class="form-control" id="inputEmail" placeholder="Email">
@@ -74,12 +75,12 @@
                                 <span class="badge">123</span>
                                 Active category TEST
                             </a>
-<?php   							foreach($this->categories as $category):?>
+<?php                       foreach($this->categories as $category):?>
                             <a href="#" class="list-group-item">
                                 <span class="badge"><?php echo $category->getProductsCount(); ?></span>
                                 <?php echo $category->getTitle(); ?>
                             </a>
-<?php   							endforeach; ?>
+<?php                       endforeach; ?>
                         </div>
                     </nav>
                 </div>

@@ -42,7 +42,7 @@ $config['propel_conf'] = 'conf/propel-codeshop-conf.php';
 
 /*Google api conf*/
 $config['gitkit']['server-config'] = 'conf/gitkit-server-config.json';
-require_once('conf/google_api_key.php');
+//require_once('conf/google_api_key.php');
 
 /*Paths for includes*/
 $config['includes'][] = './';

@@ -25,7 +25,7 @@
           window.google.identitytoolkit.signInButton(
             '#navbar', // accepts any CSS selector
             {
-              widgetUrl: "http://localhost/oauth2callback",
+              widgetUrl: "/webshop/src/index.php?action=gitkit",
               signOutUrl: "/",
             }
           );

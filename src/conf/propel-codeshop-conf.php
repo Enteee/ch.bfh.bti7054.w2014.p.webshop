@@ -9,7 +9,7 @@ $conf = array (
       'adapter' => 'mysql',
       'connection' => 
       array (
-        'dsn' => 'mysql:host=localhost;dbname=codeshop',
+        'dsn' => 'mysql:host=127.0.0.1;dbname=codeshop',
         'user' => 'codeshop',
         'password' => 'gggggg',
       ),

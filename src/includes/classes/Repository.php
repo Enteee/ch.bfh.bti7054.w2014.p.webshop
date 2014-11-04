@@ -3,7 +3,7 @@
 class Repository {
 
 	public function get_all_categories() {
-		return CategoryQuery::create()
+		return TagQuery::create()
 			->find();
 	}
 
@@ -14,33 +14,52 @@ class Repository {
 
 	public function get_products($searchstring = NULL) {
 		return ProductQuery::create()
-			->filterByTitle($searchstring)
+			->useI18nQuery('en_US') // TODO: make language dynamic
+				->filterByName($searchstring)
+			->endUse()
 			->find();
 	}
 
-	public function get_products_by_category($category_id, $searchstring = NULL) {
-		$category = CategoryQuery::create()
-			->findPk($category_id);
+	public function get_products_by_tag_id($tag_id, $searchstring = NULL) {
+		$tag = TagQuery::create()
+			->findPk($tag_id);
 
 		if (isset($searchstring)) {
 			return ProductQuery::create()
-				->filterByTitle($searchstring)
-				->filterByCategory($category)
+				->useI18nQuery('en_US') // TODO: make language dynamic
+					->filterByName($searchstring)
+				->endUse()	
+				->useProductTagQuery()
+					->filterByTag($tag)
+				->endUse()
 				->find();
 		} else {
 			return ProductQuery::create()
-				->filterByCategory($category)
+				->useProductTagQuery()
+					->filterByTag($tag)
+				->endUse()
 				->find();
 		}
 	}
 	
-	public function get_product_count_by_category($category_id) {
-		$category = CategoryQuery::create()
-			->findPk($category_id);
+	public function get_product_count_by_tag_id($tag_id) {
+		$tag = TagQuery::create()
+			->findPk($tag_id);
 
-		return ProductQuery::create()
-			->filterByCategory($category)
+		return ProductTagQuery::create()
+			->filterByTag($tag)
 			->count();
 	}
+	
+	public function get_tags_by_product_id($product_id) {
+		$product = ProductQuery::create()
+			->findPk($product_id);
+
+		return TagQuery::create()
+			->useProductTagQuery()
+				->filterByProduct($product)
+			->endUse()
+			->find();
+	}	
 }
 ?>

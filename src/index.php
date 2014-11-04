@@ -59,7 +59,6 @@ set_include_path('includes/classes/model' . PATH_SEPARATOR . get_include_path())
 
 /* Set up google client */
 // Include autoloader
-require_once('lib/google-api-php-client/autoload.php');
 $gitkitClient = Gitkit_Client::createFromFile(dirname(__FILE__) . '/conf/gitkit-server-config.json');
 $gitkitUser = $gitkitClient->getUserInRequest();
 

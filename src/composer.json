@@ -23,7 +23,7 @@
   ],
   "require": {
     "google/apiclient": "1.0.*",
-    "propel/propel1": "1.7.*@dev",
+    "propel/propel1": "1.7.1",
     "google/identity-toolkit-php-client": "dev-master"
   }
 }

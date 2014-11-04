@@ -22,7 +22,7 @@
 */
 
 /* Include configuration file */
-require_once('conf/config.php');
+require_once('../conf/config.php');
 
 /* Debug settings */
 if($config['debug']){
@@ -54,7 +54,7 @@ if(isset($config['modules'])){
 require_once($config['composer']['autoload.php']);
 
 /* Set up include handler */
-require_once('includes/include_handler_inc.php');
+require_once('../includes/include_handler_inc.php');
 $inc = new Include_handler($config['includes']);
 spl_autoload_register(array('Include_handler', 'autoload'));
 

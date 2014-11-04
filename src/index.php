@@ -49,7 +49,7 @@ foreach($config['modules'] as $module){
 }
 
 /* Set up composer autoload */
-require_once('vendor/autoload.php');
+require_once($config['composer']['autoload.php']);
 
 /* Set up Propel */
 // Initialize Propel with the runtime configuration
@@ -59,7 +59,7 @@ set_include_path('includes/classes/model' . PATH_SEPARATOR . get_include_path())
 
 /* Set up google client */
 // Include autoloader
-$gitkitClient = Gitkit_Client::createFromFile(dirname(__FILE__) . '/conf/gitkit-server-config.json');
+$gitkitClient = Gitkit_Client::createFromFile($config['gitkit']['server-config']);
 $gitkitUser = $gitkitClient->getUserInRequest();
 
 /* Set up include handler */

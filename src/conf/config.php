@@ -34,10 +34,14 @@ $config['mail'] = 'ducksource@duckpond.ch';             // admin email
 $config['debug'] = TRUE;                                // Debug mode?
 $config['timezone'] = 'Europe/Zurich';                  // The Server Timezone
 
+/*Composer autoload*/
+$config['composer']['autoload.php'] = 'vendor/autoload.php';
+
 /*Propel conf*/
-$config['propel_conf'] = './conf/propel-codeshop-conf.php';
+$config['propel_conf'] = 'conf/propel-codeshop-conf.php';
 
 /*Google api conf*/
+$config['gitkit']['server-config'] = 'conf/gitkit-server-config.json';
 require_once('conf/google_api_key.php');
 
 /*Paths for includes*/

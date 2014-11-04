@@ -64,7 +64,7 @@
  * @method array findByCreatedAt(string $created_at) Return Code objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return Code objects filtered by the updated_at column
  *
- * @package    propel.generator.includes/classes/model.om
+ * @package    propel.generator...om
  */
 abstract class BaseCodeQuery extends ModelCriteria
 {

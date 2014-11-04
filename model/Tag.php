@@ -11,12 +11,8 @@
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  *
- * @package    propel.generator.includes/classes/model
+ * @package    propel.generator..
  */
 class Tag extends BaseTag
 {
-	public function getProductsCount() {
-		$repo = new Repository();
-		return $repo->get_product_count_by_tag_id($this->getId());		
-	}
 }

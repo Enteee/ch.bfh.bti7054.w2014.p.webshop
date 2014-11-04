@@ -6,7 +6,7 @@
  *
  *
  *
- * @package    propel.generator.includes/classes/model.om
+ * @package    propel.generator...om
  */
 abstract class BaseTagI18n extends BaseObject implements Persistent
 {

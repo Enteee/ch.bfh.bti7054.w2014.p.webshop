@@ -1,29 +1,29 @@
 {
-  "name": "Codeshop",
-  "description": "Codeshop: Never code again",
-  "license": "GPLv3",
-  "repositories" : [
-    {
-      "type": "package",
-      "package": {
-        "name": "enteee/identity-toolkit-php-client",
-        "version": "dev-master",
-        "source": {
-          "url": "https://github.com/Enteee/identity-toolkit-php-client.git",
-          "type": "git",
-          "reference": "master"
-        },
-        "autoload": {
-          "classmap": [
-            "src/"
-          ]
-        }
-      }
-    }
-  ],
-  "require": {
-    "google/apiclient": "1.0.*@beta",
-    "propel/propel1": "1.7.1",
-    "enteee/identity-toolkit-php-client": "dev-master"
-  }
+	"name": "Codeshop",
+	"description": "Codeshop: Never code again",
+	"license": "GPLv3",
+	"repositories" : [
+		{
+			"type": "package",
+			"package": {
+				"name": "enteee/identity-toolkit-php-client",
+				"version": "dev-master",
+				"source": {
+					"url": "https://github.com/Enteee/identity-toolkit-php-client.git",
+					"type": "git",
+					"reference": "master"
+				},
+				"autoload": {
+					"classmap": [
+						"src/"
+						]
+				}
+			}
+		}
+	],
+	"require": {
+		"google/apiclient": "1.0.*@beta",
+		"propel/propel1": "1.7.1",
+		"enteee/identity-toolkit-php-client": "dev-master"
+	}
 }

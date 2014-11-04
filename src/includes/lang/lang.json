@@ -1,5 +1,7 @@
-// This is the language ressources file.
-// Place all global multi language strings here.
+/*
+* This is the language ressources file.
+* Place all global multi language strings here.
+*/
 {
 	"title": {
 		"DE" : "CodeShop",

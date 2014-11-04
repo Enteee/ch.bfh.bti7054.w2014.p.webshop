@@ -22,7 +22,7 @@
 */
 
 /*General configuration*/
-$config['title'] = 'CodeShop';                          // The pagetitel
+$config['title'] = 'Codeshop';                          // The pagetitel
 $config['subtitle'] = 'never code again';               // The subtitel
 $config['logo'] = 'layout/img/logo.png';                // The logo
 $config['author'] = 'winki,dbigler,ente';               // The authors
@@ -36,10 +36,12 @@ $config['timezone'] = 'Europe/Zurich';                  // The Server Timezone
 /*Propel conf*/
 $config['propel_conf'] = './conf/propel-codeshop-conf.php';
 
+/*Google api conf*/
+require_once('conf/google_api_key.php');
+
 /*Paths for includes*/
 $config['includes'][] = './';
 $config['includes'][] = 'conf/';
-$config['includes'][] = 'lib/propelorm/runtime/lib/';
 $config['includes'][] = 'includes/';
 $config['includes'][] = 'includes/classes/';
 $config['includes'][] = 'includes/classes/model/';

@@ -15,6 +15,22 @@
         <link rel="stylesheet" type="text/css" href="<?php echo $css;?>" />
 <?php   endforeach; ?>
         
+        <!-- favicon -->
+        <link rel="icon" type="image/gif" href="favicon.gif" />
+
+        <!-- gitkit -->
+        <script type="text/javascript" src="//www.gstatic.com/authtoolkit/js/gitkit.js"></script>
+        <link type=text/css rel=stylesheet href="//www.gstatic.com/authtoolkit/css/gitkit.css" />
+        <script type=text/javascript>
+          window.google.identitytoolkit.signInButton(
+            '#navbar', // accepts any CSS selector
+            {
+              widgetUrl: "http://localhost/oauth2callback",
+              signOutUrl: "/",
+            }
+          );
+        </script>
+        
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>

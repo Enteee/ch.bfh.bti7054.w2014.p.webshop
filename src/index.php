@@ -48,17 +48,21 @@ foreach($config['modules'] as $module){
     }
 }
 
-/* Setup Propel */
+/* Set up Propel */
 // Include the main Propel script
 require_once('lib/propelorm/runtime/lib/Propel.php');
-
 // Initialize Propel with the runtime configuration
 Propel::init($config['propel_conf']);
-
 // Add the generated 'classes' directory to the include path
 set_include_path('includes/classes/model' . PATH_SEPARATOR . get_include_path());
 
-/* Setup include handler */
+/* Set up google client */
+// Include autoloader
+require_once('lib/google-api-php-client/autoload.php');
+$gitkitClient = Gitkit_Client::createFromFile(dirname(__FILE__) . '/conf/gitkit-server-config.json');
+$gitkitUser = $gitkitClient->getUserInRequest();
+
+/* Set up include handler */
 require_once('includes/include_handler_inc.php');
 $inc = new Include_handler($config['includes']);
 spl_autoload_register(array('Include_handler', 'autoload'));
@@ -72,6 +76,8 @@ $save = new SaveVars();
 $GLOBALS['save'] = $save;
 
 /* Set up repository */
+//$repos = new Repository();
+//$GLOBALS['repos'] = $repos;
 
 /* Set up template system */
 $page = new Template($inc,$config['doctype'],
@@ -86,10 +92,6 @@ $page = new Template($inc,$config['doctype'],
                             'scriptinc' => $config['scriptinc'],
                             'jincludes' => $config['defaultjs']
                         ));
-
-/* Set up repository */
-$repos = new Repository();
-$GLOBALS['repos'] = $repos;
 
 /* Select the page */
 $action='';

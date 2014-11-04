@@ -37,13 +37,14 @@ if($this->save->save_global('category_id',SaveVars::T_STRING,SaveVars::G_GET)){
 }
 
 /* Load data */
-$categories = $this->repos->get_all_categories();
+//$categories = $this->repos->get_all_categories();
+$categories = array();
 
 $products = array();
 if(isset($category_id)){
-    $products = $this->repos->get_products_by_category($category_id,$searchstring);
+//    $products = $this->repos->get_products_by_category($category_id,$searchstring);
 }else{
-    $products = $this->repos->get_products($searchstring);
+//    $products = $this->repos->get_products($searchstring);
 }
 
 /* Initialize template */

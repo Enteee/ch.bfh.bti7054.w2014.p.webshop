@@ -21,21 +21,24 @@
 */
 
 class Template{
-	private $inc;		// the include object
-	private $doctype;	// location of the doctype.
-	private $template;	// the template
-	private $vars;		// known variables
+	private $doctype;
+	private $include_path;
+	private $base_path;
+	private $paths;
+	private $template;
+	private $vars;
 
-	function __construct($inc,$doctype,$vars = array(),$metadata = array()){
-		$this->inc = $inc;
+	function __construct($doctype,$include_path,$base_path,$paths = array(),$vars = array(),$metadata = array()){
 		$this->doctype = $doctype;
+		$this->include_path = $include_path;
+		$this->base_path = $base_path;
+		$this->paths = $paths;
 		$this->vars = $vars;
 		$this->vars['metadata'] = $metadata;
 	}
 
 	function __get($name){ // return a given variable for display
 		$ret = self::var_get($name); // get variable
-		
 		// if this is a string convert to string to html format
 		if(is_string($ret)){ 
 			$ret = $this->stringtohtml($ret);
@@ -45,7 +48,6 @@ class Template{
 
 	function var_get($name){ // get a variable
 		$ret = null;
-		
 		if(array_key_exists($name,$this->vars)){
 			$ret = $this->vars[$name];
 		}
@@ -61,23 +63,36 @@ class Template{
 	// initialize the template
 	function init($template,$vars = array(),$metadata = array()){
 		$this->template = $template;
-		$this->vars = array_merge($this->vars,$vars);
-		$this->vars['metadata'] = array_merge($this->vars['metadata'],$metadata);
-
-		// attach this template to the include system..
-		$this->inc->settemplate($this);
+		$this->vars_add($vars,$metadata);
 	}
 
 	private function stringtohtml($string){ // convert a string to html format
 		return htmlentities($string,ENT_QUOTES);
 	}
 
+	function doinclude($page){ // include a page
+		$this->num_includes++; // inc counter
+		return include_once($page);
+	}
+
+	function getpath($page){ // get path to a file
+		$return_path = null;
+		foreach($this->paths as $path){
+			$fpath = $this->base_path.'/'.$path.'/'.$page;
+			if(file_exists($fpath)){
+				$return_path = $path.'/'.$page;
+				break;
+			}
+		}
+		return $return_path;
+	}
+
 	// render the template
 	function render(){
 		//first include doctype
-		$this->inc->doinclude($this->doctype);
+		include($this->doctype);
 		// now include the template
-		$this->inc->doinclude($this->template);
+		include($this->template);
 	}
 }
 ?>

@@ -6,7 +6,7 @@
 		<script type="text/javascript">
 			var config = {
 				apiKey: 'AIzaSyCUtzG_YgouzzehAtmtW7jm4Ftedgvi2-I',
-				signInSuccessUrl: '/webshop/src/',
+				signInSuccessUrl: '/webshop/www/',
 				idps: ["google"],
 				oobActionUrl: '/',
 				siteName: 'Code shop'

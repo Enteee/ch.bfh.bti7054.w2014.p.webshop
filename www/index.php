@@ -60,7 +60,7 @@ set_include_path($config['propel_model'] . PATH_SEPARATOR . get_include_path());
 
 /* Set up include handler */
 require_once($config['include_handler']);
-$inc = new Include_handler($config['includes']);
+$inc = new Include_handler($config['include_path']);
 
 /* Set up google client */
 $gitkitClient = Gitkit_Client::createFromFile($config['gitkit']['server-config']);
@@ -75,11 +75,11 @@ $save = new SaveVars();
 $GLOBALS['save'] = $save;
 
 /* Set up repository */
-$repos = new Repository();
-$GLOBALS['repos'] = $repos;
+//$repos = new Repository();
+//$GLOBALS['repos'] = $repos;
 
 /* Set up template system */
-$page = new Template($inc,$config['doctype'],
+$page = new Template($config['doctype'],$config['view'],$config['ref_base'],$config['ref_path'],
 	array( 
 		'title' => $lang->title,
 		'subtitle' => $lang->subtitle,
@@ -88,10 +88,11 @@ $page = new Template($inc,$config['doctype'],
 		'author' => $config['author'], 
 		'mail' => $config['mail'],
 		'css' => $config['css'],
+		'external_css' => $config['external_css'],
 		'head' => $config['head'],
 		'scriptinc' => $config['scriptinc'],
-		'jincludes' => $config['jincludes'],
-		'external_jincludes' => $config['external_jincludes'],
+		'js' => $config['js'],
+		'external_js' => $config['external_js'],
 	));
 
 /* Select the page */

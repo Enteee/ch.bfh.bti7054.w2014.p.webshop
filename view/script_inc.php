@@ -5,9 +5,9 @@
 		</noscript>
 		<!-- Javascript -->
 		<!-- Microsoft READ THIS: http://www.rfc-editor.org/rfc/rfc4329.txt  !! You are obsolete !! -->
-<?php foreach($this->external_jincludes as $jinc){ ?>
+<?php foreach($this->external_js as $jinc){ ?>
 		<script type="application/javascript" src="<?php echo $jinc;?>"></script>
 <?php } ?>
-<?php foreach($this->jincludes as $jinc){ ?>
+<?php foreach($this->js as $jinc){ ?>
 		<script type="application/javascript" src="<?php echo $this->getpath($jinc);?>"></script>
 <?php } ?>

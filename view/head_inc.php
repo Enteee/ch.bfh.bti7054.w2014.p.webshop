@@ -9,14 +9,22 @@
 		<meta name="author" content="<?php echo $this->author;?>" />
 		<meta name="contact" content="<?php echo $this->mail;?>" />
 
+		<!-- Additional metadata -->
+<?php foreach($this->metadata as $key => $val): ?>
+		<meta name="<?php echo $key;?>" content="<?php echo $val;?>" /> 
+<?php endforeach; ?>
+
 		<!-- CSS -->
 		<meta http-equiv="content-style-type" content="text/css" />
 <?php foreach($this->css as $css): ?>
+		<link rel="stylesheet" type="text/css" href="<?php echo $this->getpath($css);?>" />
+<?php endforeach; ?>
+<?php foreach($this->external_css as $css): ?>
 		<link rel="stylesheet" type="text/css" href="<?php echo $css;?>" />
 <?php endforeach; ?>
-		
+
 		<!-- favicon -->
-		<link rel="icon" type="image/gif" href="<?php echo $this->favicon;?>" />
+		<link rel="icon" type="image/gif" href="<?php echo $this->getpath($this->favicon);?>" />
 
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -24,8 +32,4 @@
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 		<![endif]-->
-		<!-- Additional metadata -->
-<?php foreach($this->metadata as $key => $val): ?>
-		<meta name="<?php echo $key;?>" content="<?php echo $val;?>" /> 
-<?php endforeach; ?>
 	</head>

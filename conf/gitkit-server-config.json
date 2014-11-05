@@ -2,7 +2,7 @@
 	"clientId" : "709088140292-nq0r7u21mngevs9agtgbsrraq3mmenlp.apps.googleusercontent.com",
 	"serviceAccountEmail" : "709088140292-7dqdf6ttbh6tk9igfap05p3a1tsi52a9@developer.gserviceaccount.com",
 	"serviceAccountPrivateKeyFile" : "../conf/Codeshop-bcdc569af6ca.p12",
-	"widgetUrl" : "http://localhost/webshop/src/index.php",
+	"widgetUrl" : "http://localhost/webshop/www/index.php",
 	"cookieName" : "gtoken"
 }
 

@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
-<?php $this->inc->doinclude($this->head); ?>
+<?php $this->doinclude($this->head); ?>
 	<body>
-<?php $this->inc->doinclude($this->scriptinc); ?>
+<?php $this->doinclude($this->scriptinc); ?>
 		<!-- navigation -->
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div class="container">
@@ -13,7 +13,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="#"><img class="cs-logo" src="layout/img/logo_small.png" alt="CodeShop Logo" /></a>
+					<a class="navbar-brand" href="#"><img class="cs-logo" src="<?php echo $this->getpath($this->logo); ?>" alt="CodeShop Logo" /></a>
 				</div>
 				<!-- navigation, search form, login form -->
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">

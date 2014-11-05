@@ -24,8 +24,6 @@
 class Include_handler{
 	private $paths;
 	private $num_includes = 0;
-	private $template = null;
-	private $passvars = array();
 
 	function __construct($paths = array()){
 		define('INCLUDED','1'); // define constant so that files can check for that constant
@@ -38,13 +36,6 @@ class Include_handler{
 	}
 
 	function __get($name){
-		// have a look in the template system if there is one..
-		if(isset($this->template)){
-			$var = $this->template->__get($name);
-			if(isset($var)){
-				return $var;
-			}
-		}
 		if(array_key_exists($name,$GLOBALS)){
 			return $GLOBALS[$name];
 		}
@@ -56,59 +47,25 @@ class Include_handler{
 		$inc->dorequire($class_name . '.php');
 	}
 
-	// set variables of a page
-	function set_vars($page,$vars = array()){
-		if ( $page !== "" 
-		&& is_array($vars)){
-			if(array_key_exists($page,$this->passvars)){
-				array_merge($this->passvars[$page],$vars);
-			}else{
-				// key doesnt exist add array
-				$this->passvars[$page] = $vars; 
-			}
-		}
-	}
-
-	private function get_vars($page){
-		if(array_key_exists($page,$this->passvars)){
-			return $this->passvars[$page];
-		}
-		return array();
-	}
-
-	function settemplate($template){
-		$this->template = $template;
-	}
-
 	function doinclude($page){ // include a page
 		$this->num_includes++; // inc counter
-		// load passed variables
-		foreach (self::get_vars($page) as $key => $val){
-			$$key = $val;
-		}
 		return include_once($page);
 	}
 
 	function dorequire($page){ // require a page
 		$this->num_includes++; // inc counter
-		// load passed variables
-		foreach (self::get_vars($page) as $key => $val){
-			$$key = $val;
-		}
 		return require_once($page);
 	}
 
 	function getpath($page){ // get path to a file
+		$return_path = null;
 		foreach($this->paths as $path){
-			// Add a trailing / if necessary
-			if(substr($path,-1,1) != '/'){
-				$path = $path.'/';
-			}
-			$fpath = $path.$page;
+			$fpath = $path.'/'.$page;
 			if(file_exists($fpath)) // does the file exist?
-				return $fpath;
+				$return_path = $fpath;
+				break;
 		}
-		return false;
+		return $return_path;
 	}
 }
 

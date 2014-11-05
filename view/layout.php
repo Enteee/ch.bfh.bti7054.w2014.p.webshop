@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
-<?php $this->inc->doinclude($this->head); ?>
+<?php $this->doinclude($this->head); ?>
 	<body>
-<?php $this->inc->doinclude($this->scriptinc); ?>
+<?php $this->doinclude($this->scriptinc); ?>
 		<!-- navigation -->
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div class="container">

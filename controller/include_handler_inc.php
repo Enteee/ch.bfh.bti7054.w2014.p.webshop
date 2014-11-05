@@ -29,9 +29,7 @@ class Include_handler{
 
 	function __construct($paths = array()){
 		define('INCLUDED','1'); // define constant so that files can check for that constant
-
 		$this->paths = $paths;
-
 		// and add all those path to the include path variable
 		$includepaths='';
 		foreach($paths as $path)
@@ -40,7 +38,6 @@ class Include_handler{
 	}
 
 	function __get($name){
-
 		// have a look in the template system if there is one..
 		if(isset($this->template)){
 			$var = $this->template->__get($name);
@@ -48,7 +45,6 @@ class Include_handler{
 				return $var;
 			}
 		}
-
 		if(array_key_exists($name,$GLOBALS)){
 			return $GLOBALS[$name];
 		}
@@ -77,7 +73,6 @@ class Include_handler{
 		if(array_key_exists($page,$this->passvars)){
 			return $this->passvars[$page];
 		}
-
 		return array();
 	}
 
@@ -87,30 +82,25 @@ class Include_handler{
 
 	function doinclude($page){ // include a page
 		$this->num_includes++; // inc counter
-
 		// load passed variables
 		foreach (self::get_vars($page) as $key => $val){
 			$$key = $val;
 		}
-
 		return include_once($page);
 	}
 
 	function dorequire($page){ // require a page
 		$this->num_includes++; // inc counter
-
 		// load passed variables
 		foreach (self::get_vars($page) as $key => $val){
 			$$key = $val;
 		}
-
 		return require_once($page);
 	}
 
 	function getpath($page){ // get path to a file
 		foreach($this->paths as $path){
 			// Add a trailing / if necessary
-
 			if(substr($path,-1,1) != '/'){
 				$path = $path.'/';
 			}
@@ -118,9 +108,10 @@ class Include_handler{
 			if(file_exists($fpath)) // does the file exist?
 				return $fpath;
 		}
-
 		return false;
 	}
 }
 
+/* Register autloader */
+spl_autoload_register(array('Include_handler', 'autoload'))
 ?>

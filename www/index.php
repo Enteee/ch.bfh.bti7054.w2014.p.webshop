@@ -53,13 +53,14 @@ if(isset($config['modules'])){
 /* Set up composer autoload */
 require_once($config['composer']['autoload.php']);
 
+/* Set up Propel */
+Propel::init($config['propel_conf']);
+// Add the generated 'classes' directory to the include path
+set_include_path($config['propel_model'] . PATH_SEPARATOR . get_include_path());
+
 /* Set up include handler */
 require_once($config['include_handler']);
 $inc = new Include_handler($config['includes']);
-spl_autoload_register(array('Include_handler', 'autoload'));
-
-/* Set up Propel */
-Propel::init($config['propel_conf']);
 
 /* Set up google client */
 $gitkitClient = Gitkit_Client::createFromFile($config['gitkit']['server-config']);

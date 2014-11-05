@@ -39,6 +39,7 @@ $config['composer']['autoload.php'] = '../vendor/autoload.php';
 
 /*Propel conf*/
 $config['propel_conf'] = '../conf/propel-codeshop-conf.php';
+$config['propel_model'] = '../model/';
 
 /*Google api conf*/
 $config['gitkit']['server-config'] = '../conf/gitkit-server-config.json';
@@ -49,10 +50,10 @@ $config['include_handler'] = '../controller/include_handler_inc.php';
 $config['includes'][] = '../conf/';
 $config['includes'][] = '../controller/';
 $config['includes'][] = '../controller/classes/';
-$config['includes'][] = '../model/';
-$config['includes'][] = '../model/om/';
-$config['includes'][] = '../model/map/';
-$config['includes'][] = '../model/map/';
+//$config['includes'][] = '../model/';
+//$config['includes'][] = '../model/om/';
+//$config['includes'][] = '../model/map/';
+//$config['includes'][] = '../model/map/';
 $config['includes'][] = '../www/js/';
 $config['includes'][] = '../www/css/';
 $config['includes'][] = '../www/bootstrap/js/';

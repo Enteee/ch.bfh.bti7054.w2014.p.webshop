@@ -16,11 +16,11 @@
 
 		<!-- CSS -->
 		<meta http-equiv="content-style-type" content="text/css" />
-<?php foreach($this->css as $css): ?>
-		<link rel="stylesheet" type="text/css" href="<?php echo $this->getpath($css);?>" />
-<?php endforeach; ?>
 <?php foreach($this->external_css as $css): ?>
 		<link rel="stylesheet" type="text/css" href="<?php echo $css;?>" />
+<?php endforeach; ?>
+<?php foreach($this->css as $css): ?>
+		<link rel="stylesheet" type="text/css" href="<?php echo $this->getpath($css);?>" />
 <?php endforeach; ?>
 
 		<!-- favicon -->

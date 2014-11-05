@@ -67,8 +67,8 @@ $config['head'] = 'head_inc.php';	// where is the header located
 $config['scriptinc'] = 'script_inc.php';	// where is the script includer located
 // bootstrap
 $config['js'][] = 'jquery-1.11.0.js';
-$config['js'][] = 'bootstrap.min.js';
 $config['css'][] = 'bootstrap.min.css';	// bootstrap css
+$config['js'][] = 'bootstrap.min.js';
 // gitkit
 $config['external_js'][] = '//www.gstatic.com/authtoolkit/js/gitkit.js';
 $config['js'][] = 'signin.js';

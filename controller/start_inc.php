@@ -36,8 +36,7 @@ if($this->save->save_global('category_id',SaveVars::T_STRING,SaveVars::G_GET)){
 }
 
 /* Load data */
-//$categories = $this->repos->get_all_categories();
-$categories = array();
+$categories = $this->repos->get_all_categories();
 
 $products = array();
 if(isset($category_id)){

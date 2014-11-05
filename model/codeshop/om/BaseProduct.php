@@ -36,6 +36,18 @@ abstract class BaseProduct extends BaseObject implements Persistent
     protected $id;
 
     /**
+     * The value for the name field.
+     * @var        string
+     */
+    protected $name;
+
+    /**
+     * The value for the description field.
+     * @var        string
+     */
+    protected $description;
+
+    /**
      * The value for the active field.
      * Note: this column has a database default value of: true
      * @var        boolean
@@ -73,12 +85,6 @@ abstract class BaseProduct extends BaseObject implements Persistent
     protected $collProductTagsPartial;
 
     /**
-     * @var        PropelObjectCollection|ProductI18n[] Collection to store aggregation of ProductI18n objects.
-     */
-    protected $collProductI18ns;
-    protected $collProductI18nsPartial;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -98,20 +104,6 @@ abstract class BaseProduct extends BaseObject implements Persistent
      */
     protected $alreadyInClearAllReferencesDeep = false;
 
-    // i18n behavior
-
-    /**
-     * Current locale
-     * @var        string
-     */
-    protected $currentLocale = 'en_US';
-
-    /**
-     * Current translation objects
-     * @var        array[ProductI18n]
-     */
-    protected $currentTranslations;
-
     /**
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
@@ -129,12 +121,6 @@ abstract class BaseProduct extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $productTagsScheduledForDeletion = null;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var		PropelObjectCollection
-     */
-    protected $productI18nsScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -166,6 +152,28 @@ abstract class BaseProduct extends BaseObject implements Persistent
     {
 
         return $this->id;
+    }
+
+    /**
+     * Get the [name] column value.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+
+        return $this->name;
+    }
+
+    /**
+     * Get the [description] column value.
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+
+        return $this->description;
     }
 
     /**
@@ -281,6 +289,48 @@ abstract class BaseProduct extends BaseObject implements Persistent
     } // setId()
 
     /**
+     * Set the value of [name] column.
+     *
+     * @param  string $v new value
+     * @return Product The current object (for fluent API support)
+     */
+    public function setName($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->name !== $v) {
+            $this->name = $v;
+            $this->modifiedColumns[] = ProductPeer::NAME;
+        }
+
+
+        return $this;
+    } // setName()
+
+    /**
+     * Set the value of [description] column.
+     *
+     * @param  string $v new value
+     * @return Product The current object (for fluent API support)
+     */
+    public function setDescription($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->description !== $v) {
+            $this->description = $v;
+            $this->modifiedColumns[] = ProductPeer::DESCRIPTION;
+        }
+
+
+        return $this;
+    } // setDescription()
+
+    /**
      * Sets the value of the [active] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
@@ -392,9 +442,11 @@ abstract class BaseProduct extends BaseObject implements Persistent
         try {
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->active = ($row[$startcol + 1] !== null) ? (boolean) $row[$startcol + 1] : null;
-            $this->created_at = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-            $this->updated_at = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->name = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
+            $this->description = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->active = ($row[$startcol + 3] !== null) ? (boolean) $row[$startcol + 3] : null;
+            $this->created_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->updated_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -404,7 +456,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 4; // 4 = ProductPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = ProductPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Product object", $e);
@@ -471,8 +523,6 @@ abstract class BaseProduct extends BaseObject implements Persistent
             $this->collOffers = null;
 
             $this->collProductTags = null;
-
-            $this->collProductI18ns = null;
 
         } // if (deep)
     }
@@ -660,23 +710,6 @@ abstract class BaseProduct extends BaseObject implements Persistent
                 }
             }
 
-            if ($this->productI18nsScheduledForDeletion !== null) {
-                if (!$this->productI18nsScheduledForDeletion->isEmpty()) {
-                    ProductI18nQuery::create()
-                        ->filterByPrimaryKeys($this->productI18nsScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->productI18nsScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collProductI18ns !== null) {
-                foreach ($this->collProductI18ns as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
             $this->alreadyInSave = false;
 
         }
@@ -706,6 +739,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductPeer::ID)) {
             $modifiedColumns[':p' . $index++]  = '`id`';
         }
+        if ($this->isColumnModified(ProductPeer::NAME)) {
+            $modifiedColumns[':p' . $index++]  = '`name`';
+        }
+        if ($this->isColumnModified(ProductPeer::DESCRIPTION)) {
+            $modifiedColumns[':p' . $index++]  = '`description`';
+        }
         if ($this->isColumnModified(ProductPeer::ACTIVE)) {
             $modifiedColumns[':p' . $index++]  = '`active`';
         }
@@ -728,6 +767,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
                 switch ($columnName) {
                     case '`id`':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+                        break;
+                    case '`name`':
+                        $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+                        break;
+                    case '`description`':
+                        $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
                         break;
                     case '`active`':
                         $stmt->bindValue($identifier, (int) $this->active, PDO::PARAM_INT);
@@ -861,14 +906,6 @@ abstract class BaseProduct extends BaseObject implements Persistent
                     }
                 }
 
-                if ($this->collProductI18ns !== null) {
-                    foreach ($this->collProductI18ns as $referrerFK) {
-                        if (!$referrerFK->validate($columns)) {
-                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
-                        }
-                    }
-                }
-
 
             $this->alreadyInValidation = false;
         }
@@ -908,12 +945,18 @@ abstract class BaseProduct extends BaseObject implements Persistent
                 return $this->getId();
                 break;
             case 1:
-                return $this->getActive();
+                return $this->getName();
                 break;
             case 2:
-                return $this->getCreatedAt();
+                return $this->getDescription();
                 break;
             case 3:
+                return $this->getActive();
+                break;
+            case 4:
+                return $this->getCreatedAt();
+                break;
+            case 5:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -946,9 +989,11 @@ abstract class BaseProduct extends BaseObject implements Persistent
         $keys = ProductPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getActive(),
-            $keys[2] => $this->getCreatedAt(),
-            $keys[3] => $this->getUpdatedAt(),
+            $keys[1] => $this->getName(),
+            $keys[2] => $this->getDescription(),
+            $keys[3] => $this->getActive(),
+            $keys[4] => $this->getCreatedAt(),
+            $keys[5] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -964,9 +1009,6 @@ abstract class BaseProduct extends BaseObject implements Persistent
             }
             if (null !== $this->collProductTags) {
                 $result['ProductTags'] = $this->collProductTags->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
-            if (null !== $this->collProductI18ns) {
-                $result['ProductI18ns'] = $this->collProductI18ns->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1006,12 +1048,18 @@ abstract class BaseProduct extends BaseObject implements Persistent
                 $this->setId($value);
                 break;
             case 1:
-                $this->setActive($value);
+                $this->setName($value);
                 break;
             case 2:
-                $this->setCreatedAt($value);
+                $this->setDescription($value);
                 break;
             case 3:
+                $this->setActive($value);
+                break;
+            case 4:
+                $this->setCreatedAt($value);
+                break;
+            case 5:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1039,9 +1087,11 @@ abstract class BaseProduct extends BaseObject implements Persistent
         $keys = ProductPeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setActive($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setCreatedAt($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setUpdatedAt($arr[$keys[3]]);
+        if (array_key_exists($keys[1], $arr)) $this->setName($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setDescription($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setActive($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setCreatedAt($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setUpdatedAt($arr[$keys[5]]);
     }
 
     /**
@@ -1054,6 +1104,8 @@ abstract class BaseProduct extends BaseObject implements Persistent
         $criteria = new Criteria(ProductPeer::DATABASE_NAME);
 
         if ($this->isColumnModified(ProductPeer::ID)) $criteria->add(ProductPeer::ID, $this->id);
+        if ($this->isColumnModified(ProductPeer::NAME)) $criteria->add(ProductPeer::NAME, $this->name);
+        if ($this->isColumnModified(ProductPeer::DESCRIPTION)) $criteria->add(ProductPeer::DESCRIPTION, $this->description);
         if ($this->isColumnModified(ProductPeer::ACTIVE)) $criteria->add(ProductPeer::ACTIVE, $this->active);
         if ($this->isColumnModified(ProductPeer::CREATED_AT)) $criteria->add(ProductPeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(ProductPeer::UPDATED_AT)) $criteria->add(ProductPeer::UPDATED_AT, $this->updated_at);
@@ -1120,6 +1172,8 @@ abstract class BaseProduct extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setName($this->getName());
+        $copyObj->setDescription($this->getDescription());
         $copyObj->setActive($this->getActive());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
@@ -1146,12 +1200,6 @@ abstract class BaseProduct extends BaseObject implements Persistent
             foreach ($this->getProductTags() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addProductTag($relObj->copy($deepCopy));
-                }
-            }
-
-            foreach ($this->getProductI18ns() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addProductI18n($relObj->copy($deepCopy));
                 }
             }
 
@@ -1224,9 +1272,6 @@ abstract class BaseProduct extends BaseObject implements Persistent
         }
         if ('ProductTag' == $relationName) {
             $this->initProductTags();
-        }
-        if ('ProductI18n' == $relationName) {
-            $this->initProductI18ns();
         }
     }
 
@@ -1956,243 +2001,13 @@ abstract class BaseProduct extends BaseObject implements Persistent
     }
 
     /**
-     * Clears out the collProductI18ns collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return Product The current object (for fluent API support)
-     * @see        addProductI18ns()
-     */
-    public function clearProductI18ns()
-    {
-        $this->collProductI18ns = null; // important to set this to null since that means it is uninitialized
-        $this->collProductI18nsPartial = null;
-
-        return $this;
-    }
-
-    /**
-     * reset is the collProductI18ns collection loaded partially
-     *
-     * @return void
-     */
-    public function resetPartialProductI18ns($v = true)
-    {
-        $this->collProductI18nsPartial = $v;
-    }
-
-    /**
-     * Initializes the collProductI18ns collection.
-     *
-     * By default this just sets the collProductI18ns collection to an empty array (like clearcollProductI18ns());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initProductI18ns($overrideExisting = true)
-    {
-        if (null !== $this->collProductI18ns && !$overrideExisting) {
-            return;
-        }
-        $this->collProductI18ns = new PropelObjectCollection();
-        $this->collProductI18ns->setModel('ProductI18n');
-    }
-
-    /**
-     * Gets an array of ProductI18n objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this Product is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @return PropelObjectCollection|ProductI18n[] List of ProductI18n objects
-     * @throws PropelException
-     */
-    public function getProductI18ns($criteria = null, PropelPDO $con = null)
-    {
-        $partial = $this->collProductI18nsPartial && !$this->isNew();
-        if (null === $this->collProductI18ns || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collProductI18ns) {
-                // return empty collection
-                $this->initProductI18ns();
-            } else {
-                $collProductI18ns = ProductI18nQuery::create(null, $criteria)
-                    ->filterByProduct($this)
-                    ->find($con);
-                if (null !== $criteria) {
-                    if (false !== $this->collProductI18nsPartial && count($collProductI18ns)) {
-                      $this->initProductI18ns(false);
-
-                      foreach ($collProductI18ns as $obj) {
-                        if (false == $this->collProductI18ns->contains($obj)) {
-                          $this->collProductI18ns->append($obj);
-                        }
-                      }
-
-                      $this->collProductI18nsPartial = true;
-                    }
-
-                    $collProductI18ns->getInternalIterator()->rewind();
-
-                    return $collProductI18ns;
-                }
-
-                if ($partial && $this->collProductI18ns) {
-                    foreach ($this->collProductI18ns as $obj) {
-                        if ($obj->isNew()) {
-                            $collProductI18ns[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collProductI18ns = $collProductI18ns;
-                $this->collProductI18nsPartial = false;
-            }
-        }
-
-        return $this->collProductI18ns;
-    }
-
-    /**
-     * Sets a collection of ProductI18n objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param PropelCollection $productI18ns A Propel collection.
-     * @param PropelPDO $con Optional connection object
-     * @return Product The current object (for fluent API support)
-     */
-    public function setProductI18ns(PropelCollection $productI18ns, PropelPDO $con = null)
-    {
-        $productI18nsToDelete = $this->getProductI18ns(new Criteria(), $con)->diff($productI18ns);
-
-
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->productI18nsScheduledForDeletion = clone $productI18nsToDelete;
-
-        foreach ($productI18nsToDelete as $productI18nRemoved) {
-            $productI18nRemoved->setProduct(null);
-        }
-
-        $this->collProductI18ns = null;
-        foreach ($productI18ns as $productI18n) {
-            $this->addProductI18n($productI18n);
-        }
-
-        $this->collProductI18ns = $productI18ns;
-        $this->collProductI18nsPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related ProductI18n objects.
-     *
-     * @param Criteria $criteria
-     * @param boolean $distinct
-     * @param PropelPDO $con
-     * @return int             Count of related ProductI18n objects.
-     * @throws PropelException
-     */
-    public function countProductI18ns(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
-    {
-        $partial = $this->collProductI18nsPartial && !$this->isNew();
-        if (null === $this->collProductI18ns || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collProductI18ns) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getProductI18ns());
-            }
-            $query = ProductI18nQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByProduct($this)
-                ->count($con);
-        }
-
-        return count($this->collProductI18ns);
-    }
-
-    /**
-     * Method called to associate a ProductI18n object to this object
-     * through the ProductI18n foreign key attribute.
-     *
-     * @param    ProductI18n $l ProductI18n
-     * @return Product The current object (for fluent API support)
-     */
-    public function addProductI18n(ProductI18n $l)
-    {
-        if ($l && $locale = $l->getLocale()) {
-            $this->setLocale($locale);
-            $this->currentTranslations[$locale] = $l;
-        }
-        if ($this->collProductI18ns === null) {
-            $this->initProductI18ns();
-            $this->collProductI18nsPartial = true;
-        }
-
-        if (!in_array($l, $this->collProductI18ns->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
-            $this->doAddProductI18n($l);
-
-            if ($this->productI18nsScheduledForDeletion and $this->productI18nsScheduledForDeletion->contains($l)) {
-                $this->productI18nsScheduledForDeletion->remove($this->productI18nsScheduledForDeletion->search($l));
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param	ProductI18n $productI18n The productI18n object to add.
-     */
-    protected function doAddProductI18n($productI18n)
-    {
-        $this->collProductI18ns[]= $productI18n;
-        $productI18n->setProduct($this);
-    }
-
-    /**
-     * @param	ProductI18n $productI18n The productI18n object to remove.
-     * @return Product The current object (for fluent API support)
-     */
-    public function removeProductI18n($productI18n)
-    {
-        if ($this->getProductI18ns()->contains($productI18n)) {
-            $this->collProductI18ns->remove($this->collProductI18ns->search($productI18n));
-            if (null === $this->productI18nsScheduledForDeletion) {
-                $this->productI18nsScheduledForDeletion = clone $this->collProductI18ns;
-                $this->productI18nsScheduledForDeletion->clear();
-            }
-            $this->productI18nsScheduledForDeletion[]= clone $productI18n;
-            $productI18n->setProduct(null);
-        }
-
-        return $this;
-    }
-
-    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
     {
         $this->id = null;
+        $this->name = null;
+        $this->description = null;
         $this->active = null;
         $this->created_at = null;
         $this->updated_at = null;
@@ -2234,18 +2049,9 @@ abstract class BaseProduct extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collProductI18ns) {
-                foreach ($this->collProductI18ns as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
-
-        // i18n behavior
-        $this->currentLocale = 'en_US';
-        $this->currentTranslations = null;
 
         if ($this->collComments instanceof PropelCollection) {
             $this->collComments->clearIterator();
@@ -2259,10 +2065,6 @@ abstract class BaseProduct extends BaseObject implements Persistent
             $this->collProductTags->clearIterator();
         }
         $this->collProductTags = null;
-        if ($this->collProductI18ns instanceof PropelCollection) {
-            $this->collProductI18ns->clearIterator();
-        }
-        $this->collProductI18ns = null;
     }
 
     /**
@@ -2283,153 +2085,6 @@ abstract class BaseProduct extends BaseObject implements Persistent
     public function isAlreadyInSave()
     {
         return $this->alreadyInSave;
-    }
-
-    // i18n behavior
-
-    /**
-     * Sets the locale for translations
-     *
-     * @param     string $locale Locale to use for the translation, e.g. 'fr_FR'
-     *
-     * @return    Product The current object (for fluent API support)
-     */
-    public function setLocale($locale = 'en_US')
-    {
-        $this->currentLocale = $locale;
-
-        return $this;
-    }
-
-    /**
-     * Gets the locale for translations
-     *
-     * @return    string $locale Locale to use for the translation, e.g. 'fr_FR'
-     */
-    public function getLocale()
-    {
-        return $this->currentLocale;
-    }
-
-    /**
-     * Returns the current translation for a given locale
-     *
-     * @param     string $locale Locale to use for the translation, e.g. 'fr_FR'
-     * @param     PropelPDO $con an optional connection object
-     *
-     * @return ProductI18n */
-    public function getTranslation($locale = 'en_US', PropelPDO $con = null)
-    {
-        if (!isset($this->currentTranslations[$locale])) {
-            if (null !== $this->collProductI18ns) {
-                foreach ($this->collProductI18ns as $translation) {
-                    if ($translation->getLocale() == $locale) {
-                        $this->currentTranslations[$locale] = $translation;
-
-                        return $translation;
-                    }
-                }
-            }
-            if ($this->isNew()) {
-                $translation = new ProductI18n();
-                $translation->setLocale($locale);
-            } else {
-                $translation = ProductI18nQuery::create()
-                    ->filterByPrimaryKey(array($this->getPrimaryKey(), $locale))
-                    ->findOneOrCreate($con);
-                $this->currentTranslations[$locale] = $translation;
-            }
-            $this->addProductI18n($translation);
-        }
-
-        return $this->currentTranslations[$locale];
-    }
-
-    /**
-     * Remove the translation for a given locale
-     *
-     * @param     string $locale Locale to use for the translation, e.g. 'fr_FR'
-     * @param     PropelPDO $con an optional connection object
-     *
-     * @return    Product The current object (for fluent API support)
-     */
-    public function removeTranslation($locale = 'en_US', PropelPDO $con = null)
-    {
-        if (!$this->isNew()) {
-            ProductI18nQuery::create()
-                ->filterByPrimaryKey(array($this->getPrimaryKey(), $locale))
-                ->delete($con);
-        }
-        if (isset($this->currentTranslations[$locale])) {
-            unset($this->currentTranslations[$locale]);
-        }
-        foreach ($this->collProductI18ns as $key => $translation) {
-            if ($translation->getLocale() == $locale) {
-                unset($this->collProductI18ns[$key]);
-                break;
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Returns the current translation
-     *
-     * @param     PropelPDO $con an optional connection object
-     *
-     * @return ProductI18n */
-    public function getCurrentTranslation(PropelPDO $con = null)
-    {
-        return $this->getTranslation($this->getLocale(), $con);
-    }
-
-
-        /**
-         * Get the [name] column value.
-         *
-         * @return string
-         */
-        public function getName()
-        {
-        return $this->getCurrentTranslation()->getName();
-    }
-
-
-        /**
-         * Set the value of [name] column.
-         *
-         * @param  string $v new value
-         * @return ProductI18n The current object (for fluent API support)
-         */
-        public function setName($v)
-        {    $this->getCurrentTranslation()->setName($v);
-
-        return $this;
-    }
-
-
-        /**
-         * Get the [description] column value.
-         *
-         * @return string
-         */
-        public function getDescription()
-        {
-        return $this->getCurrentTranslation()->getDescription();
-    }
-
-
-        /**
-         * Set the value of [description] column.
-         *
-         * @param  string $v new value
-         * @return ProductI18n The current object (for fluent API support)
-         */
-        public function setDescription($v)
-        {    $this->getCurrentTranslation()->setDescription($v);
-
-        return $this;
     }
 
     // timestampable behavior

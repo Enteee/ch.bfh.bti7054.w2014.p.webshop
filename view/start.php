@@ -66,7 +66,7 @@
 <?php foreach($this->categories as $category):?>
 							<a href="#" class="list-group-item">
 								<span class="badge"><?php echo $category->getProductsCount(); ?></span>
-								<?php echo $category->getTitle(); ?>
+								<?php echo $category->getName(); ?>
 							</a>
 <?php endforeach; ?>
 						</div>
@@ -74,12 +74,12 @@
 				</div>
 				<!-- right content -->
 				<div class="col-md-9">
-					<p class="lead">Products</p>				
-					<!-- item list -->					
+					<p class="lead">Products</p>
+					<!-- item list -->
 					<div class="list-group">
 <?php foreach($this->products as $product): ?>
 						<div href="#" class="list-group-item">
-							<h4 class="list-group-item-heading"><?php echo $product->getTitle(); ?></h4>
+							<h4 class="list-group-item-heading"><?php echo $product->getName(); ?></h4>
 							<p class="list-group-item-text"><?php echo $product->getDescription(); ?></p>
 						</div>
 <?php endforeach; ?>

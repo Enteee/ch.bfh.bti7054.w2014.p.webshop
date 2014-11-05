@@ -41,6 +41,7 @@ class TagTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('type_id', 'TypeId', 'INTEGER', 'tag_type', 'id', true, null, null);
         $this->addForeignKey('parent_id', 'ParentId', 'INTEGER', 'tag', 'id', false, null, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', true, 200, null);
         $this->addColumn('active', 'Active', 'BOOLEAN', true, 1, true);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
@@ -57,7 +58,6 @@ class TagTableMap extends TableMap
         $this->addRelation('OfferTag', 'OfferTag', RelationMap::ONE_TO_MANY, array('id' => 'tag_id', ), null, null, 'OfferTags');
         $this->addRelation('ProductTag', 'ProductTag', RelationMap::ONE_TO_MANY, array('id' => 'tag_id', ), null, null, 'ProductTags');
         $this->addRelation('TagRelatedById', 'Tag', RelationMap::ONE_TO_MANY, array('id' => 'parent_id', ), null, null, 'TagsRelatedById');
-        $this->addRelation('TagI18n', 'TagI18n', RelationMap::ONE_TO_MANY, array('id' => 'id', ), 'CASCADE', null, 'TagI18ns');
     } // buildRelations()
 
     /**
@@ -69,15 +69,6 @@ class TagTableMap extends TableMap
     public function getBehaviors()
     {
         return array(
-            'i18n' =>  array (
-  'i18n_table' => '%TABLE%_i18n',
-  'i18n_phpname' => '%PHPNAME%I18n',
-  'i18n_columns' => 'name',
-  'i18n_pk_name' => NULL,
-  'locale_column' => 'locale',
-  'default_locale' => NULL,
-  'locale_alias' => '',
-),
             'timestampable' =>  array (
   'create_column' => 'created_at',
   'update_column' => 'updated_at',

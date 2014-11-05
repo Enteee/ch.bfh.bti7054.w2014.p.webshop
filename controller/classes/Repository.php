@@ -14,9 +14,9 @@ class Repository {
 
 	public function get_products($searchstring = NULL) {
 		return ProductQuery::create()
-			->useI18nQuery('en_US') // TODO: make language dynamic
+			//->useI18nQuery('en_US') // TODO: make language dynamic
 				->filterByName($searchstring)
-			->endUse()
+			//->endUse()
 			->find();
 	}
 
@@ -26,9 +26,9 @@ class Repository {
 
 		if (isset($searchstring)) {
 			return ProductQuery::create()
-				->useI18nQuery('en_US') // TODO: make language dynamic
+				//->useI18nQuery('en_US') // TODO: make language dynamic
 					->filterByName($searchstring)
-				->endUse()	
+				//->endUse()	
 				->useProductTagQuery()
 					->filterByTag($tag)
 				->endUse()

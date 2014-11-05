@@ -139,6 +139,8 @@ DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(200) NOT NULL,
+    `description` VARCHAR(1000) NOT NULL,
     `active` TINYINT(1) DEFAULT 1 NOT NULL,
     `created_at` DATETIME,
     `updated_at` DATETIME,
@@ -180,6 +182,7 @@ CREATE TABLE `tag`
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `type_id` INTEGER NOT NULL,
     `parent_id` INTEGER,
+    `name` VARCHAR(200) NOT NULL,
     `active` TINYINT(1) DEFAULT 1 NOT NULL,
     `created_at` DATETIME,
     `updated_at` DATETIME,
@@ -203,6 +206,7 @@ DROP TABLE IF EXISTS `tag_type`;
 CREATE TABLE `tag_type`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(200) NOT NULL,
     `active` TINYINT(1) DEFAULT 1 NOT NULL,
     `created_at` DATETIME,
     `updated_at` DATETIME,
@@ -226,67 +230,6 @@ CREATE TABLE `user`
     `updated_at` DATETIME,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `email` (`email`)
-) ENGINE=InnoDB;
-
--- ---------------------------------------------------------------------
--- product_i18n
--- ---------------------------------------------------------------------
-
-DROP TABLE IF EXISTS `product_i18n`;
-
-CREATE TABLE `product_i18n`
-(
-    `id` INTEGER NOT NULL,
-    `locale` VARCHAR(5) DEFAULT 'en_US' NOT NULL,
-    `name` VARCHAR(200) NOT NULL,
-    `description` VARCHAR(1000) NOT NULL,
-    `created_at` DATETIME,
-    `updated_at` DATETIME,
-    PRIMARY KEY (`id`,`locale`),
-    CONSTRAINT `product_i18n_FK_1`
-        FOREIGN KEY (`id`)
-        REFERENCES `product` (`id`)
-        ON DELETE CASCADE
-) ENGINE=InnoDB;
-
--- ---------------------------------------------------------------------
--- tag_i18n
--- ---------------------------------------------------------------------
-
-DROP TABLE IF EXISTS `tag_i18n`;
-
-CREATE TABLE `tag_i18n`
-(
-    `id` INTEGER NOT NULL,
-    `locale` VARCHAR(5) DEFAULT 'en_US' NOT NULL,
-    `name` VARCHAR(200) NOT NULL,
-    `created_at` DATETIME,
-    `updated_at` DATETIME,
-    PRIMARY KEY (`id`,`locale`),
-    CONSTRAINT `tag_i18n_FK_1`
-        FOREIGN KEY (`id`)
-        REFERENCES `tag` (`id`)
-        ON DELETE CASCADE
-) ENGINE=InnoDB;
-
--- ---------------------------------------------------------------------
--- tag_type_i18n
--- ---------------------------------------------------------------------
-
-DROP TABLE IF EXISTS `tag_type_i18n`;
-
-CREATE TABLE `tag_type_i18n`
-(
-    `id` INTEGER NOT NULL,
-    `locale` VARCHAR(5) DEFAULT 'en_US' NOT NULL,
-    `name` VARCHAR(200) NOT NULL,
-    `created_at` DATETIME,
-    `updated_at` DATETIME,
-    PRIMARY KEY (`id`,`locale`),
-    CONSTRAINT `tag_type_i18n_FK_1`
-        FOREIGN KEY (`id`)
-        REFERENCES `tag_type` (`id`)
-        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 # This restores the fkey checks, after having unset them earlier

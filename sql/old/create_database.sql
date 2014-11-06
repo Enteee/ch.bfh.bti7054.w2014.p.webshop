@@ -5,10 +5,11 @@ create database `codeshop`;
 */
 use `codeshop`;
 
--- current tables
+-- old tables
 drop table if exists `offer_tag`;
 drop table if exists `product_tag`;
 
+-- current tables
 drop table if exists `comment`;
 drop table if exists `code`;
 drop table if exists `order`;
@@ -31,8 +32,10 @@ create table `user` (
 );
 create table `product` (
 	`id` int not null primary key auto_increment,
-	`name` varchar(200) not null,
-	`description` varchar(1000) not null,
+	`name_de` varchar(200) not null,
+	`name_en` varchar(200) not null,
+	`description_de` varchar(1000) not null,
+	`description_en` varchar(1000) not null,
 	`active` boolean not null default 1,
 	`created_at` datetime,
     `updated_at` datetime
@@ -49,7 +52,8 @@ create table `offer` (
 );
 create table `tag_type` (
 	`id` int not null primary key auto_increment,
-	`name` varchar(200) not null,
+	`name_de` varchar(200) not null,
+	`name_en` varchar(200) not null,
 	`active` boolean not null default 1,
 	`created_at` datetime,
     `updated_at` datetime
@@ -58,7 +62,8 @@ create table `tag` (
 	`id` int not null primary key auto_increment,
 	`type_id` int not null,
 	`parent_id` int,
-	`name` varchar(200) not null,
+	`name_de` varchar(200) not null,
+	`name_en` varchar(200) not null,
 	`active` boolean not null default 1,
 	`created_at` datetime,
     `updated_at` datetime,

@@ -36,12 +36,6 @@ abstract class BaseTagType extends BaseObject implements Persistent
     protected $id;
 
     /**
-     * The value for the name field.
-     * @var        string
-     */
-    protected $name;
-
-    /**
      * The value for the active field.
      * Note: this column has a database default value of: true
      * @var        boolean
@@ -67,6 +61,12 @@ abstract class BaseTagType extends BaseObject implements Persistent
     protected $collTagsPartial;
 
     /**
+     * @var        PropelObjectCollection|TagTypeI18n[] Collection to store aggregation of TagTypeI18n objects.
+     */
+    protected $collTagTypeI18ns;
+    protected $collTagTypeI18nsPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -86,11 +86,31 @@ abstract class BaseTagType extends BaseObject implements Persistent
      */
     protected $alreadyInClearAllReferencesDeep = false;
 
+    // i18n behavior
+
+    /**
+     * Current locale
+     * @var        string
+     */
+    protected $currentLocale = 'en_US';
+
+    /**
+     * Current translation objects
+     * @var        array[TagTypeI18n]
+     */
+    protected $currentTranslations;
+
     /**
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
     protected $tagsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $tagTypeI18nsScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -122,17 +142,6 @@ abstract class BaseTagType extends BaseObject implements Persistent
     {
 
         return $this->id;
-    }
-
-    /**
-     * Get the [name] column value.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-
-        return $this->name;
     }
 
     /**
@@ -248,27 +257,6 @@ abstract class BaseTagType extends BaseObject implements Persistent
     } // setId()
 
     /**
-     * Set the value of [name] column.
-     *
-     * @param  string $v new value
-     * @return TagType The current object (for fluent API support)
-     */
-    public function setName($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->name !== $v) {
-            $this->name = $v;
-            $this->modifiedColumns[] = TagTypePeer::NAME;
-        }
-
-
-        return $this;
-    } // setName()
-
-    /**
      * Sets the value of the [active] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
@@ -380,10 +368,9 @@ abstract class BaseTagType extends BaseObject implements Persistent
         try {
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->name = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->active = ($row[$startcol + 2] !== null) ? (boolean) $row[$startcol + 2] : null;
-            $this->created_at = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->updated_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->active = ($row[$startcol + 1] !== null) ? (boolean) $row[$startcol + 1] : null;
+            $this->created_at = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->updated_at = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -393,7 +380,7 @@ abstract class BaseTagType extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 5; // 5 = TagTypePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 4; // 4 = TagTypePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating TagType object", $e);
@@ -456,6 +443,8 @@ abstract class BaseTagType extends BaseObject implements Persistent
         if ($deep) {  // also de-associate any related objects?
 
             $this->collTags = null;
+
+            $this->collTagTypeI18ns = null;
 
         } // if (deep)
     }
@@ -609,6 +598,23 @@ abstract class BaseTagType extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->tagTypeI18nsScheduledForDeletion !== null) {
+                if (!$this->tagTypeI18nsScheduledForDeletion->isEmpty()) {
+                    TagTypeI18nQuery::create()
+                        ->filterByPrimaryKeys($this->tagTypeI18nsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->tagTypeI18nsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collTagTypeI18ns !== null) {
+                foreach ($this->collTagTypeI18ns as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             $this->alreadyInSave = false;
 
         }
@@ -638,9 +644,6 @@ abstract class BaseTagType extends BaseObject implements Persistent
         if ($this->isColumnModified(TagTypePeer::ID)) {
             $modifiedColumns[':p' . $index++]  = '`id`';
         }
-        if ($this->isColumnModified(TagTypePeer::NAME)) {
-            $modifiedColumns[':p' . $index++]  = '`name`';
-        }
         if ($this->isColumnModified(TagTypePeer::ACTIVE)) {
             $modifiedColumns[':p' . $index++]  = '`active`';
         }
@@ -663,9 +666,6 @@ abstract class BaseTagType extends BaseObject implements Persistent
                 switch ($columnName) {
                     case '`id`':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
-                        break;
-                    case '`name`':
-                        $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
                     case '`active`':
                         $stmt->bindValue($identifier, (int) $this->active, PDO::PARAM_INT);
@@ -783,6 +783,14 @@ abstract class BaseTagType extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collTagTypeI18ns !== null) {
+                    foreach ($this->collTagTypeI18ns as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -822,15 +830,12 @@ abstract class BaseTagType extends BaseObject implements Persistent
                 return $this->getId();
                 break;
             case 1:
-                return $this->getName();
-                break;
-            case 2:
                 return $this->getActive();
                 break;
-            case 3:
+            case 2:
                 return $this->getCreatedAt();
                 break;
-            case 4:
+            case 3:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -863,10 +868,9 @@ abstract class BaseTagType extends BaseObject implements Persistent
         $keys = TagTypePeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getName(),
-            $keys[2] => $this->getActive(),
-            $keys[3] => $this->getCreatedAt(),
-            $keys[4] => $this->getUpdatedAt(),
+            $keys[1] => $this->getActive(),
+            $keys[2] => $this->getCreatedAt(),
+            $keys[3] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -876,6 +880,9 @@ abstract class BaseTagType extends BaseObject implements Persistent
         if ($includeForeignObjects) {
             if (null !== $this->collTags) {
                 $result['Tags'] = $this->collTags->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collTagTypeI18ns) {
+                $result['TagTypeI18ns'] = $this->collTagTypeI18ns->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -915,15 +922,12 @@ abstract class BaseTagType extends BaseObject implements Persistent
                 $this->setId($value);
                 break;
             case 1:
-                $this->setName($value);
-                break;
-            case 2:
                 $this->setActive($value);
                 break;
-            case 3:
+            case 2:
                 $this->setCreatedAt($value);
                 break;
-            case 4:
+            case 3:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -951,10 +955,9 @@ abstract class BaseTagType extends BaseObject implements Persistent
         $keys = TagTypePeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setName($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setActive($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setCreatedAt($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setUpdatedAt($arr[$keys[4]]);
+        if (array_key_exists($keys[1], $arr)) $this->setActive($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setCreatedAt($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setUpdatedAt($arr[$keys[3]]);
     }
 
     /**
@@ -967,7 +970,6 @@ abstract class BaseTagType extends BaseObject implements Persistent
         $criteria = new Criteria(TagTypePeer::DATABASE_NAME);
 
         if ($this->isColumnModified(TagTypePeer::ID)) $criteria->add(TagTypePeer::ID, $this->id);
-        if ($this->isColumnModified(TagTypePeer::NAME)) $criteria->add(TagTypePeer::NAME, $this->name);
         if ($this->isColumnModified(TagTypePeer::ACTIVE)) $criteria->add(TagTypePeer::ACTIVE, $this->active);
         if ($this->isColumnModified(TagTypePeer::CREATED_AT)) $criteria->add(TagTypePeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(TagTypePeer::UPDATED_AT)) $criteria->add(TagTypePeer::UPDATED_AT, $this->updated_at);
@@ -1034,7 +1036,6 @@ abstract class BaseTagType extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setName($this->getName());
         $copyObj->setActive($this->getActive());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
@@ -1049,6 +1050,12 @@ abstract class BaseTagType extends BaseObject implements Persistent
             foreach ($this->getTags() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addTag($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getTagTypeI18ns() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addTagTypeI18n($relObj->copy($deepCopy));
                 }
             }
 
@@ -1115,6 +1122,9 @@ abstract class BaseTagType extends BaseObject implements Persistent
     {
         if ('Tag' == $relationName) {
             $this->initTags();
+        }
+        if ('TagTypeI18n' == $relationName) {
+            $this->initTagTypeI18ns();
         }
     }
 
@@ -1369,12 +1379,243 @@ abstract class BaseTagType extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collTagTypeI18ns collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return TagType The current object (for fluent API support)
+     * @see        addTagTypeI18ns()
+     */
+    public function clearTagTypeI18ns()
+    {
+        $this->collTagTypeI18ns = null; // important to set this to null since that means it is uninitialized
+        $this->collTagTypeI18nsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collTagTypeI18ns collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialTagTypeI18ns($v = true)
+    {
+        $this->collTagTypeI18nsPartial = $v;
+    }
+
+    /**
+     * Initializes the collTagTypeI18ns collection.
+     *
+     * By default this just sets the collTagTypeI18ns collection to an empty array (like clearcollTagTypeI18ns());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initTagTypeI18ns($overrideExisting = true)
+    {
+        if (null !== $this->collTagTypeI18ns && !$overrideExisting) {
+            return;
+        }
+        $this->collTagTypeI18ns = new PropelObjectCollection();
+        $this->collTagTypeI18ns->setModel('TagTypeI18n');
+    }
+
+    /**
+     * Gets an array of TagTypeI18n objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this TagType is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|TagTypeI18n[] List of TagTypeI18n objects
+     * @throws PropelException
+     */
+    public function getTagTypeI18ns($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collTagTypeI18nsPartial && !$this->isNew();
+        if (null === $this->collTagTypeI18ns || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collTagTypeI18ns) {
+                // return empty collection
+                $this->initTagTypeI18ns();
+            } else {
+                $collTagTypeI18ns = TagTypeI18nQuery::create(null, $criteria)
+                    ->filterByTagType($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collTagTypeI18nsPartial && count($collTagTypeI18ns)) {
+                      $this->initTagTypeI18ns(false);
+
+                      foreach ($collTagTypeI18ns as $obj) {
+                        if (false == $this->collTagTypeI18ns->contains($obj)) {
+                          $this->collTagTypeI18ns->append($obj);
+                        }
+                      }
+
+                      $this->collTagTypeI18nsPartial = true;
+                    }
+
+                    $collTagTypeI18ns->getInternalIterator()->rewind();
+
+                    return $collTagTypeI18ns;
+                }
+
+                if ($partial && $this->collTagTypeI18ns) {
+                    foreach ($this->collTagTypeI18ns as $obj) {
+                        if ($obj->isNew()) {
+                            $collTagTypeI18ns[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collTagTypeI18ns = $collTagTypeI18ns;
+                $this->collTagTypeI18nsPartial = false;
+            }
+        }
+
+        return $this->collTagTypeI18ns;
+    }
+
+    /**
+     * Sets a collection of TagTypeI18n objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $tagTypeI18ns A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return TagType The current object (for fluent API support)
+     */
+    public function setTagTypeI18ns(PropelCollection $tagTypeI18ns, PropelPDO $con = null)
+    {
+        $tagTypeI18nsToDelete = $this->getTagTypeI18ns(new Criteria(), $con)->diff($tagTypeI18ns);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->tagTypeI18nsScheduledForDeletion = clone $tagTypeI18nsToDelete;
+
+        foreach ($tagTypeI18nsToDelete as $tagTypeI18nRemoved) {
+            $tagTypeI18nRemoved->setTagType(null);
+        }
+
+        $this->collTagTypeI18ns = null;
+        foreach ($tagTypeI18ns as $tagTypeI18n) {
+            $this->addTagTypeI18n($tagTypeI18n);
+        }
+
+        $this->collTagTypeI18ns = $tagTypeI18ns;
+        $this->collTagTypeI18nsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related TagTypeI18n objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related TagTypeI18n objects.
+     * @throws PropelException
+     */
+    public function countTagTypeI18ns(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collTagTypeI18nsPartial && !$this->isNew();
+        if (null === $this->collTagTypeI18ns || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collTagTypeI18ns) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getTagTypeI18ns());
+            }
+            $query = TagTypeI18nQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByTagType($this)
+                ->count($con);
+        }
+
+        return count($this->collTagTypeI18ns);
+    }
+
+    /**
+     * Method called to associate a TagTypeI18n object to this object
+     * through the TagTypeI18n foreign key attribute.
+     *
+     * @param    TagTypeI18n $l TagTypeI18n
+     * @return TagType The current object (for fluent API support)
+     */
+    public function addTagTypeI18n(TagTypeI18n $l)
+    {
+        if ($l && $locale = $l->getLocale()) {
+            $this->setLocale($locale);
+            $this->currentTranslations[$locale] = $l;
+        }
+        if ($this->collTagTypeI18ns === null) {
+            $this->initTagTypeI18ns();
+            $this->collTagTypeI18nsPartial = true;
+        }
+
+        if (!in_array($l, $this->collTagTypeI18ns->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddTagTypeI18n($l);
+
+            if ($this->tagTypeI18nsScheduledForDeletion and $this->tagTypeI18nsScheduledForDeletion->contains($l)) {
+                $this->tagTypeI18nsScheduledForDeletion->remove($this->tagTypeI18nsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	TagTypeI18n $tagTypeI18n The tagTypeI18n object to add.
+     */
+    protected function doAddTagTypeI18n($tagTypeI18n)
+    {
+        $this->collTagTypeI18ns[]= $tagTypeI18n;
+        $tagTypeI18n->setTagType($this);
+    }
+
+    /**
+     * @param	TagTypeI18n $tagTypeI18n The tagTypeI18n object to remove.
+     * @return TagType The current object (for fluent API support)
+     */
+    public function removeTagTypeI18n($tagTypeI18n)
+    {
+        if ($this->getTagTypeI18ns()->contains($tagTypeI18n)) {
+            $this->collTagTypeI18ns->remove($this->collTagTypeI18ns->search($tagTypeI18n));
+            if (null === $this->tagTypeI18nsScheduledForDeletion) {
+                $this->tagTypeI18nsScheduledForDeletion = clone $this->collTagTypeI18ns;
+                $this->tagTypeI18nsScheduledForDeletion->clear();
+            }
+            $this->tagTypeI18nsScheduledForDeletion[]= clone $tagTypeI18n;
+            $tagTypeI18n->setTagType(null);
+        }
+
+        return $this;
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
     {
         $this->id = null;
-        $this->name = null;
         $this->active = null;
         $this->created_at = null;
         $this->updated_at = null;
@@ -1406,14 +1647,27 @@ abstract class BaseTagType extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collTagTypeI18ns) {
+                foreach ($this->collTagTypeI18ns as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
+
+        // i18n behavior
+        $this->currentLocale = 'en_US';
+        $this->currentTranslations = null;
 
         if ($this->collTags instanceof PropelCollection) {
             $this->collTags->clearIterator();
         }
         $this->collTags = null;
+        if ($this->collTagTypeI18ns instanceof PropelCollection) {
+            $this->collTagTypeI18ns->clearIterator();
+        }
+        $this->collTagTypeI18ns = null;
     }
 
     /**
@@ -1446,6 +1700,129 @@ abstract class BaseTagType extends BaseObject implements Persistent
     public function keepUpdateDateUnchanged()
     {
         $this->modifiedColumns[] = TagTypePeer::UPDATED_AT;
+
+        return $this;
+    }
+
+    // i18n behavior
+
+    /**
+     * Sets the locale for translations
+     *
+     * @param     string $locale Locale to use for the translation, e.g. 'fr_FR'
+     *
+     * @return    TagType The current object (for fluent API support)
+     */
+    public function setLocale($locale = 'en_US')
+    {
+        $this->currentLocale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * Gets the locale for translations
+     *
+     * @return    string $locale Locale to use for the translation, e.g. 'fr_FR'
+     */
+    public function getLocale()
+    {
+        return $this->currentLocale;
+    }
+
+    /**
+     * Returns the current translation for a given locale
+     *
+     * @param     string $locale Locale to use for the translation, e.g. 'fr_FR'
+     * @param     PropelPDO $con an optional connection object
+     *
+     * @return TagTypeI18n */
+    public function getTranslation($locale = 'en_US', PropelPDO $con = null)
+    {
+        if (!isset($this->currentTranslations[$locale])) {
+            if (null !== $this->collTagTypeI18ns) {
+                foreach ($this->collTagTypeI18ns as $translation) {
+                    if ($translation->getLocale() == $locale) {
+                        $this->currentTranslations[$locale] = $translation;
+
+                        return $translation;
+                    }
+                }
+            }
+            if ($this->isNew()) {
+                $translation = new TagTypeI18n();
+                $translation->setLocale($locale);
+            } else {
+                $translation = TagTypeI18nQuery::create()
+                    ->filterByPrimaryKey(array($this->getPrimaryKey(), $locale))
+                    ->findOneOrCreate($con);
+                $this->currentTranslations[$locale] = $translation;
+            }
+            $this->addTagTypeI18n($translation);
+        }
+
+        return $this->currentTranslations[$locale];
+    }
+
+    /**
+     * Remove the translation for a given locale
+     *
+     * @param     string $locale Locale to use for the translation, e.g. 'fr_FR'
+     * @param     PropelPDO $con an optional connection object
+     *
+     * @return    TagType The current object (for fluent API support)
+     */
+    public function removeTranslation($locale = 'en_US', PropelPDO $con = null)
+    {
+        if (!$this->isNew()) {
+            TagTypeI18nQuery::create()
+                ->filterByPrimaryKey(array($this->getPrimaryKey(), $locale))
+                ->delete($con);
+        }
+        if (isset($this->currentTranslations[$locale])) {
+            unset($this->currentTranslations[$locale]);
+        }
+        foreach ($this->collTagTypeI18ns as $key => $translation) {
+            if ($translation->getLocale() == $locale) {
+                unset($this->collTagTypeI18ns[$key]);
+                break;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns the current translation
+     *
+     * @param     PropelPDO $con an optional connection object
+     *
+     * @return TagTypeI18n */
+    public function getCurrentTranslation(PropelPDO $con = null)
+    {
+        return $this->getTranslation($this->getLocale(), $con);
+    }
+
+
+        /**
+         * Get the [name] column value.
+         *
+         * @return string
+         */
+        public function getName()
+        {
+        return $this->getCurrentTranslation()->getName();
+    }
+
+
+        /**
+         * Set the value of [name] column.
+         *
+         * @param  string $v new value
+         * @return TagTypeI18n The current object (for fluent API support)
+         */
+        public function setName($v)
+        {    $this->getCurrentTranslation()->setName($v);
 
         return $this;
     }

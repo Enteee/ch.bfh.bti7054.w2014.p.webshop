@@ -7,15 +7,11 @@
  *
  *
  * @method ProductQuery orderById($order = Criteria::ASC) Order by the id column
- * @method ProductQuery orderByName($order = Criteria::ASC) Order by the name column
- * @method ProductQuery orderByDescription($order = Criteria::ASC) Order by the description column
  * @method ProductQuery orderByActive($order = Criteria::ASC) Order by the active column
  * @method ProductQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method ProductQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
  * @method ProductQuery groupById() Group by the id column
- * @method ProductQuery groupByName() Group by the name column
- * @method ProductQuery groupByDescription() Group by the description column
  * @method ProductQuery groupByActive() Group by the active column
  * @method ProductQuery groupByCreatedAt() Group by the created_at column
  * @method ProductQuery groupByUpdatedAt() Group by the updated_at column
@@ -36,18 +32,18 @@
  * @method ProductQuery rightJoinProductTag($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ProductTag relation
  * @method ProductQuery innerJoinProductTag($relationAlias = null) Adds a INNER JOIN clause to the query using the ProductTag relation
  *
+ * @method ProductQuery leftJoinProductI18n($relationAlias = null) Adds a LEFT JOIN clause to the query using the ProductI18n relation
+ * @method ProductQuery rightJoinProductI18n($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ProductI18n relation
+ * @method ProductQuery innerJoinProductI18n($relationAlias = null) Adds a INNER JOIN clause to the query using the ProductI18n relation
+ *
  * @method Product findOne(PropelPDO $con = null) Return the first Product matching the query
  * @method Product findOneOrCreate(PropelPDO $con = null) Return the first Product matching the query, or a new Product object populated from the query conditions when no match is found
  *
- * @method Product findOneByName(string $name) Return the first Product filtered by the name column
- * @method Product findOneByDescription(string $description) Return the first Product filtered by the description column
  * @method Product findOneByActive(boolean $active) Return the first Product filtered by the active column
  * @method Product findOneByCreatedAt(string $created_at) Return the first Product filtered by the created_at column
  * @method Product findOneByUpdatedAt(string $updated_at) Return the first Product filtered by the updated_at column
  *
  * @method array findById(int $id) Return Product objects filtered by the id column
- * @method array findByName(string $name) Return Product objects filtered by the name column
- * @method array findByDescription(string $description) Return Product objects filtered by the description column
  * @method array findByActive(boolean $active) Return Product objects filtered by the active column
  * @method array findByCreatedAt(string $created_at) Return Product objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return Product objects filtered by the updated_at column
@@ -158,7 +154,7 @@ abstract class BaseProductQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `name`, `description`, `active`, `created_at`, `updated_at` FROM `product` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `active`, `created_at`, `updated_at` FROM `product` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -287,64 +283,6 @@ abstract class BaseProductQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(ProductPeer::ID, $id, $comparison);
-    }
-
-    /**
-     * Filter the query on the name column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByName('fooValue');   // WHERE name = 'fooValue'
-     * $query->filterByName('%fooValue%'); // WHERE name LIKE '%fooValue%'
-     * </code>
-     *
-     * @param     string $name The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ProductQuery The current query, for fluid interface
-     */
-    public function filterByName($name = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($name)) {
-                $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $name)) {
-                $name = str_replace('*', '%', $name);
-                $comparison = Criteria::LIKE;
-            }
-        }
-
-        return $this->addUsingAlias(ProductPeer::NAME, $name, $comparison);
-    }
-
-    /**
-     * Filter the query on the description column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByDescription('fooValue');   // WHERE description = 'fooValue'
-     * $query->filterByDescription('%fooValue%'); // WHERE description LIKE '%fooValue%'
-     * </code>
-     *
-     * @param     string $description The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ProductQuery The current query, for fluid interface
-     */
-    public function filterByDescription($description = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($description)) {
-                $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $description)) {
-                $description = str_replace('*', '%', $description);
-                $comparison = Criteria::LIKE;
-            }
-        }
-
-        return $this->addUsingAlias(ProductPeer::DESCRIPTION, $description, $comparison);
     }
 
     /**
@@ -683,6 +621,80 @@ abstract class BaseProductQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related ProductI18n object
+     *
+     * @param   ProductI18n|PropelObjectCollection $productI18n  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 ProductQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByProductI18n($productI18n, $comparison = null)
+    {
+        if ($productI18n instanceof ProductI18n) {
+            return $this
+                ->addUsingAlias(ProductPeer::ID, $productI18n->getId(), $comparison);
+        } elseif ($productI18n instanceof PropelObjectCollection) {
+            return $this
+                ->useProductI18nQuery()
+                ->filterByPrimaryKeys($productI18n->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByProductI18n() only accepts arguments of type ProductI18n or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ProductI18n relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return ProductQuery The current query, for fluid interface
+     */
+    public function joinProductI18n($relationAlias = null, $joinType = 'LEFT JOIN')
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ProductI18n');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ProductI18n');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ProductI18n relation ProductI18n object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ProductI18nQuery A secondary query class using the current class as primary query
+     */
+    public function useProductI18nQuery($relationAlias = null, $joinType = 'LEFT JOIN')
+    {
+        return $this
+            ->joinProductI18n($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ProductI18n', 'ProductI18nQuery');
+    }
+
+    /**
      * Exclude object from result
      *
      * @param   Product $product Object to remove from the list of results
@@ -763,4 +775,61 @@ abstract class BaseProductQuery extends ModelCriteria
     {
         return $this->addAscendingOrderByColumn(ProductPeer::CREATED_AT);
     }
+    // i18n behavior
+
+    /**
+     * Adds a JOIN clause to the query using the i18n relation
+     *
+     * @param     string $locale Locale to use for the join condition, e.g. 'fr_FR'
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'. Defaults to left join.
+     *
+     * @return    ProductQuery The current query, for fluid interface
+     */
+    public function joinI18n($locale = 'en_US', $relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $relationName = $relationAlias ? $relationAlias : 'ProductI18n';
+
+        return $this
+            ->joinProductI18n($relationAlias, $joinType)
+            ->addJoinCondition($relationName, $relationName . '.Locale = ?', $locale);
+    }
+
+    /**
+     * Adds a JOIN clause to the query and hydrates the related I18n object.
+     * Shortcut for $c->joinI18n($locale)->with()
+     *
+     * @param     string $locale Locale to use for the join condition, e.g. 'fr_FR'
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'. Defaults to left join.
+     *
+     * @return    ProductQuery The current query, for fluid interface
+     */
+    public function joinWithI18n($locale = 'en_US', $joinType = Criteria::LEFT_JOIN)
+    {
+        $this
+            ->joinI18n($locale, null, $joinType)
+            ->with('ProductI18n');
+        $this->with['ProductI18n']->setIsWithOneToMany(false);
+
+        return $this;
+    }
+
+    /**
+     * Use the I18n relation query object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $locale Locale to use for the join condition, e.g. 'fr_FR'
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'. Defaults to left join.
+     *
+     * @return    ProductI18nQuery A secondary query class using the current class as primary query
+     */
+    public function useI18nQuery($locale = 'en_US', $relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinI18n($locale, $relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ProductI18n', 'ProductI18nQuery');
+    }
+
 }

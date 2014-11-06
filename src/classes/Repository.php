@@ -13,30 +13,28 @@ class Repository {
 	}
 
 	public function get_products($searchstring = NULL) {
-		return ProductQuery::create()
-			//->useI18nQuery('en_US') // TODO: make language dynamic
+		if (isset($searchstring)) {
+			return ProductQuery::create()
 				->filterByName($searchstring)
-			//->endUse()
-			->find();
+				->find();
+		} else {
+			return ProductQuery::create()
+				->find();
+		}
 	}
 
 	public function get_products_by_tag_id($tag_id, $searchstring = NULL) {
-		$tag = TagQuery::create()
-			->findPk($tag_id);
-
 		if (isset($searchstring)) {
 			return ProductQuery::create()
-				//->useI18nQuery('en_US') // TODO: make language dynamic
-					->filterByName($searchstring)
-				//->endUse()	
+				->filterByName($searchstring)
 				->useProductTagQuery()
-					->filterByTag($tag)
+					->filterByTagId($tag_id)
 				->endUse()
 				->find();
 		} else {
 			return ProductQuery::create()
 				->useProductTagQuery()
-					->filterByTag($tag)
+					->filterByTagId($tag_id)
 				->endUse()
 				->find();
 		}

@@ -9,14 +9,10 @@
  * @method ProductTagQuery orderById($order = Criteria::ASC) Order by the id column
  * @method ProductTagQuery orderByProductId($order = Criteria::ASC) Order by the product_id column
  * @method ProductTagQuery orderByTagId($order = Criteria::ASC) Order by the tag_id column
- * @method ProductTagQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
- * @method ProductTagQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
  * @method ProductTagQuery groupById() Group by the id column
  * @method ProductTagQuery groupByProductId() Group by the product_id column
  * @method ProductTagQuery groupByTagId() Group by the tag_id column
- * @method ProductTagQuery groupByCreatedAt() Group by the created_at column
- * @method ProductTagQuery groupByUpdatedAt() Group by the updated_at column
  *
  * @method ProductTagQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method ProductTagQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -35,14 +31,10 @@
  *
  * @method ProductTag findOneByProductId(int $product_id) Return the first ProductTag filtered by the product_id column
  * @method ProductTag findOneByTagId(int $tag_id) Return the first ProductTag filtered by the tag_id column
- * @method ProductTag findOneByCreatedAt(string $created_at) Return the first ProductTag filtered by the created_at column
- * @method ProductTag findOneByUpdatedAt(string $updated_at) Return the first ProductTag filtered by the updated_at column
  *
  * @method array findById(int $id) Return ProductTag objects filtered by the id column
  * @method array findByProductId(int $product_id) Return ProductTag objects filtered by the product_id column
  * @method array findByTagId(int $tag_id) Return ProductTag objects filtered by the tag_id column
- * @method array findByCreatedAt(string $created_at) Return ProductTag objects filtered by the created_at column
- * @method array findByUpdatedAt(string $updated_at) Return ProductTag objects filtered by the updated_at column
  *
  * @package    propel.generator.codeshop.om
  */
@@ -150,7 +142,7 @@ abstract class BaseProductTagQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `product_id`, `tag_id`, `created_at`, `updated_at` FROM `product_tag` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `product_id`, `tag_id` FROM `product_tag` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -370,92 +362,6 @@ abstract class BaseProductTagQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the created_at column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByCreatedAt('2011-03-14'); // WHERE created_at = '2011-03-14'
-     * $query->filterByCreatedAt('now'); // WHERE created_at = '2011-03-14'
-     * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at < '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $createdAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ProductTagQuery The current query, for fluid interface
-     */
-    public function filterByCreatedAt($createdAt = null, $comparison = null)
-    {
-        if (is_array($createdAt)) {
-            $useMinMax = false;
-            if (isset($createdAt['min'])) {
-                $this->addUsingAlias(ProductTagPeer::CREATED_AT, $createdAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($createdAt['max'])) {
-                $this->addUsingAlias(ProductTagPeer::CREATED_AT, $createdAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(ProductTagPeer::CREATED_AT, $createdAt, $comparison);
-    }
-
-    /**
-     * Filter the query on the updated_at column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByUpdatedAt('2011-03-14'); // WHERE updated_at = '2011-03-14'
-     * $query->filterByUpdatedAt('now'); // WHERE updated_at = '2011-03-14'
-     * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at < '2011-03-13'
-     * </code>
-     *
-     * @param     mixed $updatedAt The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ProductTagQuery The current query, for fluid interface
-     */
-    public function filterByUpdatedAt($updatedAt = null, $comparison = null)
-    {
-        if (is_array($updatedAt)) {
-            $useMinMax = false;
-            if (isset($updatedAt['min'])) {
-                $this->addUsingAlias(ProductTagPeer::UPDATED_AT, $updatedAt['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($updatedAt['max'])) {
-                $this->addUsingAlias(ProductTagPeer::UPDATED_AT, $updatedAt['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(ProductTagPeer::UPDATED_AT, $updatedAt, $comparison);
-    }
-
-    /**
      * Filter the query by a related Product object
      *
      * @param   Product|PropelObjectCollection $product The related object(s) to use as filter
@@ -623,69 +529,4 @@ abstract class BaseProductTagQuery extends ModelCriteria
         return $this;
     }
 
-    // timestampable behavior
-
-    /**
-     * Filter by the latest updated
-     *
-     * @param      int $nbDays Maximum age of the latest update in days
-     *
-     * @return     ProductTagQuery The current query, for fluid interface
-     */
-    public function recentlyUpdated($nbDays = 7)
-    {
-        return $this->addUsingAlias(ProductTagPeer::UPDATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
-    }
-
-    /**
-     * Order by update date desc
-     *
-     * @return     ProductTagQuery The current query, for fluid interface
-     */
-    public function lastUpdatedFirst()
-    {
-        return $this->addDescendingOrderByColumn(ProductTagPeer::UPDATED_AT);
-    }
-
-    /**
-     * Order by update date asc
-     *
-     * @return     ProductTagQuery The current query, for fluid interface
-     */
-    public function firstUpdatedFirst()
-    {
-        return $this->addAscendingOrderByColumn(ProductTagPeer::UPDATED_AT);
-    }
-
-    /**
-     * Filter by the latest created
-     *
-     * @param      int $nbDays Maximum age of in days
-     *
-     * @return     ProductTagQuery The current query, for fluid interface
-     */
-    public function recentlyCreated($nbDays = 7)
-    {
-        return $this->addUsingAlias(ProductTagPeer::CREATED_AT, time() - $nbDays * 24 * 60 * 60, Criteria::GREATER_EQUAL);
-    }
-
-    /**
-     * Order by create date desc
-     *
-     * @return     ProductTagQuery The current query, for fluid interface
-     */
-    public function lastCreatedFirst()
-    {
-        return $this->addDescendingOrderByColumn(ProductTagPeer::CREATED_AT);
-    }
-
-    /**
-     * Order by create date asc
-     *
-     * @return     ProductTagQuery The current query, for fluid interface
-     */
-    public function firstCreatedFirst()
-    {
-        return $this->addAscendingOrderByColumn(ProductTagPeer::CREATED_AT);
-    }
 }

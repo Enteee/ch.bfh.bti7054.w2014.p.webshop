@@ -24,13 +24,13 @@ abstract class BaseTagI18nPeer
     const TM_CLASS = 'TagI18nTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 3;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 5;
+    const NUM_HYDRATE_COLUMNS = 3;
 
     /** the column name for the id field */
     const ID = 'tag_i18n.id';
@@ -40,12 +40,6 @@ abstract class BaseTagI18nPeer
 
     /** the column name for the name field */
     const NAME = 'tag_i18n.name';
-
-    /** the column name for the created_at field */
-    const CREATED_AT = 'tag_i18n.created_at';
-
-    /** the column name for the updated_at field */
-    const UPDATED_AT = 'tag_i18n.updated_at';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -66,12 +60,12 @@ abstract class BaseTagI18nPeer
      * e.g. TagI18nPeer::$fieldNames[TagI18nPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Locale', 'Name', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'locale', 'name', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (TagI18nPeer::ID, TagI18nPeer::LOCALE, TagI18nPeer::NAME, TagI18nPeer::CREATED_AT, TagI18nPeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'LOCALE', 'NAME', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'locale', 'name', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Locale', 'Name', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'locale', 'name', ),
+        BasePeer::TYPE_COLNAME => array (TagI18nPeer::ID, TagI18nPeer::LOCALE, TagI18nPeer::NAME, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'LOCALE', 'NAME', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'locale', 'name', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, )
     );
 
     /**
@@ -81,12 +75,12 @@ abstract class BaseTagI18nPeer
      * e.g. TagI18nPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Locale' => 1, 'Name' => 2, 'CreatedAt' => 3, 'UpdatedAt' => 4, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'locale' => 1, 'name' => 2, 'createdAt' => 3, 'updatedAt' => 4, ),
-        BasePeer::TYPE_COLNAME => array (TagI18nPeer::ID => 0, TagI18nPeer::LOCALE => 1, TagI18nPeer::NAME => 2, TagI18nPeer::CREATED_AT => 3, TagI18nPeer::UPDATED_AT => 4, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'LOCALE' => 1, 'NAME' => 2, 'CREATED_AT' => 3, 'UPDATED_AT' => 4, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'locale' => 1, 'name' => 2, 'created_at' => 3, 'updated_at' => 4, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Locale' => 1, 'Name' => 2, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'locale' => 1, 'name' => 2, ),
+        BasePeer::TYPE_COLNAME => array (TagI18nPeer::ID => 0, TagI18nPeer::LOCALE => 1, TagI18nPeer::NAME => 2, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'LOCALE' => 1, 'NAME' => 2, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'locale' => 1, 'name' => 2, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, )
     );
 
     /**
@@ -163,14 +157,10 @@ abstract class BaseTagI18nPeer
             $criteria->addSelectColumn(TagI18nPeer::ID);
             $criteria->addSelectColumn(TagI18nPeer::LOCALE);
             $criteria->addSelectColumn(TagI18nPeer::NAME);
-            $criteria->addSelectColumn(TagI18nPeer::CREATED_AT);
-            $criteria->addSelectColumn(TagI18nPeer::UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.locale');
             $criteria->addSelectColumn($alias . '.name');
-            $criteria->addSelectColumn($alias . '.created_at');
-            $criteria->addSelectColumn($alias . '.updated_at');
         }
     }
 

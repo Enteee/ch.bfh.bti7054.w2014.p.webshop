@@ -7,13 +7,11 @@
  *
  *
  * @method TagTypeQuery orderById($order = Criteria::ASC) Order by the id column
- * @method TagTypeQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method TagTypeQuery orderByActive($order = Criteria::ASC) Order by the active column
  * @method TagTypeQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method TagTypeQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
  * @method TagTypeQuery groupById() Group by the id column
- * @method TagTypeQuery groupByName() Group by the name column
  * @method TagTypeQuery groupByActive() Group by the active column
  * @method TagTypeQuery groupByCreatedAt() Group by the created_at column
  * @method TagTypeQuery groupByUpdatedAt() Group by the updated_at column
@@ -26,16 +24,18 @@
  * @method TagTypeQuery rightJoinTag($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Tag relation
  * @method TagTypeQuery innerJoinTag($relationAlias = null) Adds a INNER JOIN clause to the query using the Tag relation
  *
+ * @method TagTypeQuery leftJoinTagTypeI18n($relationAlias = null) Adds a LEFT JOIN clause to the query using the TagTypeI18n relation
+ * @method TagTypeQuery rightJoinTagTypeI18n($relationAlias = null) Adds a RIGHT JOIN clause to the query using the TagTypeI18n relation
+ * @method TagTypeQuery innerJoinTagTypeI18n($relationAlias = null) Adds a INNER JOIN clause to the query using the TagTypeI18n relation
+ *
  * @method TagType findOne(PropelPDO $con = null) Return the first TagType matching the query
  * @method TagType findOneOrCreate(PropelPDO $con = null) Return the first TagType matching the query, or a new TagType object populated from the query conditions when no match is found
  *
- * @method TagType findOneByName(string $name) Return the first TagType filtered by the name column
  * @method TagType findOneByActive(boolean $active) Return the first TagType filtered by the active column
  * @method TagType findOneByCreatedAt(string $created_at) Return the first TagType filtered by the created_at column
  * @method TagType findOneByUpdatedAt(string $updated_at) Return the first TagType filtered by the updated_at column
  *
  * @method array findById(int $id) Return TagType objects filtered by the id column
- * @method array findByName(string $name) Return TagType objects filtered by the name column
  * @method array findByActive(boolean $active) Return TagType objects filtered by the active column
  * @method array findByCreatedAt(string $created_at) Return TagType objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return TagType objects filtered by the updated_at column
@@ -146,7 +146,7 @@ abstract class BaseTagTypeQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `name`, `active`, `created_at`, `updated_at` FROM `tag_type` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `active`, `created_at`, `updated_at` FROM `tag_type` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -275,35 +275,6 @@ abstract class BaseTagTypeQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(TagTypePeer::ID, $id, $comparison);
-    }
-
-    /**
-     * Filter the query on the name column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByName('fooValue');   // WHERE name = 'fooValue'
-     * $query->filterByName('%fooValue%'); // WHERE name LIKE '%fooValue%'
-     * </code>
-     *
-     * @param     string $name The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return TagTypeQuery The current query, for fluid interface
-     */
-    public function filterByName($name = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($name)) {
-                $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $name)) {
-                $name = str_replace('*', '%', $name);
-                $comparison = Criteria::LIKE;
-            }
-        }
-
-        return $this->addUsingAlias(TagTypePeer::NAME, $name, $comparison);
     }
 
     /**
@@ -494,6 +465,80 @@ abstract class BaseTagTypeQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related TagTypeI18n object
+     *
+     * @param   TagTypeI18n|PropelObjectCollection $tagTypeI18n  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 TagTypeQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByTagTypeI18n($tagTypeI18n, $comparison = null)
+    {
+        if ($tagTypeI18n instanceof TagTypeI18n) {
+            return $this
+                ->addUsingAlias(TagTypePeer::ID, $tagTypeI18n->getId(), $comparison);
+        } elseif ($tagTypeI18n instanceof PropelObjectCollection) {
+            return $this
+                ->useTagTypeI18nQuery()
+                ->filterByPrimaryKeys($tagTypeI18n->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByTagTypeI18n() only accepts arguments of type TagTypeI18n or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the TagTypeI18n relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return TagTypeQuery The current query, for fluid interface
+     */
+    public function joinTagTypeI18n($relationAlias = null, $joinType = 'LEFT JOIN')
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('TagTypeI18n');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'TagTypeI18n');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the TagTypeI18n relation TagTypeI18n object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   TagTypeI18nQuery A secondary query class using the current class as primary query
+     */
+    public function useTagTypeI18nQuery($relationAlias = null, $joinType = 'LEFT JOIN')
+    {
+        return $this
+            ->joinTagTypeI18n($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'TagTypeI18n', 'TagTypeI18nQuery');
+    }
+
+    /**
      * Exclude object from result
      *
      * @param   TagType $tagType Object to remove from the list of results
@@ -574,4 +619,61 @@ abstract class BaseTagTypeQuery extends ModelCriteria
     {
         return $this->addAscendingOrderByColumn(TagTypePeer::CREATED_AT);
     }
+    // i18n behavior
+
+    /**
+     * Adds a JOIN clause to the query using the i18n relation
+     *
+     * @param     string $locale Locale to use for the join condition, e.g. 'fr_FR'
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'. Defaults to left join.
+     *
+     * @return    TagTypeQuery The current query, for fluid interface
+     */
+    public function joinI18n($locale = 'en_US', $relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $relationName = $relationAlias ? $relationAlias : 'TagTypeI18n';
+
+        return $this
+            ->joinTagTypeI18n($relationAlias, $joinType)
+            ->addJoinCondition($relationName, $relationName . '.Locale = ?', $locale);
+    }
+
+    /**
+     * Adds a JOIN clause to the query and hydrates the related I18n object.
+     * Shortcut for $c->joinI18n($locale)->with()
+     *
+     * @param     string $locale Locale to use for the join condition, e.g. 'fr_FR'
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'. Defaults to left join.
+     *
+     * @return    TagTypeQuery The current query, for fluid interface
+     */
+    public function joinWithI18n($locale = 'en_US', $joinType = Criteria::LEFT_JOIN)
+    {
+        $this
+            ->joinI18n($locale, null, $joinType)
+            ->with('TagTypeI18n');
+        $this->with['TagTypeI18n']->setIsWithOneToMany(false);
+
+        return $this;
+    }
+
+    /**
+     * Use the I18n relation query object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $locale Locale to use for the join condition, e.g. 'fr_FR'
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'. Defaults to left join.
+     *
+     * @return    TagTypeI18nQuery A secondary query class using the current class as primary query
+     */
+    public function useI18nQuery($locale = 'en_US', $relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinI18n($locale, $relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'TagTypeI18n', 'TagTypeI18nQuery');
+    }
+
 }

@@ -16,10 +16,8 @@
 class Product extends BaseProduct
 {
 	public function getTags() {
-		//$repo = new Repository();
-		//return $repo->get_tags_by_product_id($this->getId());
-		// TODO:
-		return array('Tag1', 'Tag2', 'Tag3');
+		$repo = new Repository();
+		return $repo->get_tags_by_product_id($this->getId());
 	}
 	
 	public function getProgrammingLanguages() {

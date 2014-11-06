@@ -4,11 +4,21 @@
 */
 {
 	"title": {
-		"DE" : "CodeShop",
-		"EN" : "CodeChop"
+		"de" : "CodeShop",
+		"en" : "CodeShop"
 	},
 	"subtitle": {
-		"DE" : "Never code again!",
-		"EN" : "Never code again!"
+		"de_CH" : "Niä meh säuber codä!",
+		"de" : "Nie mehr selber Code schreiben!",
+		"en" : "Never code again!"
+	},
+	
+	"errorTitle": {
+		"en" : "Error",
+		"de" : "Fehler"
+	},
+	"error404": {
+		"en" : "The page you are looking for doesn't exist. We're sorry.",
+		"de" : "Die gewünschte Seite konnte nicht gefunden werden."
 	}
 }

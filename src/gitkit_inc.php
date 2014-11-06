@@ -1,10 +1,10 @@
 <?php
-/*	layout_inc.php
+/*	sample_inc.php
 *	Mischa Lehmann
 *	ducksource@duckpond.ch
 *	Version:1.0
 *
-*	the layouting test page
+*	a sample page. use this as template
 *	Require:
 *		- Requirement
 *
@@ -22,18 +22,19 @@
 *	!!Wo0t!!
 */
 
-if(!defined('INCLUDED')){
+if(!defined('CODESHOP_AUTOLOAD')){
 	exit('Go away!');
 }
 
-if(!$this->config['debug']){
-	exit('Go away!');
-}
+/* Do fancy PHP shizzle */
 
 /* Initialize template */
-$this->page->init('layout.php',
-	array( 
+$this->page->init('gitkit.php',
+	/* tempalte variables, used for rendering */
+	array(
+		'title' => $this->page->var_get('title').' - login_page',
 	),
+	/* metadata variables, used in <meta> */
 	array(
 	)
 );

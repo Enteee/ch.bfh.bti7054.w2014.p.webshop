@@ -24,13 +24,13 @@ abstract class BaseProductI18nPeer
     const TM_CLASS = 'ProductI18nTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 4;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /** the column name for the id field */
     const ID = 'product_i18n.id';
@@ -43,12 +43,6 @@ abstract class BaseProductI18nPeer
 
     /** the column name for the description field */
     const DESCRIPTION = 'product_i18n.description';
-
-    /** the column name for the created_at field */
-    const CREATED_AT = 'product_i18n.created_at';
-
-    /** the column name for the updated_at field */
-    const UPDATED_AT = 'product_i18n.updated_at';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -69,12 +63,12 @@ abstract class BaseProductI18nPeer
      * e.g. ProductI18nPeer::$fieldNames[ProductI18nPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Locale', 'Name', 'Description', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'locale', 'name', 'description', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (ProductI18nPeer::ID, ProductI18nPeer::LOCALE, ProductI18nPeer::NAME, ProductI18nPeer::DESCRIPTION, ProductI18nPeer::CREATED_AT, ProductI18nPeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'LOCALE', 'NAME', 'DESCRIPTION', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'locale', 'name', 'description', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Locale', 'Name', 'Description', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'locale', 'name', 'description', ),
+        BasePeer::TYPE_COLNAME => array (ProductI18nPeer::ID, ProductI18nPeer::LOCALE, ProductI18nPeer::NAME, ProductI18nPeer::DESCRIPTION, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'LOCALE', 'NAME', 'DESCRIPTION', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'locale', 'name', 'description', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
     );
 
     /**
@@ -84,12 +78,12 @@ abstract class BaseProductI18nPeer
      * e.g. ProductI18nPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Locale' => 1, 'Name' => 2, 'Description' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'locale' => 1, 'name' => 2, 'description' => 3, 'createdAt' => 4, 'updatedAt' => 5, ),
-        BasePeer::TYPE_COLNAME => array (ProductI18nPeer::ID => 0, ProductI18nPeer::LOCALE => 1, ProductI18nPeer::NAME => 2, ProductI18nPeer::DESCRIPTION => 3, ProductI18nPeer::CREATED_AT => 4, ProductI18nPeer::UPDATED_AT => 5, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'LOCALE' => 1, 'NAME' => 2, 'DESCRIPTION' => 3, 'CREATED_AT' => 4, 'UPDATED_AT' => 5, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'locale' => 1, 'name' => 2, 'description' => 3, 'created_at' => 4, 'updated_at' => 5, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Locale' => 1, 'Name' => 2, 'Description' => 3, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'locale' => 1, 'name' => 2, 'description' => 3, ),
+        BasePeer::TYPE_COLNAME => array (ProductI18nPeer::ID => 0, ProductI18nPeer::LOCALE => 1, ProductI18nPeer::NAME => 2, ProductI18nPeer::DESCRIPTION => 3, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'LOCALE' => 1, 'NAME' => 2, 'DESCRIPTION' => 3, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'locale' => 1, 'name' => 2, 'description' => 3, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
     );
 
     /**
@@ -167,15 +161,11 @@ abstract class BaseProductI18nPeer
             $criteria->addSelectColumn(ProductI18nPeer::LOCALE);
             $criteria->addSelectColumn(ProductI18nPeer::NAME);
             $criteria->addSelectColumn(ProductI18nPeer::DESCRIPTION);
-            $criteria->addSelectColumn(ProductI18nPeer::CREATED_AT);
-            $criteria->addSelectColumn(ProductI18nPeer::UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.locale');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.description');
-            $criteria->addSelectColumn($alias . '.created_at');
-            $criteria->addSelectColumn($alias . '.updated_at');
         }
     }
 

@@ -24,13 +24,13 @@ abstract class BaseProductTagPeer
     const TM_CLASS = 'ProductTagTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 3;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 5;
+    const NUM_HYDRATE_COLUMNS = 3;
 
     /** the column name for the id field */
     const ID = 'product_tag.id';
@@ -40,12 +40,6 @@ abstract class BaseProductTagPeer
 
     /** the column name for the tag_id field */
     const TAG_ID = 'product_tag.tag_id';
-
-    /** the column name for the created_at field */
-    const CREATED_AT = 'product_tag.created_at';
-
-    /** the column name for the updated_at field */
-    const UPDATED_AT = 'product_tag.updated_at';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -66,12 +60,12 @@ abstract class BaseProductTagPeer
      * e.g. ProductTagPeer::$fieldNames[ProductTagPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'ProductId', 'TagId', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'productId', 'tagId', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (ProductTagPeer::ID, ProductTagPeer::PRODUCT_ID, ProductTagPeer::TAG_ID, ProductTagPeer::CREATED_AT, ProductTagPeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'PRODUCT_ID', 'TAG_ID', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'product_id', 'tag_id', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'ProductId', 'TagId', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'productId', 'tagId', ),
+        BasePeer::TYPE_COLNAME => array (ProductTagPeer::ID, ProductTagPeer::PRODUCT_ID, ProductTagPeer::TAG_ID, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'PRODUCT_ID', 'TAG_ID', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'product_id', 'tag_id', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, )
     );
 
     /**
@@ -81,12 +75,12 @@ abstract class BaseProductTagPeer
      * e.g. ProductTagPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ProductId' => 1, 'TagId' => 2, 'CreatedAt' => 3, 'UpdatedAt' => 4, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'productId' => 1, 'tagId' => 2, 'createdAt' => 3, 'updatedAt' => 4, ),
-        BasePeer::TYPE_COLNAME => array (ProductTagPeer::ID => 0, ProductTagPeer::PRODUCT_ID => 1, ProductTagPeer::TAG_ID => 2, ProductTagPeer::CREATED_AT => 3, ProductTagPeer::UPDATED_AT => 4, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'PRODUCT_ID' => 1, 'TAG_ID' => 2, 'CREATED_AT' => 3, 'UPDATED_AT' => 4, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'product_id' => 1, 'tag_id' => 2, 'created_at' => 3, 'updated_at' => 4, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ProductId' => 1, 'TagId' => 2, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'productId' => 1, 'tagId' => 2, ),
+        BasePeer::TYPE_COLNAME => array (ProductTagPeer::ID => 0, ProductTagPeer::PRODUCT_ID => 1, ProductTagPeer::TAG_ID => 2, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'PRODUCT_ID' => 1, 'TAG_ID' => 2, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'product_id' => 1, 'tag_id' => 2, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, )
     );
 
     /**
@@ -163,14 +157,10 @@ abstract class BaseProductTagPeer
             $criteria->addSelectColumn(ProductTagPeer::ID);
             $criteria->addSelectColumn(ProductTagPeer::PRODUCT_ID);
             $criteria->addSelectColumn(ProductTagPeer::TAG_ID);
-            $criteria->addSelectColumn(ProductTagPeer::CREATED_AT);
-            $criteria->addSelectColumn(ProductTagPeer::UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.product_id');
             $criteria->addSelectColumn($alias . '.tag_id');
-            $criteria->addSelectColumn($alias . '.created_at');
-            $criteria->addSelectColumn($alias . '.updated_at');
         }
     }
 

@@ -1,54 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-<?php $this->doinclude($this->head); ?>
-	<body>
-<?php $this->doinclude($this->scriptinc); ?>
-		<!-- navigation -->
-		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-			<div class="container">
-				<!-- logo -->
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="#"><img class="cs-logo" src="<?php echo $this->getpath($this->logo); ?>" alt="CodeShop Logo" /></a>
-				</div>
-				<!-- navigation, search form, login form -->
-				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-					<ul class="nav navbar-nav">
-						<li>
-							<a href="#"><span class="glyphicon glyphicon-user" title="My items"></span> <span class="cs-nav-text">My items</span></a>
-						</li>
-						<li>
-							<a href="#"><span class="glyphicon glyphicon-shopping-cart" title="Shopping cart"></span> <span class="cs-nav-text">Shopping cart</span></a>
-						</li>
-						<li>
-							<a href="#"><span class="glyphicon glyphicon-folder-open" title="My products"></span> <span class="cs-nav-text">My products</span></a>
-						</li>
-						<li>
-							<a href="#"><span class="glyphicon glyphicon-plus" title="Add product"></span> <span class="cs-nav-text">Add product</span></a>
-						</li>
-					</ul>
-					<!-- search form -->					
-					<form class="navbar-form navbar-right" role="form">
-						<div class="form-group">
-							<div class="input-group">
-								<input type="text" class="form-control">
-								<span class="input-group-btn">
-									<button class="btn btn-default" type="button">
-										<span class="glyphicon glyphicon-search"></span>
-									</button>
-								</span>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-		</nav>
-
-		<!-- page content -->
+<?php $this->view('header'); ?> 
 		<div class="container">
 			<div class="row">
 				<!-- left content -->
@@ -63,7 +13,7 @@
 								<span class="badge">123</span>
 								Active category TEST
 							</a>
-<?php foreach($this->categories as $category):?>
+<?php foreach($categories as $category):?>
 							<a href="#" class="list-group-item">
 								<span class="badge"><?php echo $category->getProductsCount(); ?></span>
 								<?php echo $category->getName(); ?>
@@ -77,23 +27,23 @@
 					<p class="lead">Products</p>
 					<!-- item list -->
 					<div class="list-group">
-<?php foreach($this->products as $product): ?>
+<?php foreach($products as $product): ?>
 						<div href="#" class="list-group-item">
-							<h4 class="list-group-item-heading"><?php echo $product->getName(); ?></h4>
+							<h4 class="list-group-item-heading"><?php $product->setLocale($locale); echo $product->getName(); ?></h4>
 							<p class="list-group-item-text"><?php echo $product->getDescription(); ?></p>
 						</div>
 <?php endforeach; ?>
 					</div>
 					<!-- product details -->			
-					<?php	foreach($this->products as $product): ?>
+					<?php	foreach($products as $product): ?>
 					<div class="cs-product-picture thumbnail">
 						<img class="img-responsive" src="http://soniqdesigns.com/wp/wp-content/uploads/2013/05/MarkupCode.gif" alt="">
 						<div class="caption-full">
 							<h4 class="pull-right">$24.99</h4>
-							<h4><a href="#"><?php echo $product->getTitle(); ?></a></h4>
+							<h4><a href="#"><?php echo $product->getName(); ?></a></h4>
 							<div class="labels">
 <?php foreach($product->getTags() as $tag):?> 
-								<span class="label label-default"><?php echo $tag; ?></span>
+								<span class="label label-default"><?php echo $tag->getName(); ?></span>
 <?php endforeach; ?>
 							</div>
 							<div class="cs-product-description">
@@ -102,13 +52,13 @@
 							<div class="cs-options">
 								<span>Language:</span>
 								<select>
-<?php foreach($product->get_languages() as $language): ?>
+<?php foreach($product->getProgrammingLanguages() as $language): ?>
 									<option><?php echo $language ?></option>
 <?php endforeach;?>
 								</select>
 								<span>Version:</span>
 								<select>
-<?php foreach($product->get_versions() as $version): ?>
+<?php foreach($product->getVersions() as $version): ?>
 									<option><?php echo $version ?></option>
 <?php endforeach;?>
 								</select>
@@ -179,12 +129,4 @@
 				</div>
 			</div>
 		</div>
-		
-		<!-- footer -->
-		<footer class="cs-footer">
-			<div class="container">
-				<p class="cs-copyright text-muted">Copyright &copy; 2014 CodeShop</p>
-			</div>
-		</footer>
-	</body>
-</html>
+<?php $this->view('footer'); ?> 

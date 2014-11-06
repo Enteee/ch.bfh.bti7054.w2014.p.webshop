@@ -24,13 +24,13 @@ abstract class BaseTagPeer
     const TM_CLASS = 'TagTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 6;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 6;
 
     /** the column name for the id field */
     const ID = 'tag.id';
@@ -40,9 +40,6 @@ abstract class BaseTagPeer
 
     /** the column name for the parent_id field */
     const PARENT_ID = 'tag.parent_id';
-
-    /** the column name for the name field */
-    const NAME = 'tag.name';
 
     /** the column name for the active field */
     const ACTIVE = 'tag.active';
@@ -65,6 +62,13 @@ abstract class BaseTagPeer
     public static $instances = array();
 
 
+    // i18n behavior
+
+    /**
+     * The default locale to use for translations
+     * @var        string
+     */
+    const DEFAULT_LOCALE = 'en_US';
     /**
      * holds an array of fieldnames
      *
@@ -72,12 +76,12 @@ abstract class BaseTagPeer
      * e.g. TagPeer::$fieldNames[TagPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'TypeId', 'ParentId', 'Name', 'Active', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'typeId', 'parentId', 'name', 'active', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (TagPeer::ID, TagPeer::TYPE_ID, TagPeer::PARENT_ID, TagPeer::NAME, TagPeer::ACTIVE, TagPeer::CREATED_AT, TagPeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'TYPE_ID', 'PARENT_ID', 'NAME', 'ACTIVE', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'type_id', 'parent_id', 'name', 'active', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'TypeId', 'ParentId', 'Active', 'CreatedAt', 'UpdatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'typeId', 'parentId', 'active', 'createdAt', 'updatedAt', ),
+        BasePeer::TYPE_COLNAME => array (TagPeer::ID, TagPeer::TYPE_ID, TagPeer::PARENT_ID, TagPeer::ACTIVE, TagPeer::CREATED_AT, TagPeer::UPDATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'TYPE_ID', 'PARENT_ID', 'ACTIVE', 'CREATED_AT', 'UPDATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'type_id', 'parent_id', 'active', 'created_at', 'updated_at', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -87,12 +91,12 @@ abstract class BaseTagPeer
      * e.g. TagPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'TypeId' => 1, 'ParentId' => 2, 'Name' => 3, 'Active' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'typeId' => 1, 'parentId' => 2, 'name' => 3, 'active' => 4, 'createdAt' => 5, 'updatedAt' => 6, ),
-        BasePeer::TYPE_COLNAME => array (TagPeer::ID => 0, TagPeer::TYPE_ID => 1, TagPeer::PARENT_ID => 2, TagPeer::NAME => 3, TagPeer::ACTIVE => 4, TagPeer::CREATED_AT => 5, TagPeer::UPDATED_AT => 6, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'TYPE_ID' => 1, 'PARENT_ID' => 2, 'NAME' => 3, 'ACTIVE' => 4, 'CREATED_AT' => 5, 'UPDATED_AT' => 6, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'type_id' => 1, 'parent_id' => 2, 'name' => 3, 'active' => 4, 'created_at' => 5, 'updated_at' => 6, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'TypeId' => 1, 'ParentId' => 2, 'Active' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'typeId' => 1, 'parentId' => 2, 'active' => 3, 'createdAt' => 4, 'updatedAt' => 5, ),
+        BasePeer::TYPE_COLNAME => array (TagPeer::ID => 0, TagPeer::TYPE_ID => 1, TagPeer::PARENT_ID => 2, TagPeer::ACTIVE => 3, TagPeer::CREATED_AT => 4, TagPeer::UPDATED_AT => 5, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'TYPE_ID' => 1, 'PARENT_ID' => 2, 'ACTIVE' => 3, 'CREATED_AT' => 4, 'UPDATED_AT' => 5, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'type_id' => 1, 'parent_id' => 2, 'active' => 3, 'created_at' => 4, 'updated_at' => 5, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -169,7 +173,6 @@ abstract class BaseTagPeer
             $criteria->addSelectColumn(TagPeer::ID);
             $criteria->addSelectColumn(TagPeer::TYPE_ID);
             $criteria->addSelectColumn(TagPeer::PARENT_ID);
-            $criteria->addSelectColumn(TagPeer::NAME);
             $criteria->addSelectColumn(TagPeer::ACTIVE);
             $criteria->addSelectColumn(TagPeer::CREATED_AT);
             $criteria->addSelectColumn(TagPeer::UPDATED_AT);
@@ -177,7 +180,6 @@ abstract class BaseTagPeer
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.type_id');
             $criteria->addSelectColumn($alias . '.parent_id');
-            $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.active');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
@@ -385,6 +387,9 @@ abstract class BaseTagPeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in TagI18nPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        TagI18nPeer::clearInstancePool();
     }
 
     /**

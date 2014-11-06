@@ -48,18 +48,6 @@ abstract class BaseOfferTag extends BaseObject implements Persistent
     protected $tag_id;
 
     /**
-     * The value for the created_at field.
-     * @var        string
-     */
-    protected $created_at;
-
-    /**
-     * The value for the updated_at field.
-     * @var        string
-     */
-    protected $updated_at;
-
-    /**
      * @var        Offer
      */
     protected $aOffer;
@@ -120,86 +108,6 @@ abstract class BaseOfferTag extends BaseObject implements Persistent
     {
 
         return $this->tag_id;
-    }
-
-    /**
-     * Get the [optionally formatted] temporal [created_at] column value.
-     *
-     *
-     * @param string $format The date/time format string (either date()-style or strftime()-style).
-     *				 If format is null, then the raw DateTime object will be returned.
-     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     */
-    public function getCreatedAt($format = 'Y-m-d H:i:s')
-    {
-        if ($this->created_at === null) {
-            return null;
-        }
-
-        if ($this->created_at === '0000-00-00 00:00:00') {
-            // while technically this is not a default value of null,
-            // this seems to be closest in meaning.
-            return null;
-        }
-
-        try {
-            $dt = new DateTime($this->created_at);
-        } catch (Exception $x) {
-            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->created_at, true), $x);
-        }
-
-        if ($format === null) {
-            // Because propel.useDateTimeClass is true, we return a DateTime object.
-            return $dt;
-        }
-
-        if (strpos($format, '%') !== false) {
-            return strftime($format, $dt->format('U'));
-        }
-
-        return $dt->format($format);
-
-    }
-
-    /**
-     * Get the [optionally formatted] temporal [updated_at] column value.
-     *
-     *
-     * @param string $format The date/time format string (either date()-style or strftime()-style).
-     *				 If format is null, then the raw DateTime object will be returned.
-     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
-     * @throws PropelException - if unable to parse/validate the date/time value.
-     */
-    public function getUpdatedAt($format = 'Y-m-d H:i:s')
-    {
-        if ($this->updated_at === null) {
-            return null;
-        }
-
-        if ($this->updated_at === '0000-00-00 00:00:00') {
-            // while technically this is not a default value of null,
-            // this seems to be closest in meaning.
-            return null;
-        }
-
-        try {
-            $dt = new DateTime($this->updated_at);
-        } catch (Exception $x) {
-            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->updated_at, true), $x);
-        }
-
-        if ($format === null) {
-            // Because propel.useDateTimeClass is true, we return a DateTime object.
-            return $dt;
-        }
-
-        if (strpos($format, '%') !== false) {
-            return strftime($format, $dt->format('U'));
-        }
-
-        return $dt->format($format);
-
     }
 
     /**
@@ -274,52 +182,6 @@ abstract class BaseOfferTag extends BaseObject implements Persistent
     } // setTagId()
 
     /**
-     * Sets the value of [created_at] column to a normalized version of the date/time value specified.
-     *
-     * @param mixed $v string, integer (timestamp), or DateTime value.
-     *               Empty strings are treated as null.
-     * @return OfferTag The current object (for fluent API support)
-     */
-    public function setCreatedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->created_at !== null || $dt !== null) {
-            $currentDateAsString = ($this->created_at !== null && $tmpDt = new DateTime($this->created_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
-            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
-            if ($currentDateAsString !== $newDateAsString) {
-                $this->created_at = $newDateAsString;
-                $this->modifiedColumns[] = OfferTagPeer::CREATED_AT;
-            }
-        } // if either are not null
-
-
-        return $this;
-    } // setCreatedAt()
-
-    /**
-     * Sets the value of [updated_at] column to a normalized version of the date/time value specified.
-     *
-     * @param mixed $v string, integer (timestamp), or DateTime value.
-     *               Empty strings are treated as null.
-     * @return OfferTag The current object (for fluent API support)
-     */
-    public function setUpdatedAt($v)
-    {
-        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->updated_at !== null || $dt !== null) {
-            $currentDateAsString = ($this->updated_at !== null && $tmpDt = new DateTime($this->updated_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
-            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
-            if ($currentDateAsString !== $newDateAsString) {
-                $this->updated_at = $newDateAsString;
-                $this->modifiedColumns[] = OfferTagPeer::UPDATED_AT;
-            }
-        } // if either are not null
-
-
-        return $this;
-    } // setUpdatedAt()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -354,8 +216,6 @@ abstract class BaseOfferTag extends BaseObject implements Persistent
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->offer_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
             $this->tag_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-            $this->created_at = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->updated_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -365,7 +225,7 @@ abstract class BaseOfferTag extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 5; // 5 = OfferTagPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 3; // 3 = OfferTagPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating OfferTag object", $e);
@@ -507,19 +367,8 @@ abstract class BaseOfferTag extends BaseObject implements Persistent
             $ret = $this->preSave($con);
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
-                // timestampable behavior
-                if (!$this->isColumnModified(OfferTagPeer::CREATED_AT)) {
-                    $this->setCreatedAt(time());
-                }
-                if (!$this->isColumnModified(OfferTagPeer::UPDATED_AT)) {
-                    $this->setUpdatedAt(time());
-                }
             } else {
                 $ret = $ret && $this->preUpdate($con);
-                // timestampable behavior
-                if ($this->isModified() && !$this->isColumnModified(OfferTagPeer::UPDATED_AT)) {
-                    $this->setUpdatedAt(time());
-                }
             }
             if ($ret) {
                 $affectedRows = $this->doSave($con);
@@ -624,12 +473,6 @@ abstract class BaseOfferTag extends BaseObject implements Persistent
         if ($this->isColumnModified(OfferTagPeer::TAG_ID)) {
             $modifiedColumns[':p' . $index++]  = '`tag_id`';
         }
-        if ($this->isColumnModified(OfferTagPeer::CREATED_AT)) {
-            $modifiedColumns[':p' . $index++]  = '`created_at`';
-        }
-        if ($this->isColumnModified(OfferTagPeer::UPDATED_AT)) {
-            $modifiedColumns[':p' . $index++]  = '`updated_at`';
-        }
 
         $sql = sprintf(
             'INSERT INTO `offer_tag` (%s) VALUES (%s)',
@@ -649,12 +492,6 @@ abstract class BaseOfferTag extends BaseObject implements Persistent
                         break;
                     case '`tag_id`':
                         $stmt->bindValue($identifier, $this->tag_id, PDO::PARAM_INT);
-                        break;
-                    case '`created_at`':
-                        $stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
-                        break;
-                    case '`updated_at`':
-                        $stmt->bindValue($identifier, $this->updated_at, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -817,12 +654,6 @@ abstract class BaseOfferTag extends BaseObject implements Persistent
             case 2:
                 return $this->getTagId();
                 break;
-            case 3:
-                return $this->getCreatedAt();
-                break;
-            case 4:
-                return $this->getUpdatedAt();
-                break;
             default:
                 return null;
                 break;
@@ -855,8 +686,6 @@ abstract class BaseOfferTag extends BaseObject implements Persistent
             $keys[0] => $this->getId(),
             $keys[1] => $this->getOfferId(),
             $keys[2] => $this->getTagId(),
-            $keys[3] => $this->getCreatedAt(),
-            $keys[4] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -913,12 +742,6 @@ abstract class BaseOfferTag extends BaseObject implements Persistent
             case 2:
                 $this->setTagId($value);
                 break;
-            case 3:
-                $this->setCreatedAt($value);
-                break;
-            case 4:
-                $this->setUpdatedAt($value);
-                break;
         } // switch()
     }
 
@@ -946,8 +769,6 @@ abstract class BaseOfferTag extends BaseObject implements Persistent
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setOfferId($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setTagId($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setCreatedAt($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setUpdatedAt($arr[$keys[4]]);
     }
 
     /**
@@ -962,8 +783,6 @@ abstract class BaseOfferTag extends BaseObject implements Persistent
         if ($this->isColumnModified(OfferTagPeer::ID)) $criteria->add(OfferTagPeer::ID, $this->id);
         if ($this->isColumnModified(OfferTagPeer::OFFER_ID)) $criteria->add(OfferTagPeer::OFFER_ID, $this->offer_id);
         if ($this->isColumnModified(OfferTagPeer::TAG_ID)) $criteria->add(OfferTagPeer::TAG_ID, $this->tag_id);
-        if ($this->isColumnModified(OfferTagPeer::CREATED_AT)) $criteria->add(OfferTagPeer::CREATED_AT, $this->created_at);
-        if ($this->isColumnModified(OfferTagPeer::UPDATED_AT)) $criteria->add(OfferTagPeer::UPDATED_AT, $this->updated_at);
 
         return $criteria;
     }
@@ -1029,8 +848,6 @@ abstract class BaseOfferTag extends BaseObject implements Persistent
     {
         $copyObj->setOfferId($this->getOfferId());
         $copyObj->setTagId($this->getTagId());
-        $copyObj->setCreatedAt($this->getCreatedAt());
-        $copyObj->setUpdatedAt($this->getUpdatedAt());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1201,8 +1018,6 @@ abstract class BaseOfferTag extends BaseObject implements Persistent
         $this->id = null;
         $this->offer_id = null;
         $this->tag_id = null;
-        $this->created_at = null;
-        $this->updated_at = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -1257,20 +1072,6 @@ abstract class BaseOfferTag extends BaseObject implements Persistent
     public function isAlreadyInSave()
     {
         return $this->alreadyInSave;
-    }
-
-    // timestampable behavior
-
-    /**
-     * Mark the current object so that the update date doesn't get updated during next save
-     *
-     * @return     OfferTag The current object (for fluent API support)
-     */
-    public function keepUpdateDateUnchanged()
-    {
-        $this->modifiedColumns[] = OfferTagPeer::UPDATED_AT;
-
-        return $this;
     }
 
 }

@@ -41,8 +41,6 @@ class ProductTagTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('product_id', 'ProductId', 'INTEGER', 'product', 'id', true, null, null);
         $this->addForeignKey('tag_id', 'TagId', 'INTEGER', 'tag', 'id', true, null, null);
-        $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
-        $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         // validators
     } // initialize()
 
@@ -54,22 +52,5 @@ class ProductTagTableMap extends TableMap
         $this->addRelation('Product', 'Product', RelationMap::MANY_TO_ONE, array('product_id' => 'id', ), null, null);
         $this->addRelation('Tag', 'Tag', RelationMap::MANY_TO_ONE, array('tag_id' => 'id', ), null, null);
     } // buildRelations()
-
-    /**
-     *
-     * Gets the list of behaviors registered for this table
-     *
-     * @return array Associative array (name => parameters) of behaviors
-     */
-    public function getBehaviors()
-    {
-        return array(
-            'timestampable' =>  array (
-  'create_column' => 'created_at',
-  'update_column' => 'updated_at',
-  'disable_updated_at' => 'false',
-),
-        );
-    } // getBehaviors()
 
 } // ProductTagTableMap

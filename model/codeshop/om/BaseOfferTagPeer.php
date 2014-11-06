@@ -24,13 +24,13 @@ abstract class BaseOfferTagPeer
     const TM_CLASS = 'OfferTagTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 3;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 5;
+    const NUM_HYDRATE_COLUMNS = 3;
 
     /** the column name for the id field */
     const ID = 'offer_tag.id';
@@ -40,12 +40,6 @@ abstract class BaseOfferTagPeer
 
     /** the column name for the tag_id field */
     const TAG_ID = 'offer_tag.tag_id';
-
-    /** the column name for the created_at field */
-    const CREATED_AT = 'offer_tag.created_at';
-
-    /** the column name for the updated_at field */
-    const UPDATED_AT = 'offer_tag.updated_at';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -66,12 +60,12 @@ abstract class BaseOfferTagPeer
      * e.g. OfferTagPeer::$fieldNames[OfferTagPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'OfferId', 'TagId', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'offerId', 'tagId', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (OfferTagPeer::ID, OfferTagPeer::OFFER_ID, OfferTagPeer::TAG_ID, OfferTagPeer::CREATED_AT, OfferTagPeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'OFFER_ID', 'TAG_ID', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'offer_id', 'tag_id', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'OfferId', 'TagId', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'offerId', 'tagId', ),
+        BasePeer::TYPE_COLNAME => array (OfferTagPeer::ID, OfferTagPeer::OFFER_ID, OfferTagPeer::TAG_ID, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'OFFER_ID', 'TAG_ID', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'offer_id', 'tag_id', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, )
     );
 
     /**
@@ -81,12 +75,12 @@ abstract class BaseOfferTagPeer
      * e.g. OfferTagPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'OfferId' => 1, 'TagId' => 2, 'CreatedAt' => 3, 'UpdatedAt' => 4, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'offerId' => 1, 'tagId' => 2, 'createdAt' => 3, 'updatedAt' => 4, ),
-        BasePeer::TYPE_COLNAME => array (OfferTagPeer::ID => 0, OfferTagPeer::OFFER_ID => 1, OfferTagPeer::TAG_ID => 2, OfferTagPeer::CREATED_AT => 3, OfferTagPeer::UPDATED_AT => 4, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'OFFER_ID' => 1, 'TAG_ID' => 2, 'CREATED_AT' => 3, 'UPDATED_AT' => 4, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'offer_id' => 1, 'tag_id' => 2, 'created_at' => 3, 'updated_at' => 4, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'OfferId' => 1, 'TagId' => 2, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'offerId' => 1, 'tagId' => 2, ),
+        BasePeer::TYPE_COLNAME => array (OfferTagPeer::ID => 0, OfferTagPeer::OFFER_ID => 1, OfferTagPeer::TAG_ID => 2, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'OFFER_ID' => 1, 'TAG_ID' => 2, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'offer_id' => 1, 'tag_id' => 2, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, )
     );
 
     /**
@@ -163,14 +157,10 @@ abstract class BaseOfferTagPeer
             $criteria->addSelectColumn(OfferTagPeer::ID);
             $criteria->addSelectColumn(OfferTagPeer::OFFER_ID);
             $criteria->addSelectColumn(OfferTagPeer::TAG_ID);
-            $criteria->addSelectColumn(OfferTagPeer::CREATED_AT);
-            $criteria->addSelectColumn(OfferTagPeer::UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.offer_id');
             $criteria->addSelectColumn($alias . '.tag_id');
-            $criteria->addSelectColumn($alias . '.created_at');
-            $criteria->addSelectColumn($alias . '.updated_at');
         }
     }
 

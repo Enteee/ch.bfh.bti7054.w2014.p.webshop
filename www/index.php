@@ -1,9 +1,4 @@
 <?php
-/*	index.php
-*	Mischa Lehmann
-*	ducksource@duckpond.ch
-*	Version:1.0
-*/
 
 /* Include configuration file */
 require_once '../conf/config.php';
@@ -29,11 +24,9 @@ set_include_path($config['propel_model'] . PATH_SEPARATOR . get_include_path());
 /* Set up composer autoload */
 //require_once($config['composer']['autoload.php']);
 
-//require_once '../controller/gitkit_inc.php';
 /* Set up google client */
 //$gitkitClient = Gitkit_Client::createFromFile($config['gitkit']['server-config']);
 //$gitkitUser = $gitkitClient->getUserInRequest();
-
 
 /* Load needed php modules */
 if (isset($config['modules'])){

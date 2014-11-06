@@ -15,17 +15,20 @@ class StartController extends MainController {
 		$searchstring = $this->get('search');
 		
 		// load data
-		$categories = $this->repo->get_all_categories();
+		$categories = $this->repo->getAllCategories();
 		$products = array();
 		if (isset($categoryId)){
-			$products = $this->repo->get_products_by_tag_id($categoryId, $searchstring);
+			$products = $this->repo->getProductsByTagId($categoryId, $searchstring);
 		} else {
-			$products = $this->repo->get_products($searchstring);
+			$products = $this->repo->getProductsBySearch($searchstring);
 		}
+		$product = ProductQuery::create()->findPk(1);
+		$comments = $this->repo->getCommentsByProduct($product);
 		
 		// set data for view
 		$data['categories'] = $categories;
 		$data['products'] = $products;
+		$data['comments'] = $comments;
 		$data['active_category'] = $categoryId;
 		
 		// render template

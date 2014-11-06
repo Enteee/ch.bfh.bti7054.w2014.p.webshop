@@ -24,9 +24,6 @@
 		<link rel="stylesheet" type="text/css" href="css/layout.main.css">
 		<link rel="stylesheet" type="text/css" href="css/style.main.css">
 		<!-- External CSS -->
-		<link rel="stylesheet" type="text/css" href="http://www.gstatic.com/authtoolkit/js/gitkit.css">
-		
-		<meta http-equiv="content-style-type" content="text/css" />		
 		
 		<!-- favicon -->
 		<link rel="icon" type="image/gif" href="img/favicon.gif" />
@@ -48,6 +45,8 @@
 		<!-- Microsoft READ THIS: http://www.rfc-editor.org/rfc/rfc4329.txt  !! You are obsolete !! -->
 		<script type="application/javascript" src="bootstrap/js/jquery-1.11.0.js"></script>
 		<script type="application/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+		<script type="application/javascript" src="//www.gstatic.com/authtoolkit/js/gitkit.js"></script>
+		<script type="application/javascript" src="js/signin.js"></script>
 
 		<!-- navigation -->
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">

@@ -17,16 +17,16 @@ class Product extends BaseProduct
 {
 	public function getTags() {
 		$repo = new Repository();
-		return $repo->get_tags_by_product_id($this->getId());
+		return $repo->getTagsByProduct($this);
 	}
 	
 	public function getProgrammingLanguages() {
-		// TODO:
-		return array('C++', 'Java', 'Perl');
+		$repo = new Repository();
+		return $repo->getProgrammingLanguagesByProduct($this);
 	}
 	
 	public function getVersions() {
-		// TODO:
-		return array('alpha', 'beta', '1.0');
+		$repo = new Repository();
+		return $repo->getVersionsByProduct($this);
 	}
 }

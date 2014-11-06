@@ -2,17 +2,17 @@
 
 class Repository {
 
-	public function get_all_categories() {
+	public function getAllCategories() {
 		return TagQuery::create()
 			->find();
 	}
 
-	public function get_all_products() {
+	public function getAllProducts() {
 		return ProductQuery::create()
 			->find();	
 	}
 
-	public function get_products($searchstring = NULL) {
+	public function getProductsBySearch($searchstring = NULL) {
 		if (isset($searchstring)) {
 			return ProductQuery::create()
 				->filterByName($searchstring)
@@ -23,7 +23,7 @@ class Repository {
 		}
 	}
 
-	public function get_products_by_tag_id($tag_id, $searchstring = NULL) {
+	public function getProductsByTagId($tag_id, $searchstring = NULL) {
 		if (isset($searchstring)) {
 			return ProductQuery::create()
 				->filterByName($searchstring)
@@ -40,24 +40,42 @@ class Repository {
 		}
 	}
 	
-	public function get_product_count_by_tag_id($tag_id) {
-		$tag = TagQuery::create()
-			->findPk($tag_id);
-
+	public function getProductCountByTag($tag) {
 		return ProductTagQuery::create()
 			->filterByTag($tag)
 			->count();
 	}
 	
-	public function get_tags_by_product_id($product_id) {
-		$product = ProductQuery::create()
-			->findPk($product_id);
-
+	public function getTagsByProduct($product) {
 		return TagQuery::create()
 			->useProductTagQuery()
 				->filterByProduct($product)
 			->endUse()
 			->find();
-	}	
+	}
+	
+	public function getProgrammingLanguagesByProduct($product) {
+		$tagType = TagTypeQuery::create()->findPk(3); // programming languages
+		return TagQuery::create()
+			->useProductTagQuery()
+				->filterByProduct($product)
+			->endUse()
+			->filterByTagType($tagType)
+			->find();
+	}
+	
+	public function getVersionsByProduct($product) {
+		return CodeQuery::create()
+			->useOfferQuery()
+				->filterByProduct($product)
+			->endUse()
+			->find();
+	}
+	
+	public function getCommentsByProduct($product) {
+		return CommentQuery::create()
+			->filterByProduct($product)
+			->find();
+	}
 }
 ?>

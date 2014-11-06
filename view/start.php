@@ -4,17 +4,16 @@
 				<!-- left content -->
 				<div class="col-md-3">
 					<!-- login form -->
-					<div id="signin"></div>
+					<div class="form-group">
+						<label>Signin</label>
+						<div id="signin"></div>
+					</div>
 					<!-- category navigation -->
 					<p class="lead">Categories</p>
 					<nav>
 						<div class="list-group">
-							<a href="#" class="list-group-item active">
-								<span class="badge">123</span>
-								Active category TEST
-							</a>
 <?php foreach($categories as $category):?>
-							<a href="#" class="list-group-item">
+							<a href="?category=<?php echo $category->getId(); ?>" class="list-group-item<?php echo ($category->getId() == $active_category) ? ' active' : ''; ?>">
 								<span class="badge"><?php echo $category->getProductsCount(); ?></span>
 								<?php echo $category->getName(); ?>
 							</a>
@@ -37,7 +36,7 @@
 					<!-- product details -->			
 					<?php	foreach($products as $product): ?>
 					<div class="cs-product-picture thumbnail">
-						<img class="img-responsive" src="http://soniqdesigns.com/wp/wp-content/uploads/2013/05/MarkupCode.gif" alt="">
+						<!--<img class="img-responsive" src="http://soniqdesigns.com/wp/wp-content/uploads/2013/05/MarkupCode.gif" alt="">-->
 						<div class="caption-full">
 							<h4 class="pull-right">$24.99</h4>
 							<h4><a href="#"><?php echo $product->getName(); ?></a></h4>
@@ -86,45 +85,22 @@
 						<div class="text-right">
 							<a class="btn btn-default btn-sm">Leave a Review</a>
 						</div>
-						<hr>
+<?php foreach($comments as $comment): ?>
+						<hr />
 						<div class="row">
 							<div class="col-md-12">
+<?php for ($i = 0; $i < $comment->getRating(); $i++) { ?>
 								<span class="glyphicon glyphicon-star"></span>
-								<span class="glyphicon glyphicon-star"></span>
-								<span class="glyphicon glyphicon-star"></span>
-								<span class="glyphicon glyphicon-star"></span>
+<?php } ?>
+<?php for ($i = 0; $i < (5 - $comment->getRating()); $i++) { ?>
 								<span class="glyphicon glyphicon-star-empty"></span>
-								Anonymous
-								<span class="pull-right">10 days ago</span>
-								<p>This product was great in terms of quality. I would definitely buy another!</p>
+<?php } ?>
+								<?php echo $comment->getUser()->getEmail(); ?>
+								<span class="pull-right"><?php echo $comment->getCreatedAt(); ?></span>
+								<p><?php echo $comment->getText(); ?></p>
 							</div>
 						</div>
-						<hr>
-						<div class="row">
-							<div class="col-md-12">
-								<span class="glyphicon glyphicon-star"></span>
-								<span class="glyphicon glyphicon-star"></span>
-								<span class="glyphicon glyphicon-star"></span>
-								<span class="glyphicon glyphicon-star"></span>
-								<span class="glyphicon glyphicon-star-empty"></span>
-								Anonymous
-								<span class="pull-right">12 days ago</span>
-								<p>I've alredy ordered another one!</p>
-							</div>
-						</div>
-						<hr>
-						<div class="row">
-							<div class="col-md-12">
-								<span class="glyphicon glyphicon-star"></span>
-								<span class="glyphicon glyphicon-star"></span>
-								<span class="glyphicon glyphicon-star"></span>
-								<span class="glyphicon glyphicon-star"></span>
-								<span class="glyphicon glyphicon-star-empty"></span>
-								Anonymous
-								<span class="pull-right">15 days ago</span>
-								<p>I've seen some better than this, but not at this price. I definitely recommend this item.</p>
-							</div>
-						</div>
+<?php endforeach;?>
 					</div>
 				</div>
 			</div>

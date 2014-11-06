@@ -47,7 +47,7 @@ class Mvc {
 
 		// parse segments
 		$matches = array();
-		preg_match_all('~(?<=/)([^/])+((?=/)|$)~', $uri, $matches);
+		preg_match_all('~(?<=/)([^/?&=])+((?=/)|$)~', $uri, $matches);
 		
 		if (isset($matches) && count($matches) > 0 && count($matches[0]) > 0) {
 			// segments found

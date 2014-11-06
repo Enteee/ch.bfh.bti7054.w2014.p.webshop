@@ -100,3 +100,27 @@ VALUES
 (11,3,4)
 ;
 
+INSERT INTO `user`
+(`id`,
+`email`,
+`token`,
+`credits`,
+`active`,
+`created_at`,
+`updated_at`)
+VALUES
+(1,'testuser@gmail.com','abcdef',1000,1,NOW(),NOW())
+;
+
+INSERT INTO `comment`
+(`id`,
+`user_id`,
+`product_id`,
+`text`,
+`rating`,
+`active`,
+`created_at`,
+`updated_at`)
+VALUES
+(1,1,1,'Sehr geiles Produkt! Kann ich nur weiterempfehlen.',5,1,NOW(),NOW())
+;

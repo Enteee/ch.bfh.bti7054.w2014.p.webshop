@@ -8,7 +8,7 @@ function codeshop_autoload($class_name) {
 	$locations = array(
 		'../src/',
 		'../src/classes/',
-		'../controller/'		
+		'../controller/'
 	);
 	foreach ($locations as $location) {
 		$path = $location . $class_name . '.php';

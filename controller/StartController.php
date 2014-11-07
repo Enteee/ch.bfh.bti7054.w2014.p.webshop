@@ -23,7 +23,6 @@ class StartController extends MainController {
 			$products = $this->repo->getProductsBySearch($searchstring);
 		}
 		$product = ProductQuery::create()->findPk(1);
-		echo $product;
 		$reviews = $this->repo->getReviewsByProduct($product);
 		
 		// set data for view

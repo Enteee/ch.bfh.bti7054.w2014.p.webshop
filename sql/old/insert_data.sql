@@ -112,7 +112,7 @@ VALUES
 (1,'testuser@gmail.com','abcdef',1000,1,NOW(),NOW())
 ;
 
-INSERT INTO `comment`
+INSERT INTO `review`
 (`id`,
 `user_id`,
 `product_id`,

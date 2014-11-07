@@ -15,4 +15,8 @@
  */
 class Tag extends BaseTag
 {
+	public function getProductsCount() {
+		$repo = new Repository();
+		return $repo->getProductCountByTag($this);		
+	}
 }

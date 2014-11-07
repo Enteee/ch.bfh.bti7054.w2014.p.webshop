@@ -1,0 +1,41 @@
+/*
+* This is the language ressources file.
+* Place all global multi language strings here.
+*/
+{
+	"title": {
+		"de" : "CodeShop",
+		"en" : "CodeShop"
+	},
+	"subtitle": {
+		"de_CH" : "Niä meh säuber codä!",
+		"de" : "Nie mehr selber Code schreiben!",
+		"en" : "Never code again!"
+	},
+	
+	"navMyItems": {
+		"en" : "My items",
+		"de" : "Meine Codes"
+	},
+	"navShoppingCart": {
+		"en" : "Shopping cart",
+		"de" : "Warenkorb"
+	},
+	"navMyProducts": {
+		"en" : "My products",
+		"de" : "Meine Produkte"
+	},
+	"navAddProduct": {
+		"en" : "Add product",
+		"de" : "Produkt hinzufügen"
+	},
+	
+	"errorTitle": {
+		"en" : "Error",
+		"de" : "Fehler"
+	},
+	"error404": {
+		"en" : "The page you are looking for doesn't exist. We're sorry.",
+		"de" : "Die gewünschte Seite konnte nicht gefunden werden."
+	}
+}

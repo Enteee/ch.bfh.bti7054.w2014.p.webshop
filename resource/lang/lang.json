@@ -13,6 +13,23 @@
 		"en" : "Never code again!"
 	},
 	
+	"navMyItems": {
+		"en" : "My items",
+		"de" : "Meine Codes"
+	},
+	"navShoppingCart": {
+		"en" : "Shopping cart",
+		"de" : "Warenkorb"
+	},
+	"navMyProducts": {
+		"en" : "My products",
+		"de" : "Meine Produkte"
+	},
+	"navAddProduct": {
+		"en" : "Add product",
+		"de" : "Produkt hinzufügen"
+	},
+	
 	"errorTitle": {
 		"en" : "Error",
 		"de" : "Fehler"

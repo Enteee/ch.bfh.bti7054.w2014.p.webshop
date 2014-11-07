@@ -18,6 +18,11 @@ class MainController extends Controller {
 			'key2' => 'value2'
 		);
 		
+		$data['navMyItems'] = $this->lang->navMyItems;
+		$data['navShoppingCart'] = $this->lang->navShoppingCart;
+		$data['navMyProducts'] = $this->lang->navMyProducts;
+		$data['navAddProduct'] = $this->lang->navAddProduct;
+				
 		$data['locale'] = $this->lang->getLocale();
 		
 		$this->addData($data);

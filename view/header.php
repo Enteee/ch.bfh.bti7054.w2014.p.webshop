@@ -18,12 +18,13 @@
 <?php endforeach; ?>
 
 		<!-- CSS -->
+		<!-- External CSS -->
+		<link rel="stylesheet" type="text/css" href="//www.gstatic.com/authtoolkit/css/gitkit.css">
 		<!-- Bootstrap Core CSS -->
 		<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
 		<!-- Custom CSS -->
 		<link rel="stylesheet" type="text/css" href="css/layout.main.css">
 		<link rel="stylesheet" type="text/css" href="css/style.main.css">
-		<!-- External CSS -->
 		
 		<!-- favicon -->
 		<link rel="icon" type="image/gif" href="img/favicon.gif" />

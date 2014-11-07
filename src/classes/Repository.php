@@ -15,7 +15,9 @@ class Repository {
 	public function getProductsBySearch($searchstring = NULL) {
 		if (isset($searchstring)) {
 			return ProductQuery::create()
-				->filterByName($searchstring)
+				->useProductI18nQuery()
+					->filterByName('%' . $searchstring . '%')
+				->endUse()
 				->find();
 		} else {
 			return ProductQuery::create()

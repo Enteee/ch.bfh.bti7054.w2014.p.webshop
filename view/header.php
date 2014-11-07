@@ -76,10 +76,10 @@
 						</li>
 					</ul>
 					<!-- search form -->					
-					<form class="navbar-form navbar-right" role="form">
+					<form class="navbar-form navbar-right" role="form" action="index.php/start/search/" method="get">
 						<div class="form-group">
 							<div class="input-group">
-								<input type="text" class="form-control">
+								<input type="text" class="form-control" name="search">
 								<span class="input-group-btn">
 									<button class="btn btn-default" type="button">
 										<span class="glyphicon glyphicon-search"></span>

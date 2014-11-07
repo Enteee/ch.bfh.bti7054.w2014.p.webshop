@@ -85,19 +85,19 @@
 						<div class="text-right">
 							<a class="btn btn-default btn-sm">Leave a Review</a>
 						</div>
-<?php foreach($comments as $comment): ?>
+<?php foreach($reviews as $review): ?>
 						<hr />
 						<div class="row">
 							<div class="col-md-12">
-<?php for ($i = 0; $i < $comment->getRating(); $i++) { ?>
+<?php for ($i = 0; $i < $review->getRating(); $i++) { ?>
 								<span class="glyphicon glyphicon-star"></span>
 <?php } ?>
-<?php for ($i = 0; $i < (5 - $comment->getRating()); $i++) { ?>
+<?php for ($i = 0; $i < (5 - $review->getRating()); $i++) { ?>
 								<span class="glyphicon glyphicon-star-empty"></span>
 <?php } ?>
-								<?php echo $comment->getUser()->getEmail(); ?>
-								<span class="pull-right"><?php echo $comment->getCreatedAt(); ?></span>
-								<p><?php echo $comment->getText(); ?></p>
+								<?php echo $review->getUser()->getEmail(); ?>
+								<span class="pull-right"><?php echo $review->getCreatedAt(); ?></span>
+								<p><?php echo $review->getText(); ?></p>
 							</div>
 						</div>
 <?php endforeach;?>

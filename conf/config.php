@@ -39,7 +39,7 @@ $config['composer']['autoload.php'] = '../vendor/autoload.php';
 
 /*Propel conf*/
 $config['propel_conf'] = '../conf/propel-codeshop-conf.php';
-$config['propel_model'] = '../model/';
+$config['propel_model'] = '../';
 
 /*Google api conf*/
 $config['gitkit']['server-config'] = '../conf/gitkit-server-config.json';

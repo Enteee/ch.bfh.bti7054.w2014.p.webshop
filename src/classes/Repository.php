@@ -72,10 +72,14 @@ class Repository {
 			->find();
 	}
 	
-	public function getCommentsByProduct($product) {
-		return CommentQuery::create()
-			->filterByProduct($product)
-			->find();
+	public function getReviewsByProduct($product) {
+		if (isset($product)) {
+			return ReviewQuery::create()
+				->filterByProduct($product)
+				->find();
+		} else {
+			return array();
+		}
 	}
 }
 ?>

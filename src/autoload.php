@@ -14,7 +14,7 @@ function codeshop_autoload($class_name) {
 		$path = $location . $class_name . '.php';
 		if (file_exists($path)) {
 			require_once $path;
-			return;
+			return true;
 		}
 	}
 	return false;

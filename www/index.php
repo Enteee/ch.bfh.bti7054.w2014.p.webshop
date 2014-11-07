@@ -6,8 +6,8 @@ require_once '../conf/config.php';
 /* Autoloader */
 require_once '../src/autoload.php';
 
-/* Include libraries */
-require_once '../vendor/propel/propel1/runtime/lib/Propel.php';
+/* Set up composer autoload */
+require_once($config['composer']['autoload.php']);
 
 /* Debug settings */
 if ($config['debug']) {
@@ -21,12 +21,9 @@ if ($config['debug']) {
 Propel::init($config['propel_conf']);
 set_include_path($config['propel_model'] . PATH_SEPARATOR . get_include_path());
 
-/* Set up composer autoload */
-//require_once($config['composer']['autoload.php']);
-
 /* Set up google client */
-//$gitkitClient = Gitkit_Client::createFromFile($config['gitkit']['server-config']);
-//$gitkitUser = $gitkitClient->getUserInRequest();
+$gitkitClient = Gitkit_Client::createFromFile($config['gitkit']['server-config']);
+$gitkitUser = $gitkitClient->getUserInRequest();
 
 /* Load needed php modules */
 if (isset($config['modules'])){

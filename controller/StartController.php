@@ -23,12 +23,13 @@ class StartController extends MainController {
 			$products = $this->repo->getProductsBySearch($searchstring);
 		}
 		$product = ProductQuery::create()->findPk(1);
-		$comments = $this->repo->getCommentsByProduct($product);
+		echo $product;
+		$reviews = $this->repo->getReviewsByProduct($product);
 		
 		// set data for view
 		$data['categories'] = $categories;
 		$data['products'] = $products;
-		$data['comments'] = $comments;
+		$data['reviews'] = $reviews;
 		$data['active_category'] = $categoryId;
 		
 		// render template

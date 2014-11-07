@@ -33,12 +33,12 @@ CREATE TABLE `code`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
--- comment
+-- review
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `comment`;
+DROP TABLE IF EXISTS `review`;
 
-CREATE TABLE `comment`
+CREATE TABLE `review`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `user_id` INTEGER NOT NULL,
@@ -49,12 +49,12 @@ CREATE TABLE `comment`
     `created_at` DATETIME,
     `updated_at` DATETIME,
     PRIMARY KEY (`id`),
-    INDEX `comment_user` (`user_id`),
-    INDEX `comment_product` (`product_id`),
-    CONSTRAINT `comment_user`
+    INDEX `review_user` (`user_id`),
+    INDEX `review_product` (`product_id`),
+    CONSTRAINT `review_user`
         FOREIGN KEY (`user_id`)
         REFERENCES `user` (`id`),
-    CONSTRAINT `comment_product`
+    CONSTRAINT `review_product`
         FOREIGN KEY (`product_id`)
         REFERENCES `product` (`id`)
 ) ENGINE=InnoDB;

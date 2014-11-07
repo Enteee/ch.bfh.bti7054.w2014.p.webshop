@@ -1,28 +1,4 @@
 <?php $this->view('header'); ?> 
-		<div class="container">
-			<div class="row">
-				<!-- left content -->
-				<div class="col-md-3">
-					<!-- login form -->
-					<div class="form-group">
-						<label><?php echo $label->userPanel; ?></label>
-						<div id="signin"></div>
-					</div>
-					<!-- category navigation -->
-					<p class="lead"><?php echo $label->categories; ?></p>
-					<nav>
-						<div class="list-group">
-<?php foreach($categories as $category):?>
-							<a href="?category=<?php echo $category->getId(); ?>" class="list-group-item<?php echo ($category->getId() == $active_category) ? ' active' : ''; ?>">
-								<span class="badge"><?php echo $category->getProductsCount(); ?></span>
-								<?php $category->setLocale($locale); echo $category->getName(); ?>
-							</a>
-<?php endforeach; ?>
-						</div>
-					</nav>
-				</div>
-				<!-- right content -->
-				<div class="col-md-9">
 					<p class="lead"><?php echo $label->products; ?></p>
 					<!-- item list -->
 					<div class="list-group">
@@ -102,7 +78,4 @@
 						</div>
 <?php endforeach;?>
 					</div>
-				</div>
-			</div>
-		</div>
 <?php $this->view('footer'); ?> 

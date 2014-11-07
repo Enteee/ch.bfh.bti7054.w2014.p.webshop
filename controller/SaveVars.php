@@ -64,7 +64,7 @@ class SaveVars{
 	private $globals;	// Superglobal variables like 'GET/POST/ENV/SERVER
 
 	function __construct(){
-
+		$this->vars = array();
 		/*Make superglobals only accessible through this class*/
 		
 		if(isset($_SERVER)){
@@ -112,18 +112,19 @@ class SaveVars{
 	/*Set/Get save variables*/
 
 	// set a new save variable (type must be known..)
-	function __set($name,$value){
-		self::save_known_var($name,$value);
+	function __set($name,$data){
+		// does the varaible exist?
+		if(array_key_exists($name,$this->vars)){
+			$ret = self::save_var($name,$data,$this->vars[$name]['type']);
+		}
 	}
 
 	function __get($name){ // return a given variable for display
 		$ret = null;
-
 		// does the varaible exist?
 		if(array_key_exists($name,$this->vars)){
 			$ret = $this->vars[$name]['data'];
 		}
-
 		return $ret;
 	}
 
@@ -134,32 +135,11 @@ class SaveVars{
 	// look in the global variables defined by lookup 
 	function save_global($name,$type,$lookup){
 		$ret = false;
-
 		if(is_array($this->globals[$lookup])){ // does the lookup destination exist?
 			if(array_key_exists($name,$this->globals[$lookup])){ // does such a variable exist?
 				$ret = self::save_var($name,$this->globals[$lookup][$name],$type); // save the variable
 			}
 		}
-
-		return $ret;
-	}
-
-	function save_vars($vars){
-		$ret_vars = null;
-		foreach($vars as $name => $val){
-			self::save_var($name,$val['data'],$val['type']);
-		}
-	}
-
-	// save a already known variable
-	function save_known_var($name,$data){
-		$ret = false;
-
-		// does the varaible exist?
-		if(array_key_exists($name,$this->vars)){
-			$ret = self::save_var($name,$data,$this->vars[$name]['type']);
-		}
-
 		return $ret;
 	}
 
@@ -170,20 +150,19 @@ class SaveVars{
 
 		switch ($type){ // make save variable now
 			// basic
-			case self::T_NULL: $data = self::save_null($data); break;
+			case self::T_NULL: $data = self::save_null((unset)$data); break;
 			case self::T_SCALAR: $data = self::save_scalar($data); break;
-			case self::T_ARRAY: $data = self::save_array($data); break;
+			case self::T_ARRAY: $data = self::save_array((array)$data); break;
 			case self::T_NUMERIC: $data = self::save_numeric($data); break;
-			case self::T_STRING: $data = self::save_string($data); break;
-			case self::T_BOOL: $data = self::save_bool($data); break;
-			case self::T_INT: $data = self::save_integer($data); break;
-			case self::T_LONG: $data = self::save_long($data); break;
-			case self::T_DOUBLE: $data = self::save_double($data); break;
-			case self::T_FLOAT: $data = self::save_float($data); break;
+			case self::T_STRING: $data = self::save_string((string)$data); break;
+			case self::T_BOOL: $data = self::save_bool((bool)$data); break;
+			case self::T_INT: $data = self::save_integer((int)$data); break;
+			case self::T_LONG: $data = self::save_long((int)$data); break;
+			case self::T_DOUBLE: $data = self::save_double((float)$data); break;
+			case self::T_FLOAT: $data = self::save_float((float)$data); break;
 			case self::T_RESOURCE: $data = self::save_resource($data); break;
 			case self::T_CALLABLE: $data = self::save_callable($data); break;
-			case self::T_OBJECT: $data = self::save_object($data); break;
-
+			case self::T_OBJECT: $data = self::save_object((object)$data); break;
 			// extended
 			case self::T_STRING_SQL: $data = self::save_sql(self::save_string($data)); break;
 			case self::T_STRING_HTML: $data = self::save_html(self::save_string($data)); break;

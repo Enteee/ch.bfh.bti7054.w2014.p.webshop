@@ -9,6 +9,7 @@ abstract class Controller {
 	protected $lang;
 	protected $template;
 	protected $repo;
+	protected $vars;
 
 	public function __construct() {
 		global $config;
@@ -18,6 +19,7 @@ abstract class Controller {
 		$this->lang = Mvc::$lang;
 		$this->template = new Template();
 		$this->repo = new Repository();
+		$this->vars = new SaveVars();
 	}
 	
 	protected function view($name = NULL, $data = NULL) {
@@ -26,20 +28,6 @@ abstract class Controller {
 	
 	protected function addData($data) {
 		$this->template->addData($data);
-	}
-	
-	protected function post($key) {
-		if (isset($_POST[$key])) {
-			return $_POST[$key];
-		}
-		return NULL; // not set
-	}
-	
-	protected function get($key) {
-		if (isset($_GET[$key])) {
-			return $_GET[$key];
-		}
-		return NULL; // not set
 	}
 }
 

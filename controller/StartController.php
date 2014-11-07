@@ -7,12 +7,14 @@ class StartController extends MainController {
 
 	public function __construct() {
 		parent::__construct();
+		$this->vars->save_global('category',SaveVars::T_INT,SaveVars::G_GET);
+		$this->vars->save_global('searchstring',SaveVars::T_STRING,SaveVars::G_GET);
 	}
 
-	public function index() {	
+	public function index() {
 		// get variables
-		$categoryId = $this->get('category');
-		$searchstring = $this->get('search');
+		$categoryId = $this->vars->category;
+		$searchstring = $this->vars->searchstring;
 		
 		// load data
 		$categories = $this->repo->getAllCategories();

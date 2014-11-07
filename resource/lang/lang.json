@@ -17,10 +17,6 @@
 		"en" : "My items",
 		"de" : "Meine Codes"
 	},
-	"navShoppingCart": {
-		"en" : "Shopping cart",
-		"de" : "Warenkorb"
-	},
 	"navMyProducts": {
 		"en" : "My products",
 		"de" : "Meine Produkte"
@@ -28,6 +24,39 @@
 	"navAddProduct": {
 		"en" : "Add product",
 		"de" : "Produkt hinzufügen"
+	},
+	
+	"userPanel": {
+		"en" : "User panel",
+		"de" : "Benutzerübersicht"
+	},
+	"categories": {
+		"en" : "Categories",
+		"de" : "Kategorien"
+	},
+	"products": {
+		"en" : "Products",
+		"de" : "Produkte"
+	},
+	"addComment": {
+		"en" : "Add comment",
+		"de" : "Kommentar schreiben"
+	},
+	"version": {
+		"en" : "version",
+		"de" : "Version"
+	},
+	"withComments": {
+		"en" : "with comments",
+		"de" : "mit Kommentaren"
+	},
+	"withSupport": {
+		"en" : "with support",
+		"de" : "mit Support"
+	},
+	"programmingLanguage": {
+		"en" : "programming language",
+		"de" : "Programmiersprache"
 	},
 	
 	"errorTitle": {

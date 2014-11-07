@@ -66,16 +66,13 @@
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-user" title="My items"></span> <span class="cs-nav-text"><?php echo $navMyItems; ?></span></a>
+							<a href="#"><span class="glyphicon glyphicon-user" title="My items"></span> <span class="cs-nav-text"><?php echo $label->navMyItems; ?></span></a>
 						</li>
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-shopping-cart" title="Shopping cart"></span> <span class="cs-nav-text"><?php echo $navShoppingCart; ?></span></a>
+							<a href="#"><span class="glyphicon glyphicon-folder-open" title="My products"></span> <span class="cs-nav-text"><?php echo $label->navMyProducts; ?></span></a>
 						</li>
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-folder-open" title="My products"></span> <span class="cs-nav-text"><?php echo $navMyProducts; ?></span></a>
-						</li>
-						<li>
-							<a href="#"><span class="glyphicon glyphicon-plus" title="Add product"></span> <span class="cs-nav-text"><?php echo $navAddProduct; ?></span></a>
+							<a href="#"><span class="glyphicon glyphicon-plus" title="Add product"></span> <span class="cs-nav-text"><?php echo $label->navAddProduct; ?></span></a>
 						</li>
 					</ul>
 					<!-- search form -->					

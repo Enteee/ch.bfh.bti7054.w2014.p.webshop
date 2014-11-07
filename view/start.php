@@ -5,17 +5,17 @@
 				<div class="col-md-3">
 					<!-- login form -->
 					<div class="form-group">
-						<label>Signin</label>
+						<label><?php echo $label->userPanel; ?></label>
 						<div id="signin"></div>
 					</div>
 					<!-- category navigation -->
-					<p class="lead">Categories</p>
+					<p class="lead"><?php echo $label->categories; ?></p>
 					<nav>
 						<div class="list-group">
 <?php foreach($categories as $category):?>
 							<a href="?category=<?php echo $category->getId(); ?>" class="list-group-item<?php echo ($category->getId() == $active_category) ? ' active' : ''; ?>">
 								<span class="badge"><?php echo $category->getProductsCount(); ?></span>
-								<?php echo $category->getName(); ?>
+								<?php $category->setLocale($locale); echo $category->getName(); ?>
 							</a>
 <?php endforeach; ?>
 						</div>
@@ -23,7 +23,7 @@
 				</div>
 				<!-- right content -->
 				<div class="col-md-9">
-					<p class="lead">Products</p>
+					<p class="lead"><?php echo $label->products; ?></p>
 					<!-- item list -->
 					<div class="list-group">
 <?php foreach($products as $product): ?>
@@ -49,21 +49,21 @@
 								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
 							</div>
 							<div class="cs-options">
-								<span>Language:</span>
+								<span><?php echo $label->programmingLanguage; ?>:</span>
 								<select>
 <?php foreach($product->getProgrammingLanguages() as $language): ?>
 									<option><?php echo $language ?></option>
 <?php endforeach;?>
 								</select>
-								<span>Version:</span>
+								<span><?php echo $label->version; ?>:</span>
 								<select>
 <?php foreach($product->getVersions() as $version): ?>
 									<option><?php echo $version ?></option>
 <?php endforeach;?>
 								</select>
-								<span>Comments:</span>
+								<span><?php echo $label->withComments; ?>:</span>
 								<input type="checkbox" checked="checked"></input>
-								<span>Support:</span>
+								<span><?php echo $label->withSupport; ?>:</span>
 								<input type="checkbox"></input>  
 							</div>
 						</div>
@@ -83,7 +83,7 @@
 					<!-- comments -->
 					<div class="well well-sm">
 						<div class="text-right">
-							<a class="btn btn-default btn-sm">Leave a Review</a>
+							<a class="btn btn-default btn-sm"><?php echo $label->addComment; ?></a>
 						</div>
 <?php foreach($reviews as $review): ?>
 						<hr />

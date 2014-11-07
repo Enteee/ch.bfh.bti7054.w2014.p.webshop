@@ -14,15 +14,9 @@ class MainController extends Controller {
 		$data['author'] = $this->config['author'];
 		$data['contact'] = $this->config['mail'];
 		$data['metadata'] = array(
-			'key1' => 'value1',
-			'key2' => 'value2'
+			'keywords' => 'codeshop,code,shop,snippets,buy'
 		);
 		
-		$data['navMyItems'] = $this->lang->navMyItems;
-		$data['navShoppingCart'] = $this->lang->navShoppingCart;
-		$data['navMyProducts'] = $this->lang->navMyProducts;
-		$data['navAddProduct'] = $this->lang->navAddProduct;
-				
 		$data['locale'] = $this->lang->getLocale();
 		
 		$this->addData($data);

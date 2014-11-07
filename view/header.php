@@ -18,12 +18,13 @@
 <?php endforeach; ?>
 
 		<!-- CSS -->
+		<!-- External CSS -->
+		<link rel="stylesheet" type="text/css" href="//www.gstatic.com/authtoolkit/css/gitkit.css">
 		<!-- Bootstrap Core CSS -->
 		<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
 		<!-- Custom CSS -->
 		<link rel="stylesheet" type="text/css" href="css/layout.main.css">
 		<link rel="stylesheet" type="text/css" href="css/style.main.css">
-		<!-- External CSS -->
 		
 		<!-- favicon -->
 		<link rel="icon" type="image/gif" href="img/favicon.gif" />
@@ -65,16 +66,13 @@
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-user" title="My items"></span> <span class="cs-nav-text"><?php echo $navMyItems; ?></span></a>
+							<a href="#"><span class="glyphicon glyphicon-user" title="My items"></span> <span class="cs-nav-text"><?php echo $label->navMyItems; ?></span></a>
 						</li>
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-shopping-cart" title="Shopping cart"></span> <span class="cs-nav-text"><?php echo $navShoppingCart; ?></span></a>
+							<a href="#"><span class="glyphicon glyphicon-folder-open" title="My products"></span> <span class="cs-nav-text"><?php echo $label->navMyProducts; ?></span></a>
 						</li>
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-folder-open" title="My products"></span> <span class="cs-nav-text"><?php echo $navMyProducts; ?></span></a>
-						</li>
-						<li>
-							<a href="#"><span class="glyphicon glyphicon-plus" title="Add product"></span> <span class="cs-nav-text"><?php echo $navAddProduct; ?></span></a>
+							<a href="#"><span class="glyphicon glyphicon-plus" title="Add product"></span> <span class="cs-nav-text"><?php echo $label->navAddProduct; ?></span></a>
 						</li>
 					</ul>
 					<!-- search form -->					
@@ -93,3 +91,27 @@
 				</div>
 			</div>
 		</nav>
+		<div class="container">
+			<div class="row">
+				<!-- left content -->
+				<div class="col-md-3">
+					<!-- login form -->
+					<div class="form-group">
+						<label><?php echo $label->userPanel; ?></label>
+						<div id="signin"></div>
+					</div>
+					<!-- category navigation -->
+					<p class="lead"><?php echo $label->categories; ?></p>
+					<nav>
+						<div class="list-group">
+<?php foreach($categories as $category):?>
+							<a href="?category=<?php echo $category->getId(); ?>" class="list-group-item<?php echo ($category->getId() == $active_category) ? ' active' : ''; ?>">
+								<span class="badge"><?php echo $category->getProductsCount(); ?></span>
+								<?php $category->setLocale($locale); echo $category->getName(); ?>
+							</a>
+<?php endforeach; ?>
+						</div>
+					</nav>
+				</div>
+				<!-- right content -->
+				<div class="col-md-9">

@@ -91,6 +91,8 @@ class Template {
 		foreach (array_keys($this->data) as $key) {
 			${$key} = $this->getValue($key);
 		}
+		// make label available
+		$label = new Label(Mvc::$lang);		
 		// include template
 		include $this->getTemplatePath();
 	}

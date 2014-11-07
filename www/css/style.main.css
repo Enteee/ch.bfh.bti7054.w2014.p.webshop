@@ -36,3 +36,14 @@ a.list-group-item.active > .badge,
 	padding-right: 10px;
 	padding-left: 10px;
 }
+
+/* gitkit style */
+.gitkit-user-card-menu {
+	z-index: 100;
+}
+.gitkit-user-card,
+.gitkit-account-chip,
+.gitkit-sign-in-button,
+.gitkit-button {
+	width: 100%;
+}

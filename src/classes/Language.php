@@ -78,7 +78,7 @@ class Language {
 		if (count($this->validLocales) == 0) {
 			throw new Exception('No locales defined.');
 		}
-		$validLocales = $this->validLocales[0];
+		$validLocales = reset($this->validLocales);
 		// return first key (= language) in array
 		reset($validLocales);
 		return key($validLocales);
@@ -163,7 +163,7 @@ class Language {
 			return $value;
 		}
 		// use fallback
-		$value = $this->getLabel($label, $this->languageFallback);
+		$value = $this->getLabel($label, $this->getLanguageFallback());
 		if (isset($value)) {
 			return $value;
 		}

@@ -3,7 +3,9 @@
 class Repository {
 
 	public function getAllCategories() {
+		$tagType = TagTypeQuery::create()->findPk(Tag::CATEGORY);
 		return TagQuery::create()
+			->filterByTagType($tagType)
 			->find();
 	}
 
@@ -57,7 +59,7 @@ class Repository {
 	}
 	
 	public function getProgrammingLanguagesByProduct($product) {
-		$tagType = TagTypeQuery::create()->findPk(3); // programming languages
+		$tagType = TagTypeQuery::create()->findPk(Tag::PROGRAMMING_LANGUAGE);
 		return TagQuery::create()
 			->useProductTagQuery()
 				->filterByProduct($product)

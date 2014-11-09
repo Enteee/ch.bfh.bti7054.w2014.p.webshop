@@ -15,6 +15,10 @@
  */
 class Tag extends BaseTag
 {
+	const USER_TAG = 1;
+	const CATEGORY = 2;
+	const PROGRAMMING_LANGUAGE = 3;
+
 	public function getProductsCount() {
 		$repo = new Repository();
 		return $repo->getProductCountByTag($this);		

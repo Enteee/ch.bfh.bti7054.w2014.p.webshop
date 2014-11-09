@@ -59,6 +59,11 @@
 		"de" : "Programmiersprache"
 	},
 	
+	"search": {
+		"en" : "search...",
+		"de" : "suchen..."
+	},
+	
 	"errorTitle": {
 		"en" : "Error",
 		"de" : "Fehler"

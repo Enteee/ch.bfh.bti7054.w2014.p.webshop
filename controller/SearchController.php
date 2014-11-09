@@ -3,23 +3,17 @@
 /*
  * Abstract class for MVC controllers.
  */
-class StartController extends MainController {
+class SearchController extends MainController {
 
 	public function __construct() {
 		parent::__construct();
-		$this->vars->save_global('category',SaveVars::T_INT,SaveVars::G_GET);
 		$this->vars->save_global('search',SaveVars::T_STRING,SaveVars::G_GET);
 	}
 
 	public function index() {
-		$this->show();
-	}
-	
-	public function show() {
-				
+		
 		// get variables		
 		$searchstring = $this->vars->search;
-		$categoryId = $this->categoryId;
 		
 		// load data
 		$products = array();
@@ -37,22 +31,7 @@ class StartController extends MainController {
 		
 		// render template
 		$this->view('start', $data);
-	}
-	
-	public function codes() {
-		// todo: maybe in own controller?
-		$this->show();
-	}
-	
-	public function products() {
-		// todo: maybe in own controller?
-		$this->show();
-	}
-	
-	public function add() {
-		// todo: maybe in own controller?
-		$this->show();
-	}
+	}	
 }
 
 ?>

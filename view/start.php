@@ -1,5 +1,5 @@
-<?php $this->view('header'); ?> 
-					<p class="lead"><?php echo $label->products; ?></p>
+<?php $this->view('header'); ?>
+					<p class="lead"><?php echo label('products'); ?></p>
 					<!-- item list -->
 					<div class="list-group">
 <?php foreach($products as $product): ?>
@@ -25,21 +25,21 @@
 								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
 							</div>
 							<div class="cs-options">
-								<span><?php echo $label->programmingLanguage; ?>:</span>
+								<span><?php echo label('programmingLanguage'); ?>:</span>
 								<select>
 <?php foreach($product->getProgrammingLanguages() as $language): ?>
 									<option><?php echo $language ?></option>
 <?php endforeach;?>
 								</select>
-								<span><?php echo $label->version; ?>:</span>
+								<span><?php echo label('version'); ?>:</span>
 								<select>
 <?php foreach($product->getVersions() as $version): ?>
 									<option><?php echo $version ?></option>
 <?php endforeach;?>
 								</select>
-								<span><?php echo $label->withComments; ?>:</span>
+								<span><?php echo label('withComments'); ?>:</span>
 								<input type="checkbox" checked="checked"></input>
-								<span><?php echo $label->withSupport; ?>:</span>
+								<span><?php echo label('withSupport'); ?>:</span>
 								<input type="checkbox"></input>  
 							</div>
 						</div>
@@ -59,7 +59,7 @@
 					<!-- comments -->
 					<div class="well well-sm">
 						<div class="text-right">
-							<a class="btn btn-default btn-sm"><?php echo $label->addComment; ?></a>
+							<a class="btn btn-default btn-sm"><?php echo label('addComment'); ?></a>
 						</div>
 <?php foreach($reviews as $review): ?>
 						<hr />

@@ -66,20 +66,20 @@
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 						<li>
-							<a href="start/codes"><span class="glyphicon glyphicon-user" title="My items"></span> <span class="cs-nav-text"><?php echo $label->navMyItems; ?></span></a>
+							<a href="<?php echo lang(); ?>/start/codes"><span class="glyphicon glyphicon-user" title="My items"></span> <span class="cs-nav-text"><?php echo label('navMyItems'); ?></span></a>
 						</li>
 						<li>
-							<a href="start/products"><span class="glyphicon glyphicon-folder-open" title="My products"></span> <span class="cs-nav-text"><?php echo $label->navMyProducts; ?></span></a>
+							<a href="<?php echo lang(); ?>/start/products"><span class="glyphicon glyphicon-folder-open" title="My products"></span> <span class="cs-nav-text"><?php echo label('navMyProducts'); ?></span></a>
 						</li>
 						<li>
-							<a href="start/add"><span class="glyphicon glyphicon-plus" title="Add product"></span> <span class="cs-nav-text"><?php echo $label->navAddProduct; ?></span></a>
+							<a href="<?php echo lang(); ?>/start/add"><span class="glyphicon glyphicon-plus" title="Add product"></span> <span class="cs-nav-text"><?php echo label('navAddProduct'); ?></span></a>
 						</li>
 					</ul>
 					<!-- search form -->					
 					<form class="navbar-form navbar-right" role="form" action="search" method="get">
 						<div class="form-group">
 							<div class="input-group">
-								<input type="text" class="form-control" name="search" placeholder="<?php echo $label->search; ?>">
+								<input type="text" class="form-control" name="search" placeholder="<?php echo label('search'); ?>">
 								<span class="input-group-btn">
 									<button class="btn btn-default" type="submit">
 										<span class="glyphicon glyphicon-search"></span>
@@ -97,15 +97,15 @@
 				<div class="col-md-3">
 					<!-- login form -->
 					<div class="form-group">
-						<label><?php echo $label->userPanel; ?></label>
+						<label><?php echo label('userPanel'); ?></label>
 						<div id="signin"></div>
 					</div>
 					<!-- category navigation -->
-					<p class="lead"><?php echo $label->categories; ?></p>
+					<p class="lead"><?php echo label('categories'); ?></p>
 					<nav>
 						<div class="list-group">
 <?php foreach($categories as $category):?>
-							<a href="start/show?category=<?php echo $category->getId(); ?>" class="list-group-item<?php echo ($category->getId() == $activeCategoryId) ? ' active' : ''; ?>">
+							<a href="<?php echo lang(); ?>/start/show?category=<?php echo $category->getId(); ?>" class="list-group-item<?php echo ($category->getId() == $activeCategoryId) ? ' active' : ''; ?>">
 								<span class="badge"><?php echo $category->getProductsCount(); ?></span>
 								<?php $category->setLocale($locale); echo $category->getName(); ?>
 							</a>

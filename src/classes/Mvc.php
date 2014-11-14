@@ -41,9 +41,14 @@ class Mvc {
 		$this->initController();
 	}
 
+	private function redirect() {
+		header('Location: ' . '/' . self::$lang->getLanguage() . $_SERVER['REQUEST_URI']);
+		exit;
+	}
+	
 	private function parseUri($uri) {
-		// remove filename
-		$uri = preg_replace('~([a-z-_]*)[.](php)~i', '', $uri);
+		// remove filename if not removed with url rewrite
+		$uri = preg_replace('~(index\.php)~i', '', $uri);
 
 		// parse segments
 		$matches = array();
@@ -69,8 +74,11 @@ class Mvc {
 				array_shift($this->segments);
 				// set language				
 				self::$lang->setLocale($language, NULL);
+				return;
 			}	
 		}
+		
+		$this->redirect();
 	}
 	
 	private function setControllerByUri() {

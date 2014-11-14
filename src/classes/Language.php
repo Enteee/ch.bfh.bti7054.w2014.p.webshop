@@ -95,6 +95,13 @@ class Language {
 	 * Parse http accept-language from browser. Try to set any of the provided locales, if valid. Use first locale fallback otherwise.
 	 */
 	public function parseClientLanguage($clientLanguage) {
+				
+		// cookie value available?
+		if ($this->loadCookie()) {
+			// language set by cookie
+			return;
+		}
+		
 		$matches = array();
 		if (preg_match_all(self::CLIENT_LANGUAGE_REGEX, $clientLanguage, $matches)) {
 			// browser languages found, try to set iterative
@@ -174,6 +181,8 @@ class Language {
 			$this->language = $this->getLanguageFallback();
 			$this->country = $this->getCountryFallback();
 		}
+		// save cookie
+		$this->saveCookie();
 	}
 	
 	public function getLocale() {
@@ -223,6 +232,21 @@ class Language {
 			return $value;
 		}
 		return self::LABEL_NOT_FOUND_FALLBACK; // label not found
+	}
+	
+	private function saveCookie() {
+		global $config;
+	
+		$expire = time() + $config['cookie']['expire'];
+		setcookie('Language', $this->getLanguage(), $expire, '/', $config['cookie']['domain']);
+	}
+	
+	private function loadCookie() {
+		if (isset($_COOKIE['Language'])) {
+			$this->setLocale($_COOKIE['Language'], NULL);
+			return true;
+		}
+		return false;
 	}
 }
 

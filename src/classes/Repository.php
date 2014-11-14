@@ -14,6 +14,11 @@ class Repository {
 			->find();	
 	}
 
+public function getProductById($product_id) {
+		return ProductQuery::create()
+			->findPk($product_id);
+	}
+
 	public function getProductsBySearch($searchstring = NULL) {
 		if (isset($searchstring)) {
 			return ProductQuery::create()

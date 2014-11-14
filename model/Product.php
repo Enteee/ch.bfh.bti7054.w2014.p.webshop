@@ -13,8 +13,18 @@
  *
  * @package    propel.generator.model
  */
-class Product extends BaseProduct
+class Product extends BaseProduct implements JsonSerializable
 {
+	public function jsonSerialize(){
+		return [
+			'name' => $this->getName(),
+			'tags' => $this->getTags(),
+			'description' => $this->getDescription(),
+			'programmingLanguage' => $this->getProgrammingLanguages(),
+			'versions' => $this->getVersions(),
+		];
+	}
+
 	public function getTags() {
 		$repo = new Repository();
 		return $repo->getTagsByProduct($this);

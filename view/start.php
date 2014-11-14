@@ -10,16 +10,16 @@
 <?php endforeach; ?>
 					</div>
 					<!-- product details -->			
-					<?php	foreach($products as $product): ?>
+<?php	foreach($products as $product): ?>
 					<div class="cs-product-picture thumbnail">
 						<!--<img class="img-responsive" src="http://soniqdesigns.com/wp/wp-content/uploads/2013/05/MarkupCode.gif" alt="">-->
 						<div class="caption-full">
 							<h4 class="pull-right">$24.99</h4>
 							<h4><a href="#"><?php echo $product->getName(); ?></a></h4>
 							<div class="labels">
-<?php foreach($product->getTags() as $tag):?> 
+	<?php foreach($product->getTags() as $tag):?> 
 								<span class="label label-default"><?php echo $tag->getName(); ?></span>
-<?php endforeach; ?>
+	<?php endforeach; ?>
 							</div>
 							<div class="cs-product-description">
 								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
@@ -27,15 +27,15 @@
 							<div class="cs-options">
 								<span><?php echo label('programmingLanguage'); ?>:</span>
 								<select>
-<?php foreach($product->getProgrammingLanguages() as $language): ?>
+	<?php foreach($product->getProgrammingLanguages() as $language): ?>
 									<option><?php echo $language ?></option>
-<?php endforeach;?>
+	<?php endforeach;?>
 								</select>
 								<span><?php echo label('version'); ?>:</span>
 								<select>
-<?php foreach($product->getVersions() as $version): ?>
+	<?php foreach($product->getVersions() as $version): ?>
 									<option><?php echo $version ?></option>
-<?php endforeach;?>
+	<?php endforeach;?>
 								</select>
 								<span><?php echo label('withComments'); ?>:</span>
 								<input type="checkbox" checked="checked"></input>
@@ -55,7 +55,7 @@
 							</p>
 						</div>
 					</div>
-					<?php	endforeach; ?>
+<?php	endforeach; ?>
 					<!-- comments -->
 					<div class="well well-sm">
 						<div class="text-right">
@@ -65,12 +65,12 @@
 						<hr />
 						<div class="row">
 							<div class="col-md-12">
-<?php for ($i = 0; $i < $review->getRating(); $i++) { ?>
+	<?php for ($i = 0; $i < $review->getRating(); $i++): ?>
 								<span class="glyphicon glyphicon-star"></span>
-<?php } ?>
-<?php for ($i = 0; $i < (5 - $review->getRating()); $i++) { ?>
+	<?php endfor; ?>
+	<?php for ($i = 0; $i < (5 - $review->getRating()); $i++): ?>
 								<span class="glyphicon glyphicon-star-empty"></span>
-<?php } ?>
+	<?php endfor; ?>
 								<?php echo $review->getUser()->getEmail(); ?>
 								<span class="pull-right"><?php echo $review->getCreatedAt(); ?></span>
 								<p><?php echo $review->getText(); ?></p>

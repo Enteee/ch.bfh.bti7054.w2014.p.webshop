@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Abstract class for MVC controllers.
+ * Do a search
  */
 class SearchController extends MainController {
 

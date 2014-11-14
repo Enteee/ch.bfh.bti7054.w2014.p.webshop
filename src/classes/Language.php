@@ -235,14 +235,15 @@ class Language {
 	}
 	
 	private function saveCookie() {
-		$expire = time() + 7 * 24 * 3600; // one week
-		setcookie('Language', $this->getLanguage(), $expire);
+		global $config;
+	
+		$expire = time() + $config['cookie']['expire'];
+		setcookie('Language', $this->getLanguage(), $expire, '/', $config['cookie']['domain']);
 	}
 	
 	private function loadCookie() {
-		$language = $_COOKIE['Language'];
-		if (isset($language)) {
-			$this->setLocale($language, NULL);
+		if (isset($_COOKIE['Language'])) {
+			$this->setLocale($_COOKIE['Language'], NULL);
 			return true;
 		}
 		return false;

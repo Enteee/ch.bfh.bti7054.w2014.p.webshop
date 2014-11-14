@@ -138,3 +138,17 @@ INSERT INTO `review`
 VALUES
 (1,1,1,'Sehr geiles Produkt! Kann ich nur weiterempfehlen.',5,1,NOW(),NOW())
 ;
+
+INSERT INTO `offer`
+(`id`,
+`product_id`,
+`price`,
+`active`,
+`created_at`,
+`updated_at`)
+VALUES
+(1,1,100,1,NOW(),NOW()),
+(2,2,1000,1,NOW(),NOW()),
+(3,3,250,1,NOW(),NOW())
+;
+

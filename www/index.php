@@ -9,6 +9,9 @@ require_once '../src/autoload.php';
 /* Set up composer autoload */
 require_once($config['composer']['autoload.php']);
 
+/* Session */
+session_start();
+
 /* Debug settings */
 if ($config['debug']) {
 	ini_set('implicit_flush',1);				// flush stdout after each "echo"

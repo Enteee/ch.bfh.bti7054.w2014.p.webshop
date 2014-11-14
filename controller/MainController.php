@@ -18,6 +18,9 @@ class MainController extends Controller {
 		
 		// load data
 		$categories = $this->repo->getAllCategories();
+		$shoppingCart = ShoppingCart::get();
+				
+		$shoppingCartItems = $shoppingCart->getOffers();
 		
 		// set global data for view
 		$data['title'] = $this->lang->title;
@@ -32,6 +35,8 @@ class MainController extends Controller {
 		
 		$data['categories'] = $categories;
 		$data['activeCategoryId'] = $this->categoryId;
+		$data['shoppingCartItems'] = $shoppingCartItems;
+		$data['shoppingCartTotalPrice'] = $shoppingCart->getTotalPrice();
 		
 		$this->addData($data);
 	}

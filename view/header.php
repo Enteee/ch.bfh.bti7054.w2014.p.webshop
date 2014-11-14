@@ -113,49 +113,34 @@
 <?php endforeach; ?>
 						</div>
 					</nav>
+<?php if (count($shoppingCartItems) > 0):?>
 					<!-- shopping cart -->
 					<p class="lead"><?php echo label('shoppingCart'); ?></p>
 					<ul class="list-group">
+	<?php foreach($shoppingCartItems as $shoppingCartItem):?>
 						<li class="list-group-item">
 							<div class="row">
-								<div class="col-xs-2 text-right">
-									10
+								<div class="col-xs-7">
+									<?php echo $shoppingCartItem->getProduct()->getName(); ?>
 								</div>
-								<div class="col-xs-6">
-									Hello world
-								</div>
-								<div class="col-xs-4 text-right">
-									24.99$
+								<div class="col-xs-5 text-right">
+									<?php echo $shoppingCartItem->getPrice(); ?>&cent;
 								</div>
 							</div>
 						</li>
-						<li class="list-group-item">
-							<div class="row">
-								<div class="col-xs-2 text-right">
-									3
-								</div>
-								<div class="col-xs-6">
-									Bubble sort
-								</div>
-								<div class="col-xs-4 text-right">
-									100.99$
-								</div>
-							</div>
-						</li>
+	<?php endforeach; ?>
 						<li class="list-group-item list-group-item-info">
 							<div class="row">
-								<div class="col-xs-2 text-right">
-									
-								</div>
-								<div class="col-xs-6">
+								<div class="col-xs-7">
 									Total
 								</div>
-								<div class="col-xs-4 text-right">
-									125.98$
+								<div class="col-xs-5 text-right">
+									<?php echo $shoppingCartTotalPrice; ?>&cent;
 								</div>
 							</div>
-						</li>
+						</li>						
 					</ul>
+<?php endif; ?>
 				</div>
 				<!-- right content -->
 				<div class="col-md-9">

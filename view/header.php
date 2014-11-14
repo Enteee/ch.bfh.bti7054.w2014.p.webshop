@@ -48,6 +48,7 @@
 		<script type="application/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 		<script type="application/javascript" src="//www.gstatic.com/authtoolkit/js/gitkit.js"></script>
 		<script type="application/javascript" src="js/signin.js"></script>
+		<script type="application/javascript" src="js/start.js"></script>
 
 		<!-- navigation -->
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">

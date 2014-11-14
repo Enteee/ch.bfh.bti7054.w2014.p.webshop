@@ -3,7 +3,7 @@
 					<!-- item list -->
 					<div class="list-group">
 <?php foreach($products as $product): ?>
-						<div href="#" class="list-group-item">
+						<div href="#" class="list-group-item cs-product-list-item">
 							<h4 class="list-group-item-heading"><?php $product->setLocale($locale); echo $product->getName(); ?></h4>
 							<p class="list-group-item-text"><?php echo $product->getDescription(); ?></p>
 						</div>

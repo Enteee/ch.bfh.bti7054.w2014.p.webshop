@@ -112,6 +112,49 @@
 <?php endforeach; ?>
 						</div>
 					</nav>
+					<!-- shopping cart -->
+					<p class="lead"><?php echo label('shoppingCart'); ?></p>
+					<ul class="list-group">
+						<li class="list-group-item">
+							<div class="row">
+								<div class="col-xs-2 text-right">
+									10
+								</div>
+								<div class="col-xs-6">
+									Hello world
+								</div>
+								<div class="col-xs-4 text-right">
+									24.99$
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<div class="row">
+								<div class="col-xs-2 text-right">
+									3
+								</div>
+								<div class="col-xs-6">
+									Bubble sort
+								</div>
+								<div class="col-xs-4 text-right">
+									100.99$
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item list-group-item-info">
+							<div class="row">
+								<div class="col-xs-2 text-right">
+									
+								</div>
+								<div class="col-xs-6">
+									Total
+								</div>
+								<div class="col-xs-4 text-right">
+									125.98$
+								</div>
+							</div>
+						</li>
+					</ul>
 				</div>
 				<!-- right content -->
 				<div class="col-md-9">

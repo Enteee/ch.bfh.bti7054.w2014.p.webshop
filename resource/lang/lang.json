@@ -12,7 +12,6 @@
 		"de" : "Nie mehr selber Code schreiben!",
 		"en" : "Never code again!"
 	},
-	
 	"navMyItems": {
 		"en" : "My items",
 		"de" : "Meine Codes"
@@ -25,7 +24,6 @@
 		"en" : "Add product",
 		"de" : "Produkt hinzufügen"
 	},
-	
 	"userPanel": {
 		"en" : "User panel",
 		"de" : "Benutzerübersicht"
@@ -58,12 +56,14 @@
 		"en" : "programming language",
 		"de" : "Programmiersprache"
 	},
-	
+	"shoppingCart": {
+		"en" : "Shopping cart",
+		"de" : "Warenkorb"
+	},
 	"search": {
 		"en" : "search...",
 		"de" : "suchen..."
 	},
-	
 	"errorTitle": {
 		"en" : "Error",
 		"de" : "Fehler"

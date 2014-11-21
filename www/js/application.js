@@ -41,8 +41,11 @@ $(document).ready(function() {
 				for(var review in product.reviews){
 					var template = reviews.find($('.cs-product-list-item-review-template'));
 					var newReview = template.clone();
+					var reviewData = product.reviews[review];
 					newReview.removeClass('cs-product-list-item-review-template');
-					newReview.find('.cs-product-list-item-review-email').text(product.reviews[review].email);
+					newReview.find('.cs-product-list-item-review-email').text(reviewData.email);
+					newReview.find('.cs-product-list-item-review-text').text(reviewData.text);
+					newReview.find('.cs-product-list-item-review-created-at').text(reviewData.createdAt);
 					reviews.append(newReview);
 					
 				};

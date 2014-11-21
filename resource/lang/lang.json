@@ -36,8 +36,12 @@
 		"en" : "Products",
 		"de" : "Produkte"
 	},
-	"addComment": {
-		"en" : "Add comment",
+	"reviews": {
+		"en" : "Reviews",
+		"de" : "Kommentare"
+	},
+	"addReview": {
+		"en" : "Add review",
 		"de" : "Kommentar schreiben"
 	},
 	"version": {

@@ -25,7 +25,7 @@
 								<input class="cs-product-list-item-clickable" type="checkbox"></input>  
 							</div>
 							<div class="hidden cs-product-list-item-ratings cs-product-list-hideable">
-								<p class="pull-right">reviews <span class="badge">6</span></p>
+								<p class="pull-right"><?php echo label('reviews')?>&nbsp;<span class="badge">6</span></p>
 								<p>
 									<span class="glyphicon glyphicon-star"></span>
 									<span class="glyphicon glyphicon-star"></span>
@@ -41,21 +41,23 @@
 									<div class="hidden row cs-product-list-item-review cs-product-list-item-review-template cs-product-list-hideable">
 										<div class="col-md-12">
 											<div class="cs-product-list-item-review-rating">
-												<span class="glyphicon glyphicon-star"></span>
-												<span class="glyphicon glyphicon-star"></span>
-												<span class="glyphicon glyphicon-star"></span>
-												<span class="glyphicon glyphicon-star"></span>
-												<span class="glyphicon glyphicon-star-empty"></span>
+												<p>
+													<span class="glyphicon glyphicon-star"></span>
+													<span class="glyphicon glyphicon-star"></span>
+													<span class="glyphicon glyphicon-star"></span>
+													<span class="glyphicon glyphicon-star"></span>
+													<span class="glyphicon glyphicon-star-empty"></span>
+												</p>
 											</div>
-											<p class="cs-product-list-item-review-email">gagu@hagu.lol</p>
-											<span class="pull-right cs-product-list-item-review-created-at">11.1.1</span>
-											<p class="cs-product-list-item-review-text">This sucks!</p>
+											<p class="cs-product-list-item-review-email"></p>
+											<span class="pull-right cs-product-list-item-review-created-at"></span>
+											<p class="cs-product-list-item-review-text"></p>
 										</div>
 									</div>
 								</div>
 								<div class="text-right">
 									<textarea class="form-control cs-product-list-item-clickable" rows="5"></textarea>
-									<a class="btn btn-default btn-sm cs-product-list-item-clickable"><?php echo label('addComment'); ?></a>
+									<a class="btn btn-default btn-sm cs-product-list-item-clickable"><?php echo label('addReview'); ?></a>
 								</div>
 							</div>
 						</div>

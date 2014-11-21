@@ -20,6 +20,11 @@
 		<!-- CSS -->
 		<!-- External CSS -->
 		<link rel="stylesheet" type="text/css" href="//www.gstatic.com/authtoolkit/css/gitkit.css">
+		<!-- jQuery UI -->
+		<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
+		<link rel="stylesheet" type="text/css" href="css/jquery-ui.structure.min.css">
+		<link rel="stylesheet" type="text/css" href="css/jquery-ui.theme.min.css">				
 		<!-- Bootstrap Core CSS -->
 		<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
 		<!-- Custom CSS -->
@@ -45,10 +50,11 @@
 		<!-- Javascript -->
 		<!-- Microsoft READ THIS: http://www.rfc-editor.org/rfc/rfc4329.txt  !! You are obsolete !! -->
 		<script type="application/javascript" src="bootstrap/js/jquery-1.11.0.js"></script>
+		<script type="application/javascript" src="js/jquery-ui-1.11.2.min.js"></script>
 		<script type="application/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 		<script type="application/javascript" src="//www.gstatic.com/authtoolkit/js/gitkit.js"></script>
 		<script type="application/javascript" src="js/signin.js"></script>
-		<script type="application/javascript" src="js/start.js"></script>
+		<script type="application/javascript" src="js/application.js"></script>
 
 		<!-- navigation -->
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -73,7 +79,7 @@
 							<a href="<?php echo lang(); ?>/start/products"><span class="glyphicon glyphicon-folder-open" title="My products"></span> <span class="cs-nav-text"><?php echo label('navMyProducts'); ?></span></a>
 						</li>
 						<li>
-							<a href="<?php echo lang(); ?>/start/add"><span class="glyphicon glyphicon-plus" title="Add product"></span> <span class="cs-nav-text"><?php echo label('navAddProduct'); ?></span></a>
+							<a href="<?php echo lang(); ?>/product/add"><span class="glyphicon glyphicon-plus" title="Add product"></span> <span class="cs-nav-text"><?php echo label('navAddProduct'); ?></span></a>
 						</li>
 					</ul>
 					<!-- search form -->					

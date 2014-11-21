@@ -7,25 +7,31 @@ class ProductController extends MainController {
 
 	public function __construct() {
 		parent::__construct();
-		$this->vars->save_global('product_id',SaveVars::T_INT,SaveVars::G_GET);
+		$this->vars->save_global('product_id', SaveVars::T_INT, SaveVars::G_GET);
+		$this->vars->save_global('product_name', SaveVars::T_STRING, SaveVars::G_POST);
+		$this->vars->save_global('product_description', SaveVars::T_STRING, SaveVars::G_POST);
+		$this->vars->save_global('product_categories', SaveVars::T_STRING, SaveVars::G_POST);
+		$this->vars->save_global('product_programminglanguages', SaveVars::T_STRING, SaveVars::G_POST);
+		$this->vars->save_global('product_tags', SaveVars::T_STRING, SaveVars::G_POST);
+		$this->vars->save_global('product_file', SaveVars::T_STRING, SaveVars::G_POST);
 	}
 
 	public function index() {
-		
-		// get variables
-		$product_id = $this->vars->product_id;
-		
-		// load data
-		$product = $this->repo->getProductById($product_id);
-		if(isset($product)){
-			$product->setLocale($this->lang->getLocale());
-		}
-		// set data for view
-		$data['json'] = $product;
-		
+	}
+	
+	public function add() {
+		$data = array();
+	
 		// render template
-		$this->view('json', $data);
-	}	
+		$this->view('product', $data);
+	}
+	
+	public function save() {
+
+		echo $this->vars->product_description;
+
+		$this->add();
+	}
 }
 
 ?>

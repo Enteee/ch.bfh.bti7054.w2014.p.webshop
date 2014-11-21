@@ -8,6 +8,20 @@ class Repository {
 			->filterByTagType($tagType)
 			->find();
 	}
+	
+	public function getCategoriesBySearch($searchstring = NULL) {		
+		if (isset($searchstring)) {
+			$tagType = TagTypeQuery::create()->findPk(Tag::CATEGORY);
+			return TagQuery::create()
+				->filterByTagType($tagType)
+				->useTagI18nQuery()
+					->filterByName('%' . $searchstring . '%')
+				->endUse()
+				->find();
+		} else {
+			return $this->getAllCategories();
+		}
+	}
 
 	public function getAllProducts() {
 		return ProductQuery::create()
@@ -27,8 +41,7 @@ public function getProductById($product_id) {
 				->endUse()
 				->find();
 		} else {
-			return ProductQuery::create()
-				->find();
+			return $this->getAllProducts();
 		}
 	}
 

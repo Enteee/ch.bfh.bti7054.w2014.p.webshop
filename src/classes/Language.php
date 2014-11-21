@@ -231,7 +231,7 @@ class Language {
 		if (isset($value)) {
 			return $value;
 		}
-		return self::LABEL_NOT_FOUND_FALLBACK; // label not found
+		return 'label <b>' . $label . '</b> not found'; //self::LABEL_NOT_FOUND_FALLBACK; // label not found
 	}
 	
 	private function saveCookie() {

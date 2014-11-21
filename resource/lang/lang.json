@@ -53,8 +53,20 @@
 		"de" : "mit Support"
 	},
 	"programmingLanguage": {
-		"en" : "programming language",
+		"en" : "Programming language",
 		"de" : "Programmiersprache"
+	},
+	"programmingLanguages": {
+		"en" : "Programming languages",
+		"de" : "Programmiersprachen"
+	},
+	"name": {
+		"en" : "Name",
+		"de" : "Bezeichnung"
+	},
+	"description": {
+		"en" : "Description",
+		"de" : "Beschreibung"
 	},
 	"shoppingCart": {
 		"en" : "Shopping cart",
@@ -63,6 +75,18 @@
 	"search": {
 		"en" : "search...",
 		"de" : "suchen..."
+	},
+	"tags": {
+		"en" : "Tags",
+		"de" : "Tags"
+	},
+	"add": {
+		"en" : "Add",
+		"de" : "Hinzufügen"
+	},
+	"codeFile": {
+		"en" : "Code file",
+		"de" : "Code Datei"
 	},
 	"errorTitle": {
 		"en" : "Error",

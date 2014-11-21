@@ -82,7 +82,6 @@ $(document).ready(function() {
 		},
 		select: function(event, ui) {
 			var product = getProduct(ui.item.data);
-			console.log(product);
 			if (product != null) {
 				$('#product_id').val(ui.item.data);
 				$('#product_description').val(product.description);

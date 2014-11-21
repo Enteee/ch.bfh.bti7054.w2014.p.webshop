@@ -209,8 +209,15 @@ We're selling source code on our webshop. People can upload source code and othe
 
 ### Task 12.4: Regular Expressions
 
+## Open issues
 
-
+* Bugfix: gitkit login (getUserInRequest returns NULL, even if the user is logged in)
+* Bugifx: Product details disappear by click on any element (should only work if clicking the title?)
+* Finish code upload page (inclusive categories and programming languages)
+* Add comment feature
+* Show bought products page
+* Show uploaded products page
+* Implement shopping cart real
 
 
 

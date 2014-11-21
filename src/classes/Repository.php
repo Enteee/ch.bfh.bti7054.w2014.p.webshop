@@ -108,5 +108,18 @@ public function getProductById($product_id) {
 			return array();
 		}
 	}
+	
+	public function getUserByToken($token) {
+		$users = UserQuery::create()
+			->filterByToken($token)
+			->find();
+		if (count($users) > 1) {
+			throw new Exception('multiple users with same token');
+		}
+		if (count($users) == 1) {
+			return $users[0];
+		}
+		return NULL;
+	}
 }
 ?>

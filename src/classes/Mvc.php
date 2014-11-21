@@ -103,27 +103,37 @@ class Mvc {
 	}
 	
 	private function initController() {
-		// create controller
-		if (!$this->controllerExists($this->controllerName)) {		
-			// use fallback
-			$this->controllerName = $this->controllerNameError;
-			$this->methodName = 'error404';
-		}
-		$this->controller = new $this->controllerName();
-
-		// call method
-		if (method_exists($this->controller, $this->methodName)) {
-			$method = $this->methodName;
-			$this->controller->$method();
-		} else {
-			$this->methodName = $this->methodNameFallback;
-			if (!method_exists($this->controller, $this->methodName)) {
-				throw new Exception('Controller has no index method.');
+		try {
+			// create controller
+			if (!$this->controllerExists($this->controllerName)) {		
+				// use fallback
+				$this->controllerName = $this->controllerNameError;
+				$this->methodName = 'error404';
 			}
-			// call fallback method
-			$method = $this->methodName;
-			$this->controller->$method();
+			$this->controller = new $this->controllerName();
+
+			// call method
+			if (method_exists($this->controller, $this->methodName)) {
+				$method = $this->methodName;
+				$this->controller->$method();
+			} else {
+				$this->methodName = $this->methodNameFallback;
+				if (!method_exists($this->controller, $this->methodName)) {
+					throw new Exception('Controller has no index method.');
+				}
+				// call fallback method
+				$method = $this->methodName;
+				$this->controller->$method();
+			}
+		} catch (Exception $ex) {
+			$this->exception($ex);
 		}
+	}
+	
+	private function exception($exception) {
+		$this->controllerName = $this->controllerNameError;
+		$this->controller = new $this->controllerName();
+		$this->controller->error500($exception);
 	}	
 }
 

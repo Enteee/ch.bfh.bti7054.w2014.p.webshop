@@ -84,6 +84,10 @@
 		"en" : "Add",
 		"de" : "Hinzufügen"
 	},
+	"price": {
+		"en" : "Price",
+		"de" : "Preis"
+	},
 	"codeFile": {
 		"en" : "Code file",
 		"de" : "Code Datei"
@@ -95,5 +99,9 @@
 	"error404": {
 		"en" : "The page you are looking for doesn't exist. We're sorry.",
 		"de" : "Die gewünschte Seite konnte nicht gefunden werden."
+	},
+	"error500": {
+		"en" : "There was an internal error. We're sorry.",
+		"de" : "Allgemeiner Fehler. Wir entschuldigen uns."
 	}
 }

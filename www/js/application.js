@@ -1,4 +1,15 @@
 $(document).ready(function() {
+
+	function getProduct(id) {
+		var product = null;
+		$.ajax({
+				url: "/json?type=product&id=" + id,
+				context: $(this),
+				dataType: "json",
+				async: false
+		}).done(function (json){ product = json; });
+		return product;
+	}
 	
 	/* product list */
 	$('.cs-product-list-item').click(function(){
@@ -19,8 +30,8 @@ $(document).ready(function() {
 				var versions = $(this).find($('.cs-product-list-item-options-version'));
 				var reviews = $(this).find($('.cs-product-list-item-reviews'));
 				for(var tag in product.tags){
-					tags.append('<span class="label label-default">'+ product.tags[tag].name +'</span>');
-				};
+					tags.append('<span class="label label-default">'+ product.tags[tag].name +'</span> ');
+				};				
 				for(var language in product.programmingLanguage){
 					programmingLanguage.append('<option>'+ language +'</option>');
 				};
@@ -68,7 +79,27 @@ $(document).ready(function() {
 			.done(function (json) { result = json; });
 			
 			response(result);
+		},
+		select: function(event, ui) {
+			var product = getProduct(ui.item.data);
+			console.log(product);
+			if (product != null) {
+				$('#product_id').val(ui.item.data);
+				$('#product_description').val(product.description);
+				$('#product_description').prop('disabled', true);
+				var tags = [];
+				for (var key in product.tags){
+					tags.push(product.tags[key].name);
+				}
+				$('#product_categories').val(tags.join(', '));				
+				$('#product_categories').prop('disabled', true);
+			}
 		}
+	});
+	$('#product_name').on('keypress', function () {
+		$('#product_id').val('');
+		$('#product_description').prop('disabled', false);
+		$('#product_categories').prop('disabled', false);
 	});
 	
 	/* categories */
@@ -91,4 +122,23 @@ $(document).ready(function() {
 		}
 	});
 	
+	/* programming languages */
+	$('#product_programminglanguages').autocomplete({
+		minLength: 1,
+		source: function (request, response) {
+
+			var term = request.term;
+			var result = [];
+			
+			$.ajax({
+				url: '/json/programminglanguages_ac?search=' + term,
+				context: $(this),
+				dataType: 'json',
+				async: false
+			})
+			.done(function (json) { result = json; });
+			
+			response(result);
+		}
+	});	
 });

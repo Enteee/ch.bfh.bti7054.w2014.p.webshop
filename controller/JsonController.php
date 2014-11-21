@@ -67,6 +67,23 @@ class JsonController extends MainController {
 
 		$this->view('json', $data);
 	}
+	
+	public function programminglanguages_ac() {
+		$categories = $this->repo->getCategoriesBySearch($this->vars->search);
+		
+		$response = array();		
+		foreach ($categories as $category) {
+			$category->setLocale($this->lang->getLocale());
+			$response[] = [
+				'value' => $category->getName(),
+				'data' => $category->getId()
+			];
+		}
+			
+		$data['json'] = $response;
+
+		$this->view('json', $data);
+	}
 }
 
 ?>

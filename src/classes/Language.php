@@ -187,7 +187,17 @@ class Language {
 	
 	public function getLocale() {
 		return sprintf('%s_%s', $this->language, $this->country);			
-	}	
+	}
+	
+	public function getAllLocales() {
+		$all = array();
+		foreach ($this->validLocales as $language => $countries) {
+			foreach ($countries as $country) {
+				$all[] = sprintf('%s_%s', $language, $country);
+			}
+		}
+		return $all;		
+	}
 	
 	public static function isLanguageValid($language) {
 		return isset($language) && preg_match(self::VALID_LANGUAGE_REGEX, $language);

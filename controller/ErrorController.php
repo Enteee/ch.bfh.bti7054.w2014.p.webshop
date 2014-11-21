@@ -23,6 +23,24 @@ class ErrorController extends MainController {
 		
 		// render template
 		$this->view('error', $data);
+	}
+	
+	public function error500($exception) {	
+		
+		$errorNr = '500';
+		$errorDesc = $this->lang->error500;
+		
+		if (error_reporting() & E_ERROR) {
+			// show exception if error reporting on
+			$errorDesc = $exception;
+		}
+		
+		// set data for view
+		$data['errorTitle'] = $this->lang->errorTitle . ' ' . $errorNr;
+		$data['errorDescription'] = $errorDesc;
+		
+		// render template
+		$this->view('error', $data);
 	}	
 }
 

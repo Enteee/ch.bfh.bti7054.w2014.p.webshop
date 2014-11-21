@@ -67,7 +67,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="#"><img class="cs-logo" src="img/logo_small.png" alt="CodeShop Logo" /></a>
+					<a class="navbar-brand" href="/"><img class="cs-logo" src="img/logo_small.png" alt="CodeShop Logo" /></a>
 				</div>
 				<!-- navigation, search form, login form -->
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">

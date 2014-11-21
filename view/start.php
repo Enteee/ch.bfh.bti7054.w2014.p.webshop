@@ -14,15 +14,15 @@
 							</div>
 							<div class="hidden cs-product-list-item-options cs-product-list-hideable">
 								<span><?php echo label('programmingLanguage'); ?>:</span>
-								<select class="cs-product-list-item-options-programming-language">
+								<select class="cs-product-list-item-options-programming-language cs-product-list-item-clickable">
 								</select>
 								<span><?php echo label('version'); ?>:</span>
-								<select class="cs-product-list-item-options-version">
+								<select class="cs-product-list-item-options-version cs-product-list-item-clickable">
 								</select>
 								<span><?php echo label('withComments'); ?>:</span>
-								<input type="checkbox" checked="checked"></input>
+								<input class="cs-product-list-item-clickable" type="checkbox" checked="checked"></input>
 								<span><?php echo label('withSupport'); ?>:</span>
-								<input type="checkbox"></input>  
+								<input class="cs-product-list-item-clickable" type="checkbox"></input>  
 							</div>
 							<div class="hidden cs-product-list-item-ratings cs-product-list-hideable">
 								<p class="pull-right">reviews <span class="badge">6</span></p>
@@ -54,8 +54,8 @@
 									</div>
 								</div>
 								<div class="text-right">
-									<textarea class="form-control" rows="5"></textarea>
-									<a class="btn btn-default btn-sm"><?php echo label('addComment'); ?></a>
+									<textarea class="form-control cs-product-list-item-clickable" rows="5"></textarea>
+									<a class="btn btn-default btn-sm cs-product-list-item-clickable"><?php echo label('addComment'); ?></a>
 								</div>
 							</div>
 						</div>

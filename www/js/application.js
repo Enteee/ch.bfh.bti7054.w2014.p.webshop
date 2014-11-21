@@ -46,18 +46,16 @@ $(document).ready(function() {
 					reviews.append(newReview);
 					
 				};
-				function unfold(){
-					$(this).off('click');
-					$(this).find($('.cs-product-list-hideable')).not('[class*="template"]').removeClass('hidden');
-					$(this).click(fold);
-				}
-				function fold(){
-					$(this).off('click');
-					$(this).find($('.cs-product-list-hideable')).not('[class*="template"]').addClass('hidden');
-					$(this).click(unfold);
-				}
-				$(this).click(unfold);
-				$(this).trigger('click');
+				var hideables = $(this).find($('.cs-product-list-hideable')).not('[class*="template"]');
+				hideables.hide();
+				hideables.removeClass('hidden');
+				hideables.show('slow');
+				$(this).click(function(){
+					hideables.toggle('slow');
+				});
+				$(this).find($('.cs-product-list-item-clickable')).click(function(e){
+					e.stopPropagation();
+				});
 			}
 		});
 	});

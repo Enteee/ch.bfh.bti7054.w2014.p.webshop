@@ -23,12 +23,12 @@ class ProductController extends MainController {
 		$data = array();
 	
 		// render template
-		$this->view('product', $data);
+		$this->view('add_product', $data);
 	}
 	
 	public function save() {
 
-		echo $this->vars->product_description;
+		// TODO
 
 		$this->add();
 	}

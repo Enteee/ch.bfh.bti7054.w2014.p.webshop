@@ -60,7 +60,7 @@ $(document).ready(function() {
 			var result = [];
 			
 			$.ajax({
-				url: 'http://codeshop.ch/rest/products_ac?search=' + term,
+				url: '/json/products_ac?search=' + term,
 				context: $(this),
 				dataType: 'json',
 				async: false
@@ -80,7 +80,7 @@ $(document).ready(function() {
 			var result = [];
 			
 			$.ajax({
-				url: 'http://codeshop.ch/rest/categories_ac?search=' + term,
+				url: '/json/categories_ac?search=' + term,
 				context: $(this),
 				dataType: 'json',
 				async: false

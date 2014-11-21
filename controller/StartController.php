@@ -28,7 +28,9 @@ class StartController extends MainController {
 		} else {
 			$products = $this->repo->getProductsBySearch($searchstring);
 		}
-		$product = ProductQuery::create()->findPk(1);
+		foreach($products as $product){
+			$product->setLocale($this->lang->getLocale());
+		}
 		$reviews = $this->repo->getReviewsByProduct($product);
 		
 		// set data for view

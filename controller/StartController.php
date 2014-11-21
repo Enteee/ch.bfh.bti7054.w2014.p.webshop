@@ -31,11 +31,8 @@ class StartController extends MainController {
 		foreach($products as $product){
 			$product->setLocale($this->lang->getLocale());
 		}
-		$reviews = $this->repo->getReviewsByProduct($product);
-		
 		// set data for view
 		$data['products'] = $products;
-		$data['reviews'] = $reviews;
 		
 		// render template
 		$this->view('start', $data);

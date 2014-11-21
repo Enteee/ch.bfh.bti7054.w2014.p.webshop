@@ -13,6 +13,15 @@
  *
  * @package    propel.generator.model
  */
-class Review extends BaseReview
+class Review extends BaseReview implements JsonSerializable
 {
+	public function jsonSerialize(){
+		return [
+			'text' => $this->getText(),
+			'rating' => $this->getRating(),
+			'createdAt' => $this->getCreatedAt(),
+			'updatedAt' => $this->getUpdatedAt(),
+			'email' => $this->getUser()->getEmail(),
+		];
+	}
 }

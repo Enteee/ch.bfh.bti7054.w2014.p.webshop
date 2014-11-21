@@ -14,6 +14,10 @@ a:hover {
 	color: #ff3500;
 }
 
+textarea {
+	 resize:none;
+}
+
 /* ---------- changes on bootstrap style ---------- */
 
 /* badge in list-group */

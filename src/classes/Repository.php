@@ -80,6 +80,11 @@ public function getProductById($product_id) {
 			->endUse()
 			->find();
 	}
+
+	public function getReviewById($review_id) {
+		return ReviewQuery::create()
+			->findPk($review_id);
+	}
 	
 	public function getReviewsByProduct($product) {
 		if (isset($product)) {

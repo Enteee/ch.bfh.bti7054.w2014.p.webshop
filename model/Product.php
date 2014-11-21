@@ -22,6 +22,7 @@ class Product extends BaseProduct implements JsonSerializable
 			'description' => $this->getDescription(),
 			'programmingLanguage' => $this->getProgrammingLanguages(),
 			'versions' => $this->getVersions(),
+			'reviews' => $this->getReviews(),
 		];
 	}
 

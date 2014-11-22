@@ -13,7 +13,7 @@ class PopulateController extends Controller {
 		if($this->config['debug'] == false){
 			die('go away!');
 		}
-		
+
 		/* Tag types */
 		$tagTypeUser = (new TagType())
 			->setLocale('en_US')
@@ -147,6 +147,36 @@ class PopulateController extends Controller {
 				->setName('Schnell sort')
 				->setDescription('Schneller Sortieralgorithmus');
 		$quickSort->save();
+
+		/* Users */
+		$userTest = (new User())
+			->setEmail('testuser@gmail.com')
+			->setCredits('1000');
+		$userTest->save();
+
+		/*Reviews*/
+		$reviewHelloTest = (new Review())
+			->setUser($userTest)
+			->setProduct($helloWorld)
+			->setText('Sehr geiles Produkt! Kann ich nur weiterempfehlen.')
+			->setRating(5);
+		$reviewHelloTest->save();
+
+		/*Offers*/
+		$offer1 = (new Offer())
+			->setProduct($helloWorld)
+			->setPrice(100);
+		$offer1->save();
+		
+		$offer2 = (new Offer())
+			->setProduct($bubbleSort)
+			->setPrice(1000);
+		$offer2->save();
+
+		$offer3 = (new Offer())
+			->setProduct($quickSort)
+			->setPrice(250);
+		$offer3->save();
 	}
 	
 }

@@ -37,6 +37,7 @@ class OfferTagTableMap extends TableMap
         $this->setClassname('OfferTag');
         $this->setPackage('model');
         $this->setUseIdGenerator(true);
+        $this->setIsCrossRef(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('offer_id', 'OfferId', 'INTEGER', 'offer', 'id', true, null, null);

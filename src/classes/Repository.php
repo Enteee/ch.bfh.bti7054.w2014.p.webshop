@@ -25,7 +25,7 @@ class Repository {
 
 	public function getAllProducts() {
 		return ProductQuery::create()
-			->find();	
+			->find();
 	}
 
 public function getProductById($product_id) {
@@ -108,7 +108,7 @@ public function getProductById($product_id) {
 			return array();
 		}
 	}
-	
+
 	public function getUserByToken($token) {
 		$users = UserQuery::create()
 			->filterByToken($token)

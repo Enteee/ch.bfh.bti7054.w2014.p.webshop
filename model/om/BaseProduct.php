@@ -55,6 +55,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
     protected $updated_at;
 
     /**
+     * The value for the avg_rating field.
+     * @var        int
+     */
+    protected $avg_rating;
+
+    /**
      * @var        PropelObjectCollection|Review[] Collection to store aggregation of Review objects.
      */
     protected $collReviews;
@@ -77,6 +83,11 @@ abstract class BaseProduct extends BaseObject implements Persistent
      */
     protected $collProductI18ns;
     protected $collProductI18nsPartial;
+
+    /**
+     * @var        PropelObjectCollection|Tag[] Collection to store aggregation of Tag objects.
+     */
+    protected $collTags;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -111,6 +122,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
      * @var        array[ProductI18n]
      */
     protected $currentTranslations;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $tagsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -260,6 +277,17 @@ abstract class BaseProduct extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [avg_rating] column value.
+     *
+     * @return int
+     */
+    public function getAvgRating()
+    {
+
+        return $this->avg_rating;
+    }
+
+    /**
      * Set the value of [id] column.
      *
      * @param  int $v new value
@@ -356,6 +384,27 @@ abstract class BaseProduct extends BaseObject implements Persistent
     } // setUpdatedAt()
 
     /**
+     * Set the value of [avg_rating] column.
+     *
+     * @param  int $v new value
+     * @return Product The current object (for fluent API support)
+     */
+    public function setAvgRating($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->avg_rating !== $v) {
+            $this->avg_rating = $v;
+            $this->modifiedColumns[] = ProductPeer::AVG_RATING;
+        }
+
+
+        return $this;
+    } // setAvgRating()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -395,6 +444,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
             $this->active = ($row[$startcol + 1] !== null) ? (boolean) $row[$startcol + 1] : null;
             $this->created_at = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
             $this->updated_at = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->avg_rating = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -404,7 +454,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 4; // 4 = ProductPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = ProductPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Product object", $e);
@@ -474,6 +524,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
 
             $this->collProductI18ns = null;
 
+            $this->collTags = null;
         } // if (deep)
     }
 
@@ -568,6 +619,14 @@ abstract class BaseProduct extends BaseObject implements Persistent
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
+                // aggregate_column behavior
+                if (null !== $this->collReviews) {
+                    $this->setAvgRating($this->computeAvgRating($con));
+                    if ($this->isModified()) {
+                        $this->save($con);
+                    }
+                }
+
                 ProductPeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
@@ -607,6 +666,32 @@ abstract class BaseProduct extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->tagsScheduledForDeletion !== null) {
+                if (!$this->tagsScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    $pk = $this->getPrimaryKey();
+                    foreach ($this->tagsScheduledForDeletion->getPrimaryKeys(false) as $remotePk) {
+                        $pks[] = array($pk, $remotePk);
+                    }
+                    ProductTagQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+                    $this->tagsScheduledForDeletion = null;
+                }
+
+                foreach ($this->getTags() as $tag) {
+                    if ($tag->isModified()) {
+                        $tag->save($con);
+                    }
+                }
+            } elseif ($this->collTags) {
+                foreach ($this->collTags as $tag) {
+                    if ($tag->isModified()) {
+                        $tag->save($con);
+                    }
+                }
             }
 
             if ($this->reviewsScheduledForDeletion !== null) {
@@ -715,6 +800,9 @@ abstract class BaseProduct extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductPeer::UPDATED_AT)) {
             $modifiedColumns[':p' . $index++]  = '`updated_at`';
         }
+        if ($this->isColumnModified(ProductPeer::AVG_RATING)) {
+            $modifiedColumns[':p' . $index++]  = '`avg_rating`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `product` (%s) VALUES (%s)',
@@ -737,6 +825,9 @@ abstract class BaseProduct extends BaseObject implements Persistent
                         break;
                     case '`updated_at`':
                         $stmt->bindValue($identifier, $this->updated_at, PDO::PARAM_STR);
+                        break;
+                    case '`avg_rating`':
+                        $stmt->bindValue($identifier, $this->avg_rating, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -916,6 +1007,9 @@ abstract class BaseProduct extends BaseObject implements Persistent
             case 3:
                 return $this->getUpdatedAt();
                 break;
+            case 4:
+                return $this->getAvgRating();
+                break;
             default:
                 return null;
                 break;
@@ -949,6 +1043,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
             $keys[1] => $this->getActive(),
             $keys[2] => $this->getCreatedAt(),
             $keys[3] => $this->getUpdatedAt(),
+            $keys[4] => $this->getAvgRating(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1014,6 +1109,9 @@ abstract class BaseProduct extends BaseObject implements Persistent
             case 3:
                 $this->setUpdatedAt($value);
                 break;
+            case 4:
+                $this->setAvgRating($value);
+                break;
         } // switch()
     }
 
@@ -1042,6 +1140,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
         if (array_key_exists($keys[1], $arr)) $this->setActive($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setCreatedAt($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setUpdatedAt($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setAvgRating($arr[$keys[4]]);
     }
 
     /**
@@ -1057,6 +1156,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductPeer::ACTIVE)) $criteria->add(ProductPeer::ACTIVE, $this->active);
         if ($this->isColumnModified(ProductPeer::CREATED_AT)) $criteria->add(ProductPeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(ProductPeer::UPDATED_AT)) $criteria->add(ProductPeer::UPDATED_AT, $this->updated_at);
+        if ($this->isColumnModified(ProductPeer::AVG_RATING)) $criteria->add(ProductPeer::AVG_RATING, $this->avg_rating);
 
         return $criteria;
     }
@@ -1123,6 +1223,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
         $copyObj->setActive($this->getActive());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
+        $copyObj->setAvgRating($this->getAvgRating());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2188,6 +2289,193 @@ abstract class BaseProduct extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collTags collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Product The current object (for fluent API support)
+     * @see        addTags()
+     */
+    public function clearTags()
+    {
+        $this->collTags = null; // important to set this to null since that means it is uninitialized
+        $this->collTagsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * Initializes the collTags collection.
+     *
+     * By default this just sets the collTags collection to an empty collection (like clearTags());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initTags()
+    {
+        $this->collTags = new PropelObjectCollection();
+        $this->collTags->setModel('Tag');
+    }
+
+    /**
+     * Gets a collection of Tag objects related by a many-to-many relationship
+     * to the current object by way of the product_tag cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Product is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return PropelObjectCollection|Tag[] List of Tag objects
+     */
+    public function getTags($criteria = null, PropelPDO $con = null)
+    {
+        if (null === $this->collTags || null !== $criteria) {
+            if ($this->isNew() && null === $this->collTags) {
+                // return empty collection
+                $this->initTags();
+            } else {
+                $collTags = TagQuery::create(null, $criteria)
+                    ->filterByProduct($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    return $collTags;
+                }
+                $this->collTags = $collTags;
+            }
+        }
+
+        return $this->collTags;
+    }
+
+    /**
+     * Sets a collection of Tag objects related by a many-to-many relationship
+     * to the current object by way of the product_tag cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $tags A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Product The current object (for fluent API support)
+     */
+    public function setTags(PropelCollection $tags, PropelPDO $con = null)
+    {
+        $this->clearTags();
+        $currentTags = $this->getTags(null, $con);
+
+        $this->tagsScheduledForDeletion = $currentTags->diff($tags);
+
+        foreach ($tags as $tag) {
+            if (!$currentTags->contains($tag)) {
+                $this->doAddTag($tag);
+            }
+        }
+
+        $this->collTags = $tags;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of Tag objects related by a many-to-many relationship
+     * to the current object by way of the product_tag cross-reference table.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param boolean $distinct Set to true to force count distinct
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return int the number of related Tag objects
+     */
+    public function countTags($criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        if (null === $this->collTags || null !== $criteria) {
+            if ($this->isNew() && null === $this->collTags) {
+                return 0;
+            } else {
+                $query = TagQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByProduct($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->collTags);
+        }
+    }
+
+    /**
+     * Associate a Tag object to this object
+     * through the product_tag cross reference table.
+     *
+     * @param  Tag $tag The ProductTag object to relate
+     * @return Product The current object (for fluent API support)
+     */
+    public function addTag(Tag $tag)
+    {
+        if ($this->collTags === null) {
+            $this->initTags();
+        }
+
+        if (!$this->collTags->contains($tag)) { // only add it if the **same** object is not already associated
+            $this->doAddTag($tag);
+            $this->collTags[] = $tag;
+
+            if ($this->tagsScheduledForDeletion and $this->tagsScheduledForDeletion->contains($tag)) {
+                $this->tagsScheduledForDeletion->remove($this->tagsScheduledForDeletion->search($tag));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Tag $tag The tag object to add.
+     */
+    protected function doAddTag(Tag $tag)
+    {
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if (!$tag->getProducts()->contains($this)) { $productTag = new ProductTag();
+            $productTag->setTag($tag);
+            $this->addProductTag($productTag);
+
+            $foreignCollection = $tag->getProducts();
+            $foreignCollection[] = $this;
+        }
+    }
+
+    /**
+     * Remove a Tag object to this object
+     * through the product_tag cross reference table.
+     *
+     * @param Tag $tag The ProductTag object to relate
+     * @return Product The current object (for fluent API support)
+     */
+    public function removeTag(Tag $tag)
+    {
+        if ($this->getTags()->contains($tag)) {
+            $this->collTags->remove($this->collTags->search($tag));
+            if (null === $this->tagsScheduledForDeletion) {
+                $this->tagsScheduledForDeletion = clone $this->collTags;
+                $this->tagsScheduledForDeletion->clear();
+            }
+            $this->tagsScheduledForDeletion[]= $tag;
+        }
+
+        return $this;
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -2196,6 +2484,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
         $this->active = null;
         $this->created_at = null;
         $this->updated_at = null;
+        $this->avg_rating = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -2239,6 +2528,11 @@ abstract class BaseProduct extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collTags) {
+                foreach ($this->collTags as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
@@ -2263,6 +2557,10 @@ abstract class BaseProduct extends BaseObject implements Persistent
             $this->collProductI18ns->clearIterator();
         }
         $this->collProductI18ns = null;
+        if ($this->collTags instanceof PropelCollection) {
+            $this->collTags->clearIterator();
+        }
+        $this->collTags = null;
     }
 
     /**
@@ -2297,6 +2595,33 @@ abstract class BaseProduct extends BaseObject implements Persistent
         $this->modifiedColumns[] = ProductPeer::UPDATED_AT;
 
         return $this;
+    }
+
+    // aggregate_column behavior
+
+    /**
+     * Computes the value of the aggregate column avg_rating *
+     * @param PropelPDO $con A connection object
+     *
+     * @return mixed The scalar result from the aggregate query
+     */
+    public function computeAvgRating(PropelPDO $con)
+    {
+        $stmt = $con->prepare('SELECT AVG(rating) FROM `review` WHERE review.product_id = :p1');
+        $stmt->bindValue(':p1', $this->getId());
+        $stmt->execute();
+
+        return $stmt->fetchColumn();
+    }
+
+    /**
+     * Updates the aggregate column avg_rating *
+     * @param PropelPDO $con A connection object
+     */
+    public function updateAvgRating(PropelPDO $con)
+    {
+        $this->setAvgRating($this->computeAvgRating($con));
+        $this->save($con);
     }
 
     // i18n behavior

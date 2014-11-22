@@ -19,7 +19,7 @@ class MainController extends Controller {
 		// load data
 		$categories = $this->repo->getAllCategories();
 		$shoppingCart = ShoppingCart::get();
-				
+		
 		$shoppingCartItems = $shoppingCart->getOffers();
 		
 		// set global data for view

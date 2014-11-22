@@ -109,6 +109,9 @@ abstract class BaseReview extends BaseObject implements Persistent
      */
     protected $alreadyInClearAllReferencesDeep = false;
 
+    // aggregate_column_relation behavior
+    protected $oldProduct;
+
     /**
      * Applies default values to this object.
      * This method should be called from the object's constructor (or
@@ -686,6 +689,8 @@ abstract class BaseReview extends BaseObject implements Persistent
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
+                // aggregate_column_relation behavior
+                $this->updateRelatedProduct($con);
                 ReviewPeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
@@ -1355,6 +1360,10 @@ abstract class BaseReview extends BaseObject implements Persistent
      */
     public function setProduct(Product $v = null)
     {
+        // aggregate_column_relation behavior
+        if (null !== $this->aProduct && $v !== $this->aProduct) {
+            $this->oldProduct = $this->aProduct;
+        }
         if ($v === null) {
             $this->setProductId(NULL);
         } else {
@@ -1480,6 +1489,26 @@ abstract class BaseReview extends BaseObject implements Persistent
         $this->modifiedColumns[] = ReviewPeer::UPDATED_AT;
 
         return $this;
+    }
+
+    // aggregate_column_relation behavior
+
+    /**
+     * Update the aggregate column in the related Product object
+     *
+     * @param PropelPDO $con A connection object
+     */
+    protected function updateRelatedProduct(PropelPDO $con)
+    {
+        if ($product = $this->getProduct()) {
+            if (!$product->isAlreadyInSave()) {
+                $product->updateAvgRating($con);
+            }
+        }
+        if ($this->oldProduct) {
+            $this->oldProduct->updateAvgRating($con);
+            $this->oldProduct = null;
+        }
     }
 
 }

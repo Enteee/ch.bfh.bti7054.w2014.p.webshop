@@ -37,6 +37,7 @@ class ProductTagTableMap extends TableMap
         $this->setClassname('ProductTag');
         $this->setPackage('model');
         $this->setUseIdGenerator(true);
+        $this->setIsCrossRef(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('product_id', 'ProductId', 'INTEGER', 'product', 'id', true, null, null);

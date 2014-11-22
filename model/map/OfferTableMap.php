@@ -56,6 +56,7 @@ class OfferTableMap extends TableMap
         $this->addRelation('Code', 'Code', RelationMap::ONE_TO_MANY, array('id' => 'offer_id', ), null, null, 'Codes');
         $this->addRelation('OfferTag', 'OfferTag', RelationMap::ONE_TO_MANY, array('id' => 'offer_id', ), null, null, 'OfferTags');
         $this->addRelation('Order', 'Order', RelationMap::ONE_TO_MANY, array('id' => 'offer_id', ), null, null, 'Orders');
+        $this->addRelation('Tag', 'Tag', RelationMap::MANY_TO_MANY, array(), null, null, 'Tags');
     } // buildRelations()
 
     /**

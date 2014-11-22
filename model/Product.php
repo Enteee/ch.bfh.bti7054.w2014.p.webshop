@@ -22,15 +22,12 @@ class Product extends BaseProduct implements JsonSerializable
 			'description' => $this->getDescription(),
 			'programmingLanguage' => $this->getProgrammingLanguages(),
 			'versions' => $this->getVersions(),
+			'reviewsCount' => $this->countReviews(),
 			'reviews' => $this->getReviews(),
+			'avgRating' => $this->getAvgRating(),
 		];
 	}
 
-	public function getTags() {
-		$repo = new Repository();
-		return $repo->getTagsByProduct($this);
-	}
-	
 	public function getProgrammingLanguages() {
 		$repo = new Repository();
 		return $repo->getProgrammingLanguagesByProduct($this);
@@ -40,4 +37,5 @@ class Product extends BaseProduct implements JsonSerializable
 		$repo = new Repository();
 		return $repo->getVersionsByProduct($this);
 	}
+
 }

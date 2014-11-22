@@ -31,7 +31,7 @@ $config['page_url'] = 'http://www.codeshop.ch';
 $config['mail'] = 'ducksource@duckpond.ch';
 
 /*DEFINES*/
-$config['debug'] = TRUE;
+$config['debug'] = true;
 $config['timezone'] = 'Europe/Zurich';
 
 /*Composer autoload*/

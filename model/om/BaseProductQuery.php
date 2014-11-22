@@ -10,11 +10,13 @@
  * @method ProductQuery orderByActive($order = Criteria::ASC) Order by the active column
  * @method ProductQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method ProductQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
+ * @method ProductQuery orderByAvgRating($order = Criteria::ASC) Order by the avg_rating column
  *
  * @method ProductQuery groupById() Group by the id column
  * @method ProductQuery groupByActive() Group by the active column
  * @method ProductQuery groupByCreatedAt() Group by the created_at column
  * @method ProductQuery groupByUpdatedAt() Group by the updated_at column
+ * @method ProductQuery groupByAvgRating() Group by the avg_rating column
  *
  * @method ProductQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method ProductQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -42,11 +44,13 @@
  * @method Product findOneByActive(boolean $active) Return the first Product filtered by the active column
  * @method Product findOneByCreatedAt(string $created_at) Return the first Product filtered by the created_at column
  * @method Product findOneByUpdatedAt(string $updated_at) Return the first Product filtered by the updated_at column
+ * @method Product findOneByAvgRating(int $avg_rating) Return the first Product filtered by the avg_rating column
  *
  * @method array findById(int $id) Return Product objects filtered by the id column
  * @method array findByActive(boolean $active) Return Product objects filtered by the active column
  * @method array findByCreatedAt(string $created_at) Return Product objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return Product objects filtered by the updated_at column
+ * @method array findByAvgRating(int $avg_rating) Return Product objects filtered by the avg_rating column
  *
  * @package    propel.generator.model.om
  */
@@ -154,7 +158,7 @@ abstract class BaseProductQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `active`, `created_at`, `updated_at` FROM `product` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `active`, `created_at`, `updated_at`, `avg_rating` FROM `product` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -396,6 +400,48 @@ abstract class BaseProductQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(ProductPeer::UPDATED_AT, $updatedAt, $comparison);
+    }
+
+    /**
+     * Filter the query on the avg_rating column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByAvgRating(1234); // WHERE avg_rating = 1234
+     * $query->filterByAvgRating(array(12, 34)); // WHERE avg_rating IN (12, 34)
+     * $query->filterByAvgRating(array('min' => 12)); // WHERE avg_rating >= 12
+     * $query->filterByAvgRating(array('max' => 12)); // WHERE avg_rating <= 12
+     * </code>
+     *
+     * @param     mixed $avgRating The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ProductQuery The current query, for fluid interface
+     */
+    public function filterByAvgRating($avgRating = null, $comparison = null)
+    {
+        if (is_array($avgRating)) {
+            $useMinMax = false;
+            if (isset($avgRating['min'])) {
+                $this->addUsingAlias(ProductPeer::AVG_RATING, $avgRating['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($avgRating['max'])) {
+                $this->addUsingAlias(ProductPeer::AVG_RATING, $avgRating['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(ProductPeer::AVG_RATING, $avgRating, $comparison);
     }
 
     /**
@@ -692,6 +738,23 @@ abstract class BaseProductQuery extends ModelCriteria
         return $this
             ->joinProductI18n($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'ProductI18n', 'ProductI18nQuery');
+    }
+
+    /**
+     * Filter the query by a related Tag object
+     * using the product_tag table as cross reference
+     *
+     * @param   Tag $tag the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   ProductQuery The current query, for fluid interface
+     */
+    public function filterByTag($tag, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useProductTagQuery()
+            ->filterByTag($tag, $comparison)
+            ->endUse();
     }
 
     /**

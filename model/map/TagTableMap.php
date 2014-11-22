@@ -58,6 +58,8 @@ class TagTableMap extends TableMap
         $this->addRelation('ProductTag', 'ProductTag', RelationMap::ONE_TO_MANY, array('id' => 'tag_id', ), null, null, 'ProductTags');
         $this->addRelation('TagRelatedById', 'Tag', RelationMap::ONE_TO_MANY, array('id' => 'parent_id', ), null, null, 'TagsRelatedById');
         $this->addRelation('TagI18n', 'TagI18n', RelationMap::ONE_TO_MANY, array('id' => 'id', ), 'CASCADE', null, 'TagI18ns');
+        $this->addRelation('Offer', 'Offer', RelationMap::MANY_TO_MANY, array(), null, null, 'Offers');
+        $this->addRelation('Product', 'Product', RelationMap::MANY_TO_MANY, array(), null, null, 'Products');
     } // buildRelations()
 
     /**

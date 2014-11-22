@@ -20,6 +20,11 @@ if ($config['debug']) {
 	error_reporting(-1);							// be verbose as fuck: http://php.net/manual/de/errorfunc.constants.php
 }
 
+/* Set php defaults */
+if(!date_default_timezone_set($config['timezone'])){
+	die('Invalid timezone in config');
+}
+
 /* Set up Propel */
 Propel::init($config['propel_conf']);
 set_include_path($config['propel_model'] . PATH_SEPARATOR . get_include_path());

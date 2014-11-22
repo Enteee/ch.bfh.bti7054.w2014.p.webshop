@@ -42,6 +42,7 @@ class ProductTableMap extends TableMap
         $this->addColumn('active', 'Active', 'BOOLEAN', true, 1, true);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('avg_rating', 'AvgRating', 'INTEGER', false, null, null);
         // validators
     } // initialize()
 
@@ -54,6 +55,7 @@ class ProductTableMap extends TableMap
         $this->addRelation('Offer', 'Offer', RelationMap::ONE_TO_MANY, array('id' => 'product_id', ), null, null, 'Offers');
         $this->addRelation('ProductTag', 'ProductTag', RelationMap::ONE_TO_MANY, array('id' => 'product_id', ), null, null, 'ProductTags');
         $this->addRelation('ProductI18n', 'ProductI18n', RelationMap::ONE_TO_MANY, array('id' => 'id', ), 'CASCADE', null, 'ProductI18ns');
+        $this->addRelation('Tag', 'Tag', RelationMap::MANY_TO_MANY, array(), null, null, 'Tags');
     } // buildRelations()
 
     /**
@@ -69,6 +71,13 @@ class ProductTableMap extends TableMap
   'create_column' => 'created_at',
   'update_column' => 'updated_at',
   'disable_updated_at' => 'false',
+),
+            'aggregate_column' =>  array (
+  'name' => 'avg_rating',
+  'expression' => 'AVG(rating)',
+  'condition' => NULL,
+  'foreign_table' => 'review',
+  'foreign_schema' => NULL,
 ),
             'i18n' =>  array (
   'i18n_table' => '%TABLE%_i18n',

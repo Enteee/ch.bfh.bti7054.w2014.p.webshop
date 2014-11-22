@@ -140,6 +140,7 @@ CREATE TABLE `product`
     `active` TINYINT(1) DEFAULT 1 NOT NULL,
     `created_at` DATETIME,
     `updated_at` DATETIME,
+    `avg_rating` INTEGER,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 

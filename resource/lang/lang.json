@@ -44,6 +44,10 @@
 		"en" : "Add review",
 		"de" : "Kommentar schreiben"
 	},
+	"writeReview": {
+		"en" : "write review...",
+		"de" : "kommentar schreiben..."
+	},
 	"version": {
 		"en" : "version",
 		"de" : "Version"
@@ -63,6 +67,10 @@
 	"programmingLanguages": {
 		"en" : "Programming languages",
 		"de" : "Programmiersprachen"
+	},
+	"rating": {
+		"en" : "Rating",
+		"de" : "Bewertung"
 	},
 	"name": {
 		"en" : "Name",

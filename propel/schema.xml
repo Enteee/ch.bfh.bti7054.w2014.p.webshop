@@ -67,7 +67,7 @@
     </vendor>
     <behavior name="timestampable" />
   </table>
-  <table name="offer_tag" phpName="OfferTag" idMethod="native">
+  <table name="offer_tag" phpName="OfferTag" isCrossRef="true" idMethod="native">
     <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="offer_id" phpName="OfferId" type="INTEGER" required="true"/>
     <column name="tag_id" phpName="TagId" type="INTEGER" required="true"/>
@@ -119,11 +119,16 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
     <behavior name="timestampable" />
+    <behavior name="aggregate_column">
+      <parameter name="name" value="avg_rating" />
+      <parameter name="foreign_table" value="review" />
+      <parameter name="expression" value="AVG(rating)" />
+    </behavior>
     <behavior name="i18n">
       <parameter name="i18n_columns" value="name, description" />
     </behavior>
   </table>
-  <table name="product_tag" phpName="ProductTag" idMethod="native">
+  <table name="product_tag" phpName="ProductTag" isCrossRef="true" idMethod="native">
     <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="product_id" phpName="ProductId" type="INTEGER" required="true"/>
     <column name="tag_id" phpName="TagId" type="INTEGER" required="true"/>

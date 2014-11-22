@@ -11,6 +11,7 @@
 		<meta name="subtitle" content="<?php echo $subtitle; ?>" />
 		<meta name="author" content="<?php echo $author; ?>" />
 		<meta name="contact" content="<?php echo $contact; ?>" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 		<!-- Additional metadata -->
 <?php foreach($metadata as $key => $val): ?>

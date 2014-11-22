@@ -24,24 +24,16 @@
 								<span><?php echo label('withSupport'); ?>:</span>
 								<input class="cs-product-list-item-clickable" type="checkbox"></input>  
 							</div>
-							<div class="hidden cs-product-list-item-ratings cs-product-list-hideable">
+							<div class="hidden cs-product-list-item-rating cs-product-list-hideable">
 								<p class="pull-right"><?php echo label('reviews')?>&nbsp;<span class="badge cs-product-list-item-reviews-count"></span></p>
-								<p>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star"></span>
-									<span class="glyphicon glyphicon-star-empty"></span>
-								</p>
 							</div>
 							<!-- reviews -->
 							<div class="hidden well well-sm cs-product-list-hideable">
 								<div class="cs-product-list-item-reviews">
 									<div class="hidden row cs-product-list-item-review cs-product-list-item-review-template cs-product-list-hideable">
 										<div class="col-md-12">
-											<div class="cs-product-list-item-review-rating">
-											</div>
 											<p class="cs-product-list-item-review-email"></p>
+											<div class="cs-product-list-item-review-rating"></div>
 											<span class="pull-right cs-product-list-item-review-created-at"></span>
 											<p class="cs-product-list-item-review-text"></p>
 										</div>

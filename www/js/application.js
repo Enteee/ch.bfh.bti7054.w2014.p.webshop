@@ -29,6 +29,7 @@ $(document).ready(function() {
 				var programmingLanguage = $(this).find('.cs-product-list-item-options-programming-language');
 				var versions = $(this).find('.cs-product-list-item-options-version');
 				var reviews = $(this).find('.cs-product-list-item-reviews');
+				var rating = $(this).find('.cs-product-list-item-rating');
 				var reviewsCount = $(this).find('.cs-product-list-item-reviews-count');
 				for(var tag in product.tags){
 					tags.append('<span class="label label-default">'+ product.tags[tag].name +'</span>&nbsp;');
@@ -39,6 +40,11 @@ $(document).ready(function() {
 				for(var version in product.versions){
 					programmingLanguage.append('<option>'+ version +'</option>');
 				};
+				for(var i = 0; i < 5; i++){
+					if(product.avgRating > 0){
+						rating.append(( i <= Math.round(product.avgRating) ) ? '<span class="glyphicon glyphicon-star"></span>&nbsp;' : '<span class="glyphicon glyphicon-star-empty"></span>&nbsp;');
+					}
+				}
 				reviewsCount.text(product.reviewsCount);
 				for(var review in product.reviews){
 					var template = reviews.find($('.cs-product-list-item-review-template'));

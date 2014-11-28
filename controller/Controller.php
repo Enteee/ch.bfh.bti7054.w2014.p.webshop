@@ -54,7 +54,7 @@ abstract class Controller {
 			return $user;
 		}		
 		// not logged in
-		return new User();
+		return NULL;
 	}
 	
 	/**

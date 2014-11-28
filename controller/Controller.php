@@ -38,9 +38,8 @@ abstract class Controller {
 	protected function getUser() {
 		$gitkitUser = $this->gitkit->getUserInRequest();
 		if (isset($gitkitUser)) {
-			// user logged in
-			$token = $gitkitUser->getUserId();
-			
+			// user logged in			
+			$token = $gitkitUser->getUserId();			
 			$user = $this->repo->getUserByToken($token);
 			if (!isset($user)) {
 				// first time login -> create user in db
@@ -53,14 +52,7 @@ abstract class Controller {
 					->save();
 			}
 			return $user;
-		}
-		
-		if ($this->isDebug()) {
-			// testuser
-			return UserQuery::create()
-				->findPk(1);
-		}
-		
+		}		
 		// not logged in
 		return NULL;
 	}

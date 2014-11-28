@@ -15,13 +15,7 @@ class MainController extends Controller {
 				
 		// get variables
 		$this->categoryId = $this->vars->category;
-		
-		// load data
-		$categories = $this->repo->getAllCategories();
-		$shoppingCart = ShoppingCart::get();
-		
-		$shoppingCartItems = $shoppingCart->getOffers();
-		
+
 		// set global data for view
 		$data['title'] = $this->lang->title;
 		$data['subtitle'] = $this->lang->subtitle;
@@ -30,13 +24,32 @@ class MainController extends Controller {
 		$data['metadata'] = array(
 			'keywords' => 'codeshop,code,shop,snippets,buy'
 		);
-		
 		$data['locale'] = $this->lang->getLocale();
+				
+		// navigation
+		$navItems = array();
+		if ($this->isLoggedIn()) {
+			$navItems[] = array('url' => lang() . '/product/orders', 'text' => label('navMyItems'), 'icon' => 'glyphicon-user');
+			$navItems[] = array('url' => lang() . '/product/offers', 'text' => label('navMyProducts'), 'icon' => 'glyphicon-folder-open');
+			$navItems[] = array('url' => lang() . '/product/add', 'text' => label('navAddProduct'), 'icon' => 'glyphicon-plus');
+		}
+		$data['navItems'] = $navItems;
 		
+		// side nav
+		$categories = $this->repo->getAllCategories();
 		$data['categories'] = $categories;
 		$data['activeCategoryId'] = $this->categoryId;
+		
+		// shopping cart
+		$shoppingCartItems = array();
+		$shoppingCartTotal = 0;
+		if ($this->isLoggedIn()) {
+			$shoppingCart = ShoppingCart::get();
+			$shoppingCartItems = $shoppingCart->getOffers();
+			$shoppingCartTotal = $shoppingCart->getTotalPrice();
+		}
 		$data['shoppingCartItems'] = $shoppingCartItems;
-		$data['shoppingCartTotalPrice'] = $shoppingCart->getTotalPrice();
+		$data['shoppingCartTotalPrice'] = $shoppingCartTotal;
 		
 		$this->addData($data);
 	}

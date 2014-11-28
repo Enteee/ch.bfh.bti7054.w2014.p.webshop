@@ -42,26 +42,38 @@ abstract class Controller {
 			if (!isset($user)) {
 				// first time login -> create user in db
 				$user = new User();
-				$user->setEmail($gitkitUser->getEmail());
-				$user->setToken($gitkitUser->getUserId());
-				$user->setCreadits(0);
-				$user->setActive(TRUE);
-				
-				$user->save();
+				$user
+					->setEmail($gitkitUser->getEmail())
+					->setToken($gitkitUser->getUserId())
+					->setCreadits(0)
+					->setActive(TRUE)
+					->save();
 			}
-			return $user;			
+			return $user;
 		}
 		
-		// TODO: remove!
-		// only user for testing because gitkit doesn't work!
-		return UserQuery::create()->findPk(1);		
+		if ($this->isDebug()) {
+			// testuser
+			return UserQuery::create()
+				->findPk(1);
+		}
 		
 		// not logged in
 		return NULL;
 	}
 	
+	/**
+	 * Is a user logged in.
+	 */
 	protected function isLoggedIn() {
 		return $this->getUser() != NULL;
+	}
+	
+	/**
+	 * Is the debug mode on.
+	 */
+	protected function isDebug() {
+		return error_reporting() & E_ERROR;
 	}
 }
 

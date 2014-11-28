@@ -30,7 +30,7 @@ class ErrorController extends MainController {
 		$errorNr = '500';
 		$errorDesc = $this->lang->error500;
 		
-		if (error_reporting() & E_ERROR) {
+		if ($this->isDebug()) {
 			// show exception if error reporting on
 			$errorDesc = $exception;
 		}

@@ -41,25 +41,8 @@ class JsonController extends MainController {
 		foreach ($products as $product) {
 			$product->setLocale($this->lang->getLocale());
 			$response[] = [
-				'value' => $product->getName(),
-				'data' => $product->getId()
-			];
-		}
-			
-		$data['json'] = $response;
-
-		$this->view('json', $data);
-	}
-
-	public function categories_ac() {
-		$categories = $this->repo->getCategoriesBySearch($this->vars->search);
-		
-		$response = array();		
-		foreach ($categories as $category) {
-			$category->setLocale($this->lang->getLocale());
-			$response[] = [
-				'value' => $category->getName(),
-				'data' => $category->getId()
+				'data' => $product->getId(),			
+				'value' => $product->getName()
 			];
 		}
 			
@@ -68,15 +51,49 @@ class JsonController extends MainController {
 		$this->view('json', $data);
 	}
 	
-	public function programminglanguages_ac() {
+	public function products_select2() {
+		$products = $this->repo->getProductsBySearch($this->vars->search);
+		
+		$response = array();		
+		foreach ($products as $product) {
+			$product->setLocale($this->lang->getLocale());
+			$response[] = [
+				'id' => $product->getId(),			
+				'text' => $product->getName()
+			];
+		}
+			
+		$data['json'] = $response;
+
+		$this->view('json', $data);
+	}
+
+	public function categories_select2() {
 		$categories = $this->repo->getCategoriesBySearch($this->vars->search);
 		
 		$response = array();		
 		foreach ($categories as $category) {
 			$category->setLocale($this->lang->getLocale());
 			$response[] = [
-				'value' => $category->getName(),
-				'data' => $category->getId()
+				'id' => $category->getId(),
+				'text' => $category->getName()
+			];
+		}
+			
+		$data['json'] = $response;
+
+		$this->view('json', $data);
+	}
+	
+	public function programminglanguages_select2() {
+		$pls = $this->repo->getProgrammingLanguagesBySearch($this->vars->search);
+		
+		$response = array();		
+		foreach ($pls as $pl) {
+			$pl->setLocale($this->lang->getLocale());
+			$response[] = [
+				'id' => $pl->getId(),
+				'text' => $pl->getName()
 			];
 		}
 			

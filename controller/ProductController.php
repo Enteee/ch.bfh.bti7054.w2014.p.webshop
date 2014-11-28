@@ -29,7 +29,11 @@ class ProductController extends MainController {
 	}
 	
 	public function save() {
-	
+		if (!$this->isLoggedIn()) {
+			// TODO: use own exception and handle in mvc framework
+			throw new Exception('forbidden');
+		}
+
 		// validate...
 		$file = $this->vars->product_file;		
 		if (!isset($file)) {
@@ -56,39 +60,85 @@ class ProductController extends MainController {
 		// TODO: validate all!
 	
 		$user = $this->getUser();
-	
-		// load product if exists
-		$product = ProductQuery::create()->findPk($this->vars->product_id);
-		if (!isset($product)) {
-			// create product, it doesn't already exist
-			$product = new Product();
-			foreach ($this->lang->getAllLocales() as $locale) {
-				$product->setLocale($locale);			
-				$product->setName($this->vars->product_name);
-				$product->setDescription($this->vars->product_description);
+		
+		$con = Propel::getConnection();
+		$con->beginTransaction();
+		try {
+			// load product if exists
+			$product = ProductQuery::create()->findPk($this->vars->product_id);
+			if (!isset($product)) {
+				// create product, it doesn't already exist
+				$product = new Product();
+				foreach ($this->lang->getAllLocales() as $locale) {
+					$product
+						->setLocale($locale)		
+							->setName($this->vars->product_name)
+							->setDescription($this->vars->product_description);
+				}
+				$product->setActive(true);
+				
+				$product->save();
 			}
-			$product->setActive(true);
 			
-			$product->save();
+			// categories
+			$categoryIds = $this->splitInts($this->vars->product_categories);
+			if (count($categoryIds) > 0) {
+				foreach ($categoryIds as $categoryId) {
+					$category = TagQuery::create()->getCategory($categoryId);
+					if (isset($category)) {
+						$product->addTag($category);
+					}
+				}
+				$product->save();
+			}
+			
+			// offer
+			$offer = new Offer();						
+			$offer
+				->setProduct($product)
+				->setPrice($this->vars->product_price)
+				->setActive(true)
+				->save();
+			
+			// programming languages
+			$plIds = $this->splitInts($this->vars->product_programminglanguages);
+			if (count($plIds) > 0) {
+				foreach ($plIds as $plId) {
+					$pl = TagQuery::create()->getProgrammingLanguage($plId);
+					if (isset($pl)) {
+						$offer->addTag($pl);
+					}
+				}
+				$offer->save();
+			}
+			
+			// code
+			$code = new Code();
+			$code
+				->setUser($user)
+				->setOffer($offer)
+				->setFilename($file['name'])
+				->setFilesize($file['size'])
+				->setMimetype($file['type'])
+				->setContent(file_get_contents($file['tmp_name']))
+				->setActive(true)		
+				->save();
+
+			$con->commit();
+		} catch (Exception $e) {
+			$con->rollback();
+			throw $e;
 		}
-		
-		$offer = new Offer();
-		$offer->setProduct($product);
-		$offer->setPrice($this->vars->product_price);
-		$offer->setActive(true);
-		
-		$offer->save();
-		
-		$code = new Code();
-		$code->setUser($user);
-		$code->setOffer($offer);
-		$code->setFilename($file['name']);
-		$code->setFilesize($file['size']);
-		$code->setMimetype($file['type']);
-		$code->setContent(file_get_contents($file['tmp_name']));
-		$code->setActive(true);
-		
-		$code->save();
+	}
+	
+	private function splitInts($input) {
+		$ids = array();
+		$parts = preg_split('`,`', $input);
+		foreach ($parts as $part) {
+			$id = filter_var($part, FILTER_VALIDATE_INT);
+			if ($id) { $ids[] = $id; }
+		}
+		return $ids;
 	}
 }
 

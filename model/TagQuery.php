@@ -15,4 +15,30 @@
  */
 class TagQuery extends BaseTagQuery
 {
+	public function getUserTag($id) {
+		return $this
+			->filterById($id)
+			->useTagTypeQuery()
+				->filterById(Tag::USER_TAG)
+			->endUse()
+			->findOne();
+	}
+
+	public function getCategory($id) {
+		return $this
+			->filterById($id)
+			->useTagTypeQuery()
+				->filterById(Tag::CATEGORY)
+			->endUse()
+			->findOne();
+	}
+
+	public function getProgrammingLanguage($id) {
+		return $this
+			->filterById($id)
+			->useTagTypeQuery()
+				->filterById(Tag::PROGRAMMING_LANGUAGE)
+			->endUse()
+			->findOne();
+	}	
 }

@@ -1,5 +1,44 @@
 $(document).ready(function() {
 
+	/* ---------- functions ---------- */
+	
+	function autocomplete(element, url, multiselect, freetext) {
+		$(element).select2({	
+			//minimumInputLength: 1,
+			multiple: multiselect,
+			allowClear: true,
+			ajax: {
+				url: url,
+				dataType: 'json',
+				data: function(term, page) {
+					return { search: term };
+				},
+				results: function(data, page) {
+					return { results: data };
+				}
+			},
+			//formatSelection: format,
+			//formatResult: format,
+			initSelection: function(element, callback) {
+				//alert('init');				
+			}
+		});
+		/*
+		if (freetext) {
+			$(element).select2({
+			// TODO:
+				//Allow manually entered text in drop down.
+				 createSearchChoice:function(term, data) {
+					if ( $(data).filter( function() {
+					  return this.text.localeCompare(term)===0;
+					}).length===0) {
+					  return {id:term, text:term};
+					}
+				 }
+			});
+		}*/
+	};
+
 	function getProduct(id) {
 		var product = null;
 		$.ajax({
@@ -10,6 +49,8 @@ $(document).ready(function() {
 		}).done(function (json){ product = json; });
 		return product;
 	}
+	
+	/* ---------- events ---------- */
 	
 	/* product list */
 	$('.cs-product-list-item').click(function(){
@@ -101,82 +142,14 @@ $(document).ready(function() {
 		}
 	});
 	
-	/* products */
-	$('#product_name').autocomplete({
-		minLength: 1,
-		source: function (request, response) {
-
-			var term = request.term;
-			var result = [];
-			
-			$.ajax({
-				url: '/json/products_ac?search=' + term,
-				context: $(this),
-				dataType: 'json',
-				async: false
-			})
-			.done(function (json) { result = json; });
-			
-			response(result);
-		},
-		select: function(event, ui) {
-			var product = getProduct(ui.item.data);
-			if (product != null) {
-				$('#product_id').val(ui.item.data);
-				$('#product_description').val(product.description);
-				$('#product_description').prop('disabled', true);
-				var tags = [];
-				for (var key in product.tags){
-					tags.push(product.tags[key].name);
-				}
-				$('#product_categories').val(tags.join(', '));				
-				$('#product_categories').prop('disabled', true);
-			}
-		}
-	});
-	$('#product_name').on('keypress', function () {
+	/* autocompleter */
+	autocomplete('#product_name', '/de/json/products_select2', false, true);
+	autocomplete('#product_categories', '/de/json/categories_select2', true, false);
+	autocomplete('#product_programminglanguages', '/de/json/programminglanguages_select2', true, false);
+	$('#product_name').on('select2-selecting', function (e) {
 		$('#product_id').val('');
 		$('#product_description').prop('disabled', false);
 		$('#product_categories').prop('disabled', false);
-	});
-	
-	/* categories */
-	$('#product_categories').autocomplete({
-		minLength: 1,
-		source: function (request, response) {
-
-			var term = request.term;
-			var result = [];
-			
-			$.ajax({
-				url: '/json/categories_ac?search=' + term,
-				context: $(this),
-				dataType: 'json',
-				async: false
-			})
-			.done(function (json) { result = json; });
-			
-			response(result);
-		}
-	});
-	
-	/* programming languages */
-	$('#product_programminglanguages').autocomplete({
-		minLength: 1,
-		source: function (request, response) {
-
-			var term = request.term;
-			var result = [];
-			
-			$.ajax({
-				url: '/json/programminglanguages_ac?search=' + term,
-				context: $(this),
-				dataType: 'json',
-				async: false
-			})
-			.done(function (json) { result = json; });
-			
-			response(result);
-		}
 	});	
+	
 });

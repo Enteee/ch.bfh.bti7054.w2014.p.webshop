@@ -22,7 +22,28 @@ class Repository {
 			return $this->getAllCategories();
 		}
 	}
-
+	
+	public function getAllProgrammingLanguages() {
+		$tagType = TagTypeQuery::create()->findPk(Tag::PROGRAMMING_LANGUAGE);
+		return TagQuery::create()
+			->filterByTagType($tagType)
+			->find();
+	}
+	
+	public function getProgrammingLanguagesBySearch($searchstring = NULL) {		
+		if (isset($searchstring)) {
+			$tagType = TagTypeQuery::create()->findPk(Tag::PROGRAMMING_LANGUAGE);
+			return TagQuery::create()
+				->filterByTagType($tagType)
+				->useTagI18nQuery()
+					->filterByName('%' . $searchstring . '%')
+				->endUse()
+				->find();
+		} else {
+			return $this->getAllProgrammingLanguages();
+		}
+	}
+	
 	public function getAllProducts() {
 		return ProductQuery::create()
 			->find();

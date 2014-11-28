@@ -38,21 +38,6 @@ class StartController extends MainController {
 		// render template
 		$this->view('start', $data);
 	}
-	
-	public function codes() {
-		// todo: maybe in own controller?
-		$this->show();
-	}
-	
-	public function products() {
-		// todo: maybe in own controller?
-		$this->show();
-	}
-	
-	public function add() {
-		// todo: maybe in own controller?
-		$this->show();
-	}
 }
 
 ?>

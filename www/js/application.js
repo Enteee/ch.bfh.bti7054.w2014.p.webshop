@@ -3,7 +3,7 @@ $(document).ready(function() {
 	/* ---------- functions ---------- */
 	
 	function autocomplete(element, url, multiselect, freetext) {
-		$(element).select2({	
+		var options = {
 			//minimumInputLength: 1,
 			multiple: multiselect,
 			allowClear: true,
@@ -22,22 +22,17 @@ $(document).ready(function() {
 			initSelection: function(element, callback) {
 				//alert('init');				
 			}
-		});
-		/*
+		}		
 		if (freetext) {
-			$(element).select2({
-			// TODO:
-				//Allow manually entered text in drop down.
-				 createSearchChoice:function(term, data) {
-					if ( $(data).filter( function() {
-					  return this.text.localeCompare(term)===0;
-					}).length===0) {
-					  return {id:term, text:term};
-					}
-				 }
-			});
-		}*/
-	};
+			options['createSearchChoice'] = function(term, data) { 
+				if ($(data).filter(function() { return this.text.localeCompare(term)===0; }).length===0) {
+					return { id: -1, text:term };
+				}
+			};
+		}
+		// init select2
+		$(element).select2(options);
+	}
 
 	function getProduct(id) {
 		var product = null;
@@ -143,13 +138,32 @@ $(document).ready(function() {
 	});
 	
 	/* autocompleter */
-	autocomplete('#product_name', '/de/json/products_select2', false, true);
+	autocomplete('#product_id', '/de/json/products_select2', false, true);
 	autocomplete('#product_categories', '/de/json/categories_select2', true, false);
 	autocomplete('#product_programminglanguages', '/de/json/programminglanguages_select2', true, false);
-	$('#product_name').on('select2-selecting', function (e) {
-		$('#product_id').val('');
-		$('#product_description').prop('disabled', false);
-		$('#product_categories').prop('disabled', false);
-	});	
 	
+	/* select product */
+	$('#product_id').on('select2-selecting', function (e) {		
+		$('#product_name').val(e.choice.text);
+		if (e.choice.id == -1) {
+			// freetext for product
+			$('#product_description').prop('disabled', false);
+			$('#product_categories').select2('enable', true);
+			
+			$('#product_description').val('');
+			$('#product_categories').select2('val', '');			
+		} else {
+			// already existing product
+			$('#product_description').prop('disabled', true);
+			$('#product_categories').select2('enable', false);
+			
+			var tags = []
+			var product = getProduct(e.choice.id);
+			for (var key in product.tags) {
+				tags.push({ id: -1, text: product.tags[key].name });
+			}
+			$('#product_description').val(product.description);
+			$('#product_categories').select2('data', tags);
+		}
+	});
 });

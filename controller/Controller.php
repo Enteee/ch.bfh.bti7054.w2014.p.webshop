@@ -63,6 +63,13 @@ abstract class Controller {
 	}
 	
 	/**
+	 * Redirect a user.
+	 */
+	protected function redirect($location) {
+		header('Location: ' . $location);
+	}
+	
+	/**
 	 * Is a user logged in.
 	 */
 	protected function isLoggedIn() {

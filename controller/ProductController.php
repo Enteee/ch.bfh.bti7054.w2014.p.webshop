@@ -20,12 +20,7 @@ class ProductController extends MainController {
 	}
 	
 	public function add() {
-		$data = array();
-		
-		$this->getUser();
-	
-		// render template
-		$this->view('add_product', $data);
+		$this->view('add_product');
 	}
 	
 	public function save() {
@@ -78,18 +73,18 @@ class ProductController extends MainController {
 				$product->setActive(true);
 				
 				$product->save();
-			}
-			
-			// categories
-			$categoryIds = $this->splitInts($this->vars->product_categories);
-			if (count($categoryIds) > 0) {
-				foreach ($categoryIds as $categoryId) {
-					$category = TagQuery::create()->getCategory($categoryId);
-					if (isset($category)) {
-						$product->addTag($category);
+								
+				// categories
+				$categoryIds = $this->splitInts($this->vars->product_categories);
+				if (count($categoryIds) > 0) {
+					foreach ($categoryIds as $categoryId) {
+						$category = TagQuery::create()->getCategory($categoryId);
+						if (isset($category)) {
+							$product->addTag($category);
+						}
 					}
+					$product->save();
 				}
-				$product->save();
 			}
 			
 			// offer
@@ -125,6 +120,10 @@ class ProductController extends MainController {
 				->save();
 
 			$con->commit();
+			
+			// redirect
+			$this->redirect('/start');
+			
 		} catch (Exception $e) {
 			$con->rollback();
 			throw $e;

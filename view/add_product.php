@@ -3,11 +3,11 @@
 					
 				<div class="well">
 					<form class="form-horizontal" enctype="multipart/form-data" method="post" action="<?php echo lang(); ?>/product/save" role="form">
-						<input type="hidden" class="form-control" name="product_id" id="product_id">
+						<input type="hidden" class="form-control" name="product_name" id="product_name">
 						<div class="form-group">
-							<label class="col-sm-3 control-label" for="product_name"><?php echo label('name'); ?></label>
+							<label class="col-sm-3 control-label" for="product_id"><?php echo label('name'); ?></label>
 							<div class="col-sm-9">
-								<input type="text" class="form-control" name="product_name" id="product_name" required="required">
+								<input type="text" class="form-control" name="product_id" id="product_id" required="required">
 							</div>
 						</div>
 						<div class="form-group">

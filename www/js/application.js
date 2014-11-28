@@ -2,9 +2,9 @@ $(document).ready(function() {
 
 	/* ---------- functions ---------- */
 	
-	function autocomplete(element, url, multiselect, freetext) {
+	function autocomplete(element, url, multiselect, freetext, mininputlength) {
 		var options = {
-			//minimumInputLength: 1,
+			minimumInputLength: mininputlength,
 			multiple: multiselect,
 			allowClear: true,
 			ajax: {
@@ -16,11 +16,6 @@ $(document).ready(function() {
 				results: function(data, page) {
 					return { results: data };
 				}
-			},
-			//formatSelection: format,
-			//formatResult: format,
-			initSelection: function(element, callback) {
-				//alert('init');				
 			}
 		}		
 		if (freetext) {
@@ -138,9 +133,9 @@ $(document).ready(function() {
 	});
 	
 	/* autocompleter */
-	autocomplete('#product_id', '/de/json/products_select2', false, true);
-	autocomplete('#product_categories', '/de/json/categories_select2', true, false);
-	autocomplete('#product_programminglanguages', '/de/json/programminglanguages_select2', true, false);
+	autocomplete('#product_id', '/de/json/products_select2', false, true, 0);
+	autocomplete('#product_categories', '/de/json/categories_select2', true, false, 0);
+	autocomplete('#product_programminglanguages', '/de/json/programminglanguages_select2', true, false, 1);
 	
 	/* select product */
 	$('#product_id').on('select2-selecting', function (e) {		

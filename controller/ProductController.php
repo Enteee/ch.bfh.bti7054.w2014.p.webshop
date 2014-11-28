@@ -7,6 +7,10 @@ class ProductController extends MainController {
 
 	public function __construct() {
 		parent::__construct();
+		
+		$this->vars->save_global('category', SaveVars::T_INT, SaveVars::G_GET);
+		$this->vars->save_global('search', SaveVars::T_STRING, SaveVars::G_GET);
+		
 		$this->vars->save_global('product_id', SaveVars::T_INT, SaveVars::G_POST);
 		$this->vars->save_global('product_name', SaveVars::T_STRING, SaveVars::G_POST);
 		$this->vars->save_global('product_description', SaveVars::T_STRING, SaveVars::G_POST);
@@ -19,15 +23,60 @@ class ProductController extends MainController {
 	public function index() {
 	}
 	
+	public function orders() {
+		$this->assertUserIsLoggedIn();
+				
+		// get variables		
+		$searchstring = $this->vars->search;
+		$categoryId = $this->categoryId;
+		
+		// load data
+		$user = $this->getUser();
+		$products = $this->repo->getUsersOrders($categoryId, $searchstring, $user);
+		
+		foreach ($products as $product){
+			$product->setLocale($this->lang->getLocale());
+		}
+		
+		// set data for view
+		$data['pageTitle'] = label('navMyItems');
+		$data['products'] = $products;
+		
+		// render template
+		$this->view('start', $data);
+	}
+	
+	public function offers() {
+		$this->assertUserIsLoggedIn();
+				
+		// get variables		
+		$searchstring = $this->vars->search;
+		$categoryId = $this->categoryId;
+		
+		// load data
+		$user = $this->getUser();
+		$products = $this->repo->getUsersOffers($categoryId, $searchstring, $user);
+		
+		foreach ($products as $product){
+			$product->setLocale($this->lang->getLocale());
+		}
+		
+		// set data for view
+		$data['pageTitle'] = label('navMyProducts');
+		$data['products'] = $products;
+		
+		// render template
+		$this->view('start', $data);
+	}
+	
 	public function add() {
+		$this->assertUserIsLoggedIn();
+		
 		$this->view('add_product');
 	}
 	
 	public function save() {
-		if (!$this->isLoggedIn()) {
-			// TODO: use own exception and handle in mvc framework
-			throw new Exception('forbidden');
-		}
+		$this->assertUserIsLoggedIn();
 
 		// validate...
 		$file = $this->vars->product_file;		

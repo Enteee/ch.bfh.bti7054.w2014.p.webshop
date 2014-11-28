@@ -185,21 +185,26 @@ We're selling source code on our webshop. People can upload source code and othe
 * problem solved by using *Google Identity Toolkit*
 * login with Gmail account
 
-### Task 9.1: OO Shopping Cart
+### Task 9.1: OO Shopping Cart [done]
 
-### Task 9.2 : OO Product List
+### Task 9.2 : OO Product List [done]
 
-### Task 9.3: Even more OO
+### Task 9.3: Even more OO [done]
 
-### Task 10.1: Database Schema Design
+### Task 10.1: Database Schema Design [done]
 
-### Task 10.2: Database Setup
+### Task 10.2: Database Setup [done]
 
-### Task 10.3: PHP Integration
+### Task 10.3: PHP Integration [done]
 
-### Task 10.4: Administrator
+* using propel orm
 
-### Task 11.1: Web Service Integration
+### Task 10.4: Administrator [done]
+
+* create database via propel generator
+* populate controller to insert data
+
+### Task 11.1: Web Service Integration [progress]
 
 ### Task 12.1: XML
 

@@ -77,15 +77,11 @@
 				<!-- navigation, search form, login form -->
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
+<?php foreach ($navItems as $navItem): ?>
 						<li>
-							<a href="<?php echo lang(); ?>/start/codes"><span class="glyphicon glyphicon-user" title="My items"></span> <span class="cs-nav-text"><?php echo label('navMyItems'); ?></span></a>
+							<a href="<?php echo $navItem['url']; ?>"><span class="glyphicon <?php echo $navItem['icon']; ?>" title="<?php echo $navItem['text']; ?>"></span> <span class="cs-nav-text"><?php echo $navItem['text']; ?></span></a>
 						</li>
-						<li>
-							<a href="<?php echo lang(); ?>/start/products"><span class="glyphicon glyphicon-folder-open" title="My products"></span> <span class="cs-nav-text"><?php echo label('navMyProducts'); ?></span></a>
-						</li>
-						<li>
-							<a href="<?php echo lang(); ?>/product/add"><span class="glyphicon glyphicon-plus" title="Add product"></span> <span class="cs-nav-text"><?php echo label('navAddProduct'); ?></span></a>
-						</li>
+<?php endforeach; ?>
 					</ul>
 					<!-- search form -->					
 					<form class="navbar-form navbar-right" role="form" action="search" method="get">

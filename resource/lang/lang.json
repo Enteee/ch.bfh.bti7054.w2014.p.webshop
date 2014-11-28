@@ -12,14 +12,9 @@
 		"de" : "Nie mehr selber Code schreiben!",
 		"en" : "Never code again!"
 	},
-	
 	"navMyItems": {
 		"en" : "My items",
 		"de" : "Meine Codes"
-	},
-	"navShoppingCart": {
-		"en" : "Shopping cart",
-		"de" : "Warenkorb"
 	},
 	"navMyProducts": {
 		"en" : "My products",
@@ -29,7 +24,86 @@
 		"en" : "Add product",
 		"de" : "Produkt hinzufügen"
 	},
-	
+	"userPanel": {
+		"en" : "User panel",
+		"de" : "Benutzerübersicht"
+	},
+	"categories": {
+		"en" : "Categories",
+		"de" : "Kategorien"
+	},
+	"products": {
+		"en" : "Products",
+		"de" : "Produkte"
+	},
+	"reviews": {
+		"en" : "Reviews",
+		"de" : "Kommentare"
+	},
+	"addReview": {
+		"en" : "Add review",
+		"de" : "Kommentar schreiben"
+	},
+	"writeReview": {
+		"en" : "write review...",
+		"de" : "kommentar schreiben..."
+	},
+	"version": {
+		"en" : "version",
+		"de" : "Version"
+	},
+	"withComments": {
+		"en" : "with comments",
+		"de" : "mit Kommentaren"
+	},
+	"withSupport": {
+		"en" : "with support",
+		"de" : "mit Support"
+	},
+	"programmingLanguage": {
+		"en" : "Programming language",
+		"de" : "Programmiersprache"
+	},
+	"programmingLanguages": {
+		"en" : "Programming languages",
+		"de" : "Programmiersprachen"
+	},
+	"rating": {
+		"en" : "Rating",
+		"de" : "Bewertung"
+	},
+	"name": {
+		"en" : "Name",
+		"de" : "Bezeichnung"
+	},
+	"description": {
+		"en" : "Description",
+		"de" : "Beschreibung"
+	},
+	"shoppingCart": {
+		"en" : "Shopping cart",
+		"de" : "Warenkorb"
+	},
+	"search": {
+		"en" : "search...",
+		"de" : "suchen..."
+	},
+	"tags": {
+		"en" : "Tags",
+		"de" : "Tags"
+	},
+	"add": {
+		"en" : "Add",
+		"de" : "Hinzufügen"
+	},
+	"price": {
+		"en" : "Price",
+		"de" : "Preis"
+	},
+	"codeFile": {
+		"en" : "Code file",
+		"de" : "Code Datei"
+	},
 	"errorTitle": {
 		"en" : "Error",
 		"de" : "Fehler"
@@ -37,5 +111,9 @@
 	"error404": {
 		"en" : "The page you are looking for doesn't exist. We're sorry.",
 		"de" : "Die gewünschte Seite konnte nicht gefunden werden."
+	},
+	"error500": {
+		"en" : "There was an internal error. We're sorry.",
+		"de" : "Allgemeiner Fehler. Wir entschuldigen uns."
 	}
 }

@@ -24,13 +24,13 @@ abstract class BaseProductPeer
     const TM_CLASS = 'ProductTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 4;
+    const NUM_COLUMNS = 5;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 4;
+    const NUM_HYDRATE_COLUMNS = 5;
 
     /** the column name for the id field */
     const ID = 'product.id';
@@ -43,6 +43,9 @@ abstract class BaseProductPeer
 
     /** the column name for the updated_at field */
     const UPDATED_AT = 'product.updated_at';
+
+    /** the column name for the avg_rating field */
+    const AVG_RATING = 'product.avg_rating';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -70,12 +73,12 @@ abstract class BaseProductPeer
      * e.g. ProductPeer::$fieldNames[ProductPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Active', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'active', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (ProductPeer::ID, ProductPeer::ACTIVE, ProductPeer::CREATED_AT, ProductPeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'ACTIVE', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'active', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Active', 'CreatedAt', 'UpdatedAt', 'AvgRating', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'active', 'createdAt', 'updatedAt', 'avgRating', ),
+        BasePeer::TYPE_COLNAME => array (ProductPeer::ID, ProductPeer::ACTIVE, ProductPeer::CREATED_AT, ProductPeer::UPDATED_AT, ProductPeer::AVG_RATING, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'ACTIVE', 'CREATED_AT', 'UPDATED_AT', 'AVG_RATING', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'active', 'created_at', 'updated_at', 'avg_rating', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
     /**
@@ -85,12 +88,12 @@ abstract class BaseProductPeer
      * e.g. ProductPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Active' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'active' => 1, 'createdAt' => 2, 'updatedAt' => 3, ),
-        BasePeer::TYPE_COLNAME => array (ProductPeer::ID => 0, ProductPeer::ACTIVE => 1, ProductPeer::CREATED_AT => 2, ProductPeer::UPDATED_AT => 3, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'ACTIVE' => 1, 'CREATED_AT' => 2, 'UPDATED_AT' => 3, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'active' => 1, 'created_at' => 2, 'updated_at' => 3, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Active' => 1, 'CreatedAt' => 2, 'UpdatedAt' => 3, 'AvgRating' => 4, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'active' => 1, 'createdAt' => 2, 'updatedAt' => 3, 'avgRating' => 4, ),
+        BasePeer::TYPE_COLNAME => array (ProductPeer::ID => 0, ProductPeer::ACTIVE => 1, ProductPeer::CREATED_AT => 2, ProductPeer::UPDATED_AT => 3, ProductPeer::AVG_RATING => 4, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'ACTIVE' => 1, 'CREATED_AT' => 2, 'UPDATED_AT' => 3, 'AVG_RATING' => 4, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'active' => 1, 'created_at' => 2, 'updated_at' => 3, 'avg_rating' => 4, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
     /**
@@ -168,11 +171,13 @@ abstract class BaseProductPeer
             $criteria->addSelectColumn(ProductPeer::ACTIVE);
             $criteria->addSelectColumn(ProductPeer::CREATED_AT);
             $criteria->addSelectColumn(ProductPeer::UPDATED_AT);
+            $criteria->addSelectColumn(ProductPeer::AVG_RATING);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.active');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
+            $criteria->addSelectColumn($alias . '.avg_rating');
         }
     }
 

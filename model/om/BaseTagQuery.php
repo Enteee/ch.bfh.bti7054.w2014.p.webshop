@@ -951,6 +951,40 @@ abstract class BaseTagQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Offer object
+     * using the offer_tag table as cross reference
+     *
+     * @param   Offer $offer the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   TagQuery The current query, for fluid interface
+     */
+    public function filterByOffer($offer, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useOfferTagQuery()
+            ->filterByOffer($offer, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related Product object
+     * using the product_tag table as cross reference
+     *
+     * @param   Product $product the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   TagQuery The current query, for fluid interface
+     */
+    public function filterByProduct($product, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useProductTagQuery()
+            ->filterByProduct($product, $comparison)
+            ->endUse();
+    }
+
+    /**
      * Exclude object from result
      *
      * @param   Tag $tag Object to remove from the list of results

@@ -20,6 +20,15 @@
 *	!!Wo0t!!
 */
 
+// template functions
+function lang() {
+	return Mvc::$lang->getLanguage();
+}
+
+function label($key) {
+	return Mvc::$lang->$key;;
+}
+
 class Template {
 
 	const DEFAULT_VIEW = 'start';
@@ -90,7 +99,7 @@ class Template {
 		// make variables available local
 		foreach (array_keys($this->data) as $key) {
 			${$key} = $this->getValue($key);
-		}
+		}	
 		// include template
 		include $this->getTemplatePath();
 	}

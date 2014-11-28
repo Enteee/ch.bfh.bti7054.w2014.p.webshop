@@ -91,6 +91,11 @@ abstract class BaseOffer extends BaseObject implements Persistent
     protected $collOrdersPartial;
 
     /**
+     * @var        PropelObjectCollection|Tag[] Collection to store aggregation of Tag objects.
+     */
+    protected $collTags;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -109,6 +114,12 @@ abstract class BaseOffer extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $tagsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -543,6 +554,7 @@ abstract class BaseOffer extends BaseObject implements Persistent
 
             $this->collOrders = null;
 
+            $this->collTags = null;
         } // if (deep)
     }
 
@@ -688,6 +700,32 @@ abstract class BaseOffer extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->tagsScheduledForDeletion !== null) {
+                if (!$this->tagsScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    $pk = $this->getPrimaryKey();
+                    foreach ($this->tagsScheduledForDeletion->getPrimaryKeys(false) as $remotePk) {
+                        $pks[] = array($pk, $remotePk);
+                    }
+                    OfferTagQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+                    $this->tagsScheduledForDeletion = null;
+                }
+
+                foreach ($this->getTags() as $tag) {
+                    if ($tag->isModified()) {
+                        $tag->save($con);
+                    }
+                }
+            } elseif ($this->collTags) {
+                foreach ($this->collTags as $tag) {
+                    if ($tag->isModified()) {
+                        $tag->save($con);
+                    }
+                }
             }
 
             if ($this->codesScheduledForDeletion !== null) {
@@ -2124,6 +2162,193 @@ abstract class BaseOffer extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collTags collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Offer The current object (for fluent API support)
+     * @see        addTags()
+     */
+    public function clearTags()
+    {
+        $this->collTags = null; // important to set this to null since that means it is uninitialized
+        $this->collTagsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * Initializes the collTags collection.
+     *
+     * By default this just sets the collTags collection to an empty collection (like clearTags());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initTags()
+    {
+        $this->collTags = new PropelObjectCollection();
+        $this->collTags->setModel('Tag');
+    }
+
+    /**
+     * Gets a collection of Tag objects related by a many-to-many relationship
+     * to the current object by way of the offer_tag cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Offer is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return PropelObjectCollection|Tag[] List of Tag objects
+     */
+    public function getTags($criteria = null, PropelPDO $con = null)
+    {
+        if (null === $this->collTags || null !== $criteria) {
+            if ($this->isNew() && null === $this->collTags) {
+                // return empty collection
+                $this->initTags();
+            } else {
+                $collTags = TagQuery::create(null, $criteria)
+                    ->filterByOffer($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    return $collTags;
+                }
+                $this->collTags = $collTags;
+            }
+        }
+
+        return $this->collTags;
+    }
+
+    /**
+     * Sets a collection of Tag objects related by a many-to-many relationship
+     * to the current object by way of the offer_tag cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $tags A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Offer The current object (for fluent API support)
+     */
+    public function setTags(PropelCollection $tags, PropelPDO $con = null)
+    {
+        $this->clearTags();
+        $currentTags = $this->getTags(null, $con);
+
+        $this->tagsScheduledForDeletion = $currentTags->diff($tags);
+
+        foreach ($tags as $tag) {
+            if (!$currentTags->contains($tag)) {
+                $this->doAddTag($tag);
+            }
+        }
+
+        $this->collTags = $tags;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of Tag objects related by a many-to-many relationship
+     * to the current object by way of the offer_tag cross-reference table.
+     *
+     * @param Criteria $criteria Optional query object to filter the query
+     * @param boolean $distinct Set to true to force count distinct
+     * @param PropelPDO $con Optional connection object
+     *
+     * @return int the number of related Tag objects
+     */
+    public function countTags($criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        if (null === $this->collTags || null !== $criteria) {
+            if ($this->isNew() && null === $this->collTags) {
+                return 0;
+            } else {
+                $query = TagQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByOffer($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->collTags);
+        }
+    }
+
+    /**
+     * Associate a Tag object to this object
+     * through the offer_tag cross reference table.
+     *
+     * @param  Tag $tag The OfferTag object to relate
+     * @return Offer The current object (for fluent API support)
+     */
+    public function addTag(Tag $tag)
+    {
+        if ($this->collTags === null) {
+            $this->initTags();
+        }
+
+        if (!$this->collTags->contains($tag)) { // only add it if the **same** object is not already associated
+            $this->doAddTag($tag);
+            $this->collTags[] = $tag;
+
+            if ($this->tagsScheduledForDeletion and $this->tagsScheduledForDeletion->contains($tag)) {
+                $this->tagsScheduledForDeletion->remove($this->tagsScheduledForDeletion->search($tag));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Tag $tag The tag object to add.
+     */
+    protected function doAddTag(Tag $tag)
+    {
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if (!$tag->getOffers()->contains($this)) { $offerTag = new OfferTag();
+            $offerTag->setTag($tag);
+            $this->addOfferTag($offerTag);
+
+            $foreignCollection = $tag->getOffers();
+            $foreignCollection[] = $this;
+        }
+    }
+
+    /**
+     * Remove a Tag object to this object
+     * through the offer_tag cross reference table.
+     *
+     * @param Tag $tag The OfferTag object to relate
+     * @return Offer The current object (for fluent API support)
+     */
+    public function removeTag(Tag $tag)
+    {
+        if ($this->getTags()->contains($tag)) {
+            $this->collTags->remove($this->collTags->search($tag));
+            if (null === $this->tagsScheduledForDeletion) {
+                $this->tagsScheduledForDeletion = clone $this->collTags;
+                $this->tagsScheduledForDeletion->clear();
+            }
+            $this->tagsScheduledForDeletion[]= $tag;
+        }
+
+        return $this;
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -2172,6 +2397,11 @@ abstract class BaseOffer extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collTags) {
+                foreach ($this->collTags as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->aProduct instanceof Persistent) {
               $this->aProduct->clearAllReferences($deep);
             }
@@ -2191,6 +2421,10 @@ abstract class BaseOffer extends BaseObject implements Persistent
             $this->collOrders->clearIterator();
         }
         $this->collOrders = null;
+        if ($this->collTags instanceof PropelCollection) {
+            $this->collTags->clearIterator();
+        }
+        $this->collTags = null;
         $this->aProduct = null;
     }
 

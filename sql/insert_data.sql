@@ -37,7 +37,12 @@ VALUES
 (2,2,NULL,1,NOW(),NOW()),
 (3,2,NULL,1,NOW(),NOW()),
 (4,2,NULL,1,NOW(),NOW()),
-(5,2,NULL,1,NOW(),NOW())
+(5,2,NULL,1,NOW(),NOW()),
+-- programming languages
+(6,3,NULL,1,NOW(),NOW()),
+(7,3,NULL,1,NOW(),NOW()),
+(8,3,NULL,1,NOW(),NOW()),
+(9,3,NULL,1,NOW(),NOW())
 ;
 
 INSERT INTO `tag_i18n`
@@ -54,7 +59,16 @@ VALUES
 (4,'de_CH','Klassen'),
 (4,'en_US','Classes'),
 (5,'de_CH','Frameworks'),
-(5,'en_US','Frameworks')
+(5,'en_US','Frameworks'),
+-- programming languages
+(6,'de_CH','C'),
+(6,'en_US','C'),
+(7,'de_CH','Java'),
+(7,'en_US','Java'),
+(8,'de_CH','PHP'),
+(8,'en_US','PHP'),
+(9,'de_CH','Lisp'),
+(9,'en_US','Lisp')
 ;
 
 INSERT INTO `product`
@@ -124,3 +138,17 @@ INSERT INTO `review`
 VALUES
 (1,1,1,'Sehr geiles Produkt! Kann ich nur weiterempfehlen.',5,1,NOW(),NOW())
 ;
+
+INSERT INTO `offer`
+(`id`,
+`product_id`,
+`price`,
+`active`,
+`created_at`,
+`updated_at`)
+VALUES
+(1,1,100,1,NOW(),NOW()),
+(2,2,1000,1,NOW(),NOW()),
+(3,3,250,1,NOW(),NOW())
+;
+

@@ -5,25 +5,38 @@
  */
 class MainController extends Controller {
 
+	protected $categoryId;	
+
 	public function __construct() {
 		parent::__construct();
-
+		
+		// save variables
+		$this->vars->save_global('category',SaveVars::T_INT,SaveVars::G_GET);
+				
+		// get variables
+		$this->categoryId = $this->vars->category;
+		
+		// load data
+		$categories = $this->repo->getAllCategories();
+		$shoppingCart = ShoppingCart::get();
+		
+		$shoppingCartItems = $shoppingCart->getOffers();
+		
 		// set global data for view
 		$data['title'] = $this->lang->title;
 		$data['subtitle'] = $this->lang->subtitle;
 		$data['author'] = $this->config['author'];
 		$data['contact'] = $this->config['mail'];
 		$data['metadata'] = array(
-			'key1' => 'value1',
-			'key2' => 'value2'
+			'keywords' => 'codeshop,code,shop,snippets,buy'
 		);
 		
-		$data['navMyItems'] = $this->lang->navMyItems;
-		$data['navShoppingCart'] = $this->lang->navShoppingCart;
-		$data['navMyProducts'] = $this->lang->navMyProducts;
-		$data['navAddProduct'] = $this->lang->navAddProduct;
-				
 		$data['locale'] = $this->lang->getLocale();
+		
+		$data['categories'] = $categories;
+		$data['activeCategoryId'] = $this->categoryId;
+		$data['shoppingCartItems'] = $shoppingCartItems;
+		$data['shoppingCartTotalPrice'] = $shoppingCart->getTotalPrice();
 		
 		$this->addData($data);
 	}

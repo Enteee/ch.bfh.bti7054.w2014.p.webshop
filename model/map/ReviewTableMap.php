@@ -72,6 +72,10 @@ class ReviewTableMap extends TableMap
   'update_column' => 'updated_at',
   'disable_updated_at' => 'false',
 ),
+            'aggregate_column_relation' =>  array (
+  'foreign_table' => 'product',
+  'update_method' => 'updateAvgRating',
+),
         );
     } // getBehaviors()
 

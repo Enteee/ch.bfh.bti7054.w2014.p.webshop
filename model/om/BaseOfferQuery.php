@@ -791,6 +791,23 @@ abstract class BaseOfferQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Tag object
+     * using the offer_tag table as cross reference
+     *
+     * @param   Tag $tag the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return   OfferQuery The current query, for fluid interface
+     */
+    public function filterByTag($tag, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useOfferTagQuery()
+            ->filterByTag($tag, $comparison)
+            ->endUse();
+    }
+
+    /**
      * Exclude object from result
      *
      * @param   Offer $offer Object to remove from the list of results

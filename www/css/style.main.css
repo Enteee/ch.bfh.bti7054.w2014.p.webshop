@@ -14,6 +14,10 @@ a:hover {
 	color: #ff3500;
 }
 
+textarea {
+	 resize:none;
+}
+
 /* ---------- changes on bootstrap style ---------- */
 
 /* badge in list-group */
@@ -35,4 +39,15 @@ a.list-group-item.active > .badge,
 	color: #ff3500;
 	padding-right: 10px;
 	padding-left: 10px;
+}
+
+/* gitkit style */
+.gitkit-user-card-menu {
+	z-index: 100;
+}
+.gitkit-user-card,
+.gitkit-account-chip,
+.gitkit-sign-in-button,
+.gitkit-button {
+	width: 100%;
 }

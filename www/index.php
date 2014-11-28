@@ -9,12 +9,20 @@ require_once '../src/autoload.php';
 /* Set up composer autoload */
 require_once($config['composer']['autoload.php']);
 
+/* Session */
+session_start();
+
 /* Debug settings */
 if ($config['debug']) {
 	ini_set('implicit_flush',1);				// flush stdout after each "echo"
 	ini_set('display_errors',1);				// show errors
 	ini_set('display_startup_errors',1);	// show starup errors
 	error_reporting(-1);							// be verbose as fuck: http://php.net/manual/de/errorfunc.constants.php
+}
+
+/* Set php defaults */
+if(!date_default_timezone_set($config['timezone'])){
+	die('Invalid timezone in config');
 }
 
 /* Set up Propel */

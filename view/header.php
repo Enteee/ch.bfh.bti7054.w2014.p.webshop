@@ -11,6 +11,7 @@
 		<meta name="subtitle" content="<?php echo $subtitle; ?>" />
 		<meta name="author" content="<?php echo $author; ?>" />
 		<meta name="contact" content="<?php echo $contact; ?>" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 		<!-- Additional metadata -->
 <?php foreach($metadata as $key => $val): ?>
@@ -19,12 +20,20 @@
 
 		<!-- CSS -->
 		<!-- External CSS -->
-		<link rel="stylesheet" type="text/css" href="//www.gstatic.com/authtoolkit/css/gitkit.css">
+		<link rel="stylesheet" type="text/css" href="//www.gstatic.com/authtoolkit/css/gitkit.css" />
+		<!-- jQuery UI -->
+		<link rel="stylesheet" type="text/css" href="plugin/bootstrap/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="plugin/jquery/jquery-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="plugin/jquery/jquery-ui.structure.min.css" />
+		<link rel="stylesheet" type="text/css" href="plugin/jquery/jquery-ui.theme.min.css" />
 		<!-- Bootstrap Core CSS -->
-		<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="plugin/bootstrap/css/bootstrap.min.css" />
+		<!-- Libraries -->
+		<link rel="stylesheet" type="text/css" href="plugin/select2/select2.css" />
+		<link rel="stylesheet" type="text/css" href="plugin/select2/select2-bootstrap.css" />
 		<!-- Custom CSS -->
-		<link rel="stylesheet" type="text/css" href="css/layout.main.css">
-		<link rel="stylesheet" type="text/css" href="css/style.main.css">
+		<link rel="stylesheet" type="text/css" href="css/layout.main.css" />
+		<link rel="stylesheet" type="text/css" href="css/style.main.css" />		
 		
 		<!-- favicon -->
 		<link rel="icon" type="image/gif" href="img/favicon.gif" />
@@ -44,10 +53,13 @@
 		</noscript>
 		<!-- Javascript -->
 		<!-- Microsoft READ THIS: http://www.rfc-editor.org/rfc/rfc4329.txt  !! You are obsolete !! -->
-		<script type="application/javascript" src="bootstrap/js/jquery-1.11.0.js"></script>
-		<script type="application/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+		<script type="application/javascript" src="plugin/bootstrap/js/jquery-1.11.0.js"></script>
+		<script type="application/javascript" src="plugin/jquery/jquery-ui-1.11.2.min.js"></script>
+		<script type="application/javascript" src="plugin/bootstrap/js/bootstrap.min.js"></script>
+		<script type="application/javascript" src="plugin/select2/select2.min.js"></script>
 		<script type="application/javascript" src="//www.gstatic.com/authtoolkit/js/gitkit.js"></script>
 		<script type="application/javascript" src="js/signin.js"></script>
+		<script type="application/javascript" src="js/application.js"></script>
 
 		<!-- navigation -->
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -60,31 +72,28 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="#"><img class="cs-logo" src="img/logo_small.png" alt="CodeShop Logo" /></a>
+					<a class="navbar-brand" href="/"><img class="cs-logo" src="img/logo_small.png" alt="CodeShop Logo" /></a>
 				</div>
 				<!-- navigation, search form, login form -->
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-user" title="My items"></span> <span class="cs-nav-text"><?php echo $navMyItems; ?></span></a>
+							<a href="<?php echo lang(); ?>/start/codes"><span class="glyphicon glyphicon-user" title="My items"></span> <span class="cs-nav-text"><?php echo label('navMyItems'); ?></span></a>
 						</li>
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-shopping-cart" title="Shopping cart"></span> <span class="cs-nav-text"><?php echo $navShoppingCart; ?></span></a>
+							<a href="<?php echo lang(); ?>/start/products"><span class="glyphicon glyphicon-folder-open" title="My products"></span> <span class="cs-nav-text"><?php echo label('navMyProducts'); ?></span></a>
 						</li>
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-folder-open" title="My products"></span> <span class="cs-nav-text"><?php echo $navMyProducts; ?></span></a>
-						</li>
-						<li>
-							<a href="#"><span class="glyphicon glyphicon-plus" title="Add product"></span> <span class="cs-nav-text"><?php echo $navAddProduct; ?></span></a>
+							<a href="<?php echo lang(); ?>/product/add"><span class="glyphicon glyphicon-plus" title="Add product"></span> <span class="cs-nav-text"><?php echo label('navAddProduct'); ?></span></a>
 						</li>
 					</ul>
 					<!-- search form -->					
-					<form class="navbar-form navbar-right" role="form">
+					<form class="navbar-form navbar-right" role="form" action="search" method="get">
 						<div class="form-group">
 							<div class="input-group">
-								<input type="text" class="form-control">
+								<input type="text" class="form-control" name="search" placeholder="<?php echo label('search'); ?>">
 								<span class="input-group-btn">
-									<button class="btn btn-default" type="button">
+									<button class="btn btn-default" type="submit">
 										<span class="glyphicon glyphicon-search"></span>
 									</button>
 								</span>
@@ -94,3 +103,55 @@
 				</div>
 			</div>
 		</nav>
+		<div class="container">
+			<div class="row">
+				<!-- left content -->
+				<div class="col-md-3">
+					<!-- login form -->
+					<div class="form-group">
+						<label><?php echo label('userPanel'); ?></label>
+						<div id="signin"></div>
+					</div>
+					<!-- category navigation -->
+					<p class="lead"><?php echo label('categories'); ?></p>
+					<nav>
+						<div class="list-group">
+<?php foreach($categories as $category):?>
+							<a href="<?php echo lang(); ?>/start/show?category=<?php echo $category->getId(); ?>" class="list-group-item<?php echo ($category->getId() == $activeCategoryId) ? ' active' : ''; ?>">
+								<span class="badge"><?php echo $category->getProductsCount(); ?></span>
+								<?php $category->setLocale($locale); echo $category->getName(); ?>
+							</a>
+<?php endforeach; ?>
+						</div>
+					</nav>
+<?php if (count($shoppingCartItems) > 0):?>
+					<!-- shopping cart -->
+					<p class="lead"><?php echo label('shoppingCart'); ?></p>
+					<ul class="list-group">
+	<?php foreach($shoppingCartItems as $shoppingCartItem):?>
+						<li class="list-group-item">
+							<div class="row">
+								<div class="col-xs-7">
+									<?php echo $shoppingCartItem->getProduct()->getName(); ?>
+								</div>
+								<div class="col-xs-5 text-right">
+									<?php echo $shoppingCartItem->getPrice(); ?>&cent;
+								</div>
+							</div>
+						</li>
+	<?php endforeach; ?>
+						<li class="list-group-item list-group-item-info">
+							<div class="row">
+								<div class="col-xs-7">
+									Total
+								</div>
+								<div class="col-xs-5 text-right">
+									<?php echo $shoppingCartTotalPrice; ?>&cent;
+								</div>
+							</div>
+						</li>						
+					</ul>
+<?php endif; ?>
+				</div>
+				<!-- right content -->
+				<div class="col-md-9">

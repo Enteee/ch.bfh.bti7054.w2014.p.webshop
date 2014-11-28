@@ -1,108 +1,59 @@
-<?php $this->view('header'); ?> 
-		<div class="container">
-			<div class="row">
-				<!-- left content -->
-				<div class="col-md-3">
-					<!-- login form -->
-					<div class="form-group">
-						<label>Signin</label>
-						<div id="signin"></div>
-					</div>
-					<!-- category navigation -->
-					<p class="lead">Categories</p>
-					<nav>
-						<div class="list-group">
-<?php foreach($categories as $category):?>
-							<a href="?category=<?php echo $category->getId(); ?>" class="list-group-item<?php echo ($category->getId() == $active_category) ? ' active' : ''; ?>">
-								<span class="badge"><?php echo $category->getProductsCount(); ?></span>
-								<?php echo $category->getName(); ?>
-							</a>
-<?php endforeach; ?>
-						</div>
-					</nav>
-				</div>
-				<!-- right content -->
-				<div class="col-md-9">
-					<p class="lead">Products</p>
-					<!-- item list -->
-					<div class="list-group">
-<?php foreach($products as $product): ?>
-						<div href="#" class="list-group-item">
-							<h4 class="list-group-item-heading"><?php $product->setLocale($locale); echo $product->getName(); ?></h4>
-							<p class="list-group-item-text"><?php echo $product->getDescription(); ?></p>
-						</div>
-<?php endforeach; ?>
-					</div>
+<?php $this->view('header'); ?>
+					<p class="lead"><?php echo label('products'); ?></p>
 					<!-- product details -->			
-					<?php	foreach($products as $product): ?>
-					<div class="cs-product-picture thumbnail">
+<?php	foreach($products as $product): ?>
+					<div class="list-group-item cs-product-picture thumbnail cs-product-list-item">
 						<!--<img class="img-responsive" src="http://soniqdesigns.com/wp/wp-content/uploads/2013/05/MarkupCode.gif" alt="">-->
 						<div class="caption-full">
-							<h4 class="pull-right">$24.99</h4>
-							<h4><a href="#"><?php echo $product->getName(); ?></a></h4>
-							<div class="labels">
-<?php foreach($product->getTags() as $tag):?> 
-								<span class="label label-default"><?php echo $tag->getName(); ?></span>
-<?php endforeach; ?>
+							<input class="hidden cs-product-list-item-id" type="hidden" name="id" value="<?php echo $product->getId();?>" />
+							<h4 class="hidden pull-right cs-product-list-item-price cs-product-list-hideable"></h4>
+							<h4 class="list-group-item-heading cs-product-list-item-name"><?php echo $product->getName(); ?></h4>
+							<div class="labels hidden cs-product-list-item-tags cs-product-list-hideable"></div>
+							<div class="cs-product-list-item-description">
+								<p class="list-group-item-text"><?php echo $product->getDescription(); ?></p>
 							</div>
-							<div class="cs-product-description">
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-							</div>
-							<div class="cs-options">
-								<span>Language:</span>
-								<select>
-<?php foreach($product->getProgrammingLanguages() as $language): ?>
-									<option><?php echo $language ?></option>
-<?php endforeach;?>
+							<div class="hidden cs-product-list-item-options cs-product-list-hideable">
+								<span><?php echo label('programmingLanguage'); ?>:</span>
+								<select class="cs-product-list-item-options-programming-language cs-product-list-item-clickable">
 								</select>
-								<span>Version:</span>
-								<select>
-<?php foreach($product->getVersions() as $version): ?>
-									<option><?php echo $version ?></option>
-<?php endforeach;?>
+								<span><?php echo label('version'); ?>:</span>
+								<select class="cs-product-list-item-options-version cs-product-list-item-clickable">
 								</select>
-								<span>Comments:</span>
-								<input type="checkbox" checked="checked"></input>
-								<span>Support:</span>
-								<input type="checkbox"></input>  
+								<span><?php echo label('withComments'); ?>:</span>
+								<input class="cs-product-list-item-clickable" type="checkbox" checked="checked"></input>
+								<span><?php echo label('withSupport'); ?>:</span>
+								<input class="cs-product-list-item-clickable" type="checkbox"></input>  
 							</div>
-						</div>
-						<div class="cs-ratings">
-							<p class="pull-right">reviews <span class="badge">6</span></p>
-							<p>
-								<span class="glyphicon glyphicon-star"></span>
-								<span class="glyphicon glyphicon-star"></span>
-								<span class="glyphicon glyphicon-star"></span>
-								<span class="glyphicon glyphicon-star"></span>
-								<span class="glyphicon glyphicon-star-empty"></span>
-								4.0 stars
-							</p>
+							<div class="hidden cs-product-list-item-rating cs-product-list-hideable">
+								<p class="pull-right"><?php echo label('reviews')?>&nbsp;<span class="badge cs-product-list-item-reviews-count"></span></p>
+							</div>
+							<!-- reviews -->
+							<div class="hidden well well-sm cs-product-list-hideable">
+								<div class="cs-product-list-item-reviews">
+									<div class="hidden row cs-product-list-item-review cs-product-list-item-review-template cs-product-list-hideable">
+										<div class="col-md-12">
+											<p class="cs-product-list-item-review-email"></p>
+											<div class="cs-product-list-item-review-rating"></div>
+											<span class="pull-right cs-product-list-item-review-created-at"></span>
+											<p class="cs-product-list-item-review-text"></p>
+										</div>
+									</div>
+								</div>
+								<textarea class="form-control cs-product-list-item-review-new-text cs-product-list-item-clickable" rows="5" placeholder="<?php echo label('writeReview') ?>"></textarea>
+								<div class="text-right">
+								<p>
+									<?php echo label('rating'); ?>:
+									<span class="glyphicon glyphicon-star cs-product-list-item-review-new-rating-1"></span>
+									<span class="glyphicon glyphicon-star-empty cs-product-list-item-review-new-rating-2"></span>
+									<span class="glyphicon glyphicon-star-empty cs-product-list-item-review-new-rating-3"></span>
+									<span class="glyphicon glyphicon-star-empty cs-product-list-item-review-new-rating-4"></span>
+									<span class="glyphicon glyphicon-star-empty cs-product-list-item-review-new-rating-5"></span>
+									<input class="hidden cs-product-list-item-review-rating-val" type="hidden" name="id" value="0" />
+								</p>
+									<button type="button" class="btn btn-default btn-sm cs-product-list-item-clickable"><?php echo label('addReview'); ?></a>
+								</div>
+							</div>
 						</div>
 					</div>
-					<?php	endforeach; ?>
-					<!-- comments -->
-					<div class="well well-sm">
-						<div class="text-right">
-							<a class="btn btn-default btn-sm">Leave a Review</a>
-						</div>
-<?php foreach($reviews as $review): ?>
-						<hr />
-						<div class="row">
-							<div class="col-md-12">
-<?php for ($i = 0; $i < $review->getRating(); $i++) { ?>
-								<span class="glyphicon glyphicon-star"></span>
-<?php } ?>
-<?php for ($i = 0; $i < (5 - $review->getRating()); $i++) { ?>
-								<span class="glyphicon glyphicon-star-empty"></span>
-<?php } ?>
-								<?php echo $review->getUser()->getEmail(); ?>
-								<span class="pull-right"><?php echo $review->getCreatedAt(); ?></span>
-								<p><?php echo $review->getText(); ?></p>
-							</div>
-						</div>
-<?php endforeach;?>
-					</div>
-				</div>
-			</div>
-		</div>
+<?php	endforeach; ?>
 <?php $this->view('footer'); ?> 

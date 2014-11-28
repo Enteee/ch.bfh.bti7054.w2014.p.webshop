@@ -31,7 +31,7 @@ $config['page_url'] = 'http://www.codeshop.ch';
 $config['mail'] = 'ducksource@duckpond.ch';
 
 /*DEFINES*/
-$config['debug'] = TRUE;
+$config['debug'] = true;
 $config['timezone'] = 'Europe/Zurich';
 
 /*Composer autoload*/
@@ -82,4 +82,9 @@ $config['css'][] = 'style.main.css';	// syling css
 
 /*PHP modules*/
 //$config['modules'][] = 'pdo_mysql';
+
+/* Cookies */
+$config['cookie']['expire'] = 24 * 7 * 3600; // one week
+$config['cookie']['domain'] = '.codeshop.ch'; // also valid for subdomains
+
 ?>

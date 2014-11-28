@@ -32,6 +32,9 @@ abstract class Controller {
 		$this->template->addData($data);
 	}
 	
+	/**
+	 * Get current user. NULL if user is not logged in.
+	 */
 	protected function getUser() {
 		$gitkitUser = $this->gitkit->getUserInRequest();
 		if (isset($gitkitUser)) {
@@ -76,6 +79,15 @@ abstract class Controller {
 		return $this->getUser() != NULL;
 	}
 	
+	/**
+	 * Is a user logged in.
+	 */
+	protected function assertUserIsLoggedIn() {
+		if (!$this->isLoggedIn()) {
+			throw new SecurityException();
+		}
+	}
+
 	/**
 	 * Is the debug mode on.
 	 */

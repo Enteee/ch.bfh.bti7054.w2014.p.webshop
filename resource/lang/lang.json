@@ -112,6 +112,10 @@
 		"en" : "The page you are looking for doesn't exist. We're sorry.",
 		"de" : "Die gewünschte Seite konnte nicht gefunden werden."
 	},
+	"error403": {
+		"en" : "You are not allowed to see this page.",
+		"de" : "Der Zugriff zu dieser Seite wird Ihnen verwehrt."
+	},
 	"error500": {
 		"en" : "There was an internal error. We're sorry.",
 		"de" : "Allgemeiner Fehler. Wir entschuldigen uns."

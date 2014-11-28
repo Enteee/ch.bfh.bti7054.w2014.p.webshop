@@ -20,14 +20,13 @@ class ProductController extends MainController {
 	}
 	
 	public function add() {
+		$this->assertUserIsLoggedIn();
+		
 		$this->view('add_product');
 	}
 	
 	public function save() {
-		if (!$this->isLoggedIn()) {
-			// TODO: use own exception and handle in mvc framework
-			throw new Exception('forbidden');
-		}
+		$this->assertUserIsLoggedIn();
 
 		// validate...
 		$file = $this->vars->product_file;		

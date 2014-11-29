@@ -32,12 +32,13 @@ class StartController extends MainController {
 			$product->setLocale($this->lang->getLocale());
 		}
 		// set data for view
+		$data['pageTitle'] = label('products');
 		$data['products'] = $products;
 		
 		// render template
 		$this->view('start', $data);
 	}
-	
+
 	public function codes() {
 		// todo: maybe in own controller?
 		$this->show();

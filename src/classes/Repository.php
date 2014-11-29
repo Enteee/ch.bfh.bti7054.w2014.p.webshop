@@ -48,8 +48,10 @@ class Repository {
 		return ProductQuery::create()
 			->find();
 	}
+	
+	
 
-public function getProductById($product_id) {
+	public function getProductById($product_id) {
 		return ProductQuery::create()
 			->findPk($product_id);
 	}
@@ -81,6 +83,58 @@ public function getProductById($product_id) {
 				->endUse()
 				->find();
 		}
+	}
+	
+	public function getUsersOrders($tag_id = NULL, $searchstring = NULL, $user = NULL) {
+		$query = ProductQuery::create();
+		
+		if (isset($tag_id)) {
+			$query
+				->useProductTagQuery()
+					->filterByTagId($tag_id)
+				->endUse();
+		}
+		if (isset($searchstring)) {
+			$query
+				->useProductI18nQuery()
+					->filterByName('%' . $searchstring . '%')
+				->endUse();
+		}		
+		if (isset($user)) {
+			$query
+				->useOfferQuery()
+					->useOrderQuery()
+						->filterByUser($user)					
+					->endUse()
+				->endUse();
+		}		
+		return $query->find();
+	}
+	
+	public function getUsersOffers($tag_id = NULL, $searchstring = NULL, $user = NULL) {
+		$query = ProductQuery::create();
+		
+		if (isset($tag_id)) {
+			$query
+				->useProductTagQuery()
+					->filterByTagId($tag_id)
+				->endUse();
+		}
+		if (isset($searchstring)) {
+			$query
+				->useProductI18nQuery()
+					->filterByName('%' . $searchstring . '%')
+				->endUse();
+		}		
+		if (isset($user)) {
+			$query
+				->useOfferQuery()
+					->useCodeQuery()
+						->filterByUser($user)					
+					->endUse()
+				->endUse();
+		}		
+		return $query->find();
 	}
 	
 	public function getProductCountByTag($tag) {

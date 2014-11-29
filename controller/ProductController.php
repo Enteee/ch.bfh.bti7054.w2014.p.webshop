@@ -7,6 +7,10 @@ class ProductController extends MainController {
 
 	public function __construct() {
 		parent::__construct();
+		
+		$this->vars->save_global('category', SaveVars::T_INT, SaveVars::G_GET);
+		$this->vars->save_global('search', SaveVars::T_STRING, SaveVars::G_GET);
+		
 		$this->vars->save_global('product_id', SaveVars::T_INT, SaveVars::G_POST);
 		$this->vars->save_global('product_name', SaveVars::T_STRING, SaveVars::G_POST);
 		$this->vars->save_global('product_description', SaveVars::T_STRING, SaveVars::G_POST);
@@ -19,20 +23,60 @@ class ProductController extends MainController {
 	public function index() {
 	}
 	
-	public function add() {
-		$data = array();
+	public function orders() {
+		$this->assertUserIsLoggedIn();
+				
+		// get variables		
+		$searchstring = $this->vars->search;
+		$categoryId = $this->categoryId;
 		
-		$this->getUser();
-	
+		// load data
+		$user = $this->getUser();
+		$products = $this->repo->getUsersOrders($categoryId, $searchstring, $user);
+		
+		foreach ($products as $product){
+			$product->setLocale($this->lang->getLocale());
+		}
+		
+		// set data for view
+		$data['pageTitle'] = label('navMyItems');
+		$data['products'] = $products;
+		
 		// render template
-		$this->view('add_product', $data);
+		$this->view('start', $data);
+	}
+	
+	public function offers() {
+		$this->assertUserIsLoggedIn();
+				
+		// get variables		
+		$searchstring = $this->vars->search;
+		$categoryId = $this->categoryId;
+		
+		// load data
+		$user = $this->getUser();
+		$products = $this->repo->getUsersOffers($categoryId, $searchstring, $user);
+		
+		foreach ($products as $product){
+			$product->setLocale($this->lang->getLocale());
+		}
+		
+		// set data for view
+		$data['pageTitle'] = label('navMyProducts');
+		$data['products'] = $products;
+		
+		// render template
+		$this->view('start', $data);
+	}
+	
+	public function add() {
+		$this->assertUserIsLoggedIn();
+		
+		$this->view('add_product');
 	}
 	
 	public function save() {
-		if (!$this->isLoggedIn()) {
-			// TODO: use own exception and handle in mvc framework
-			throw new Exception('forbidden');
-		}
+		$this->assertUserIsLoggedIn();
 
 		// validate...
 		$file = $this->vars->product_file;		
@@ -78,18 +122,18 @@ class ProductController extends MainController {
 				$product->setActive(true);
 				
 				$product->save();
-			}
-			
-			// categories
-			$categoryIds = $this->splitInts($this->vars->product_categories);
-			if (count($categoryIds) > 0) {
-				foreach ($categoryIds as $categoryId) {
-					$category = TagQuery::create()->getCategory($categoryId);
-					if (isset($category)) {
-						$product->addTag($category);
+								
+				// categories
+				$categoryIds = $this->splitInts($this->vars->product_categories);
+				if (count($categoryIds) > 0) {
+					foreach ($categoryIds as $categoryId) {
+						$category = TagQuery::create()->getCategory($categoryId);
+						if (isset($category)) {
+							$product->addTag($category);
+						}
 					}
+					$product->save();
 				}
-				$product->save();
 			}
 			
 			// offer
@@ -125,6 +169,10 @@ class ProductController extends MainController {
 				->save();
 
 			$con->commit();
+			
+			// redirect
+			$this->redirect('/start');
+			
 		} catch (Exception $e) {
 			$con->rollback();
 			throw $e;

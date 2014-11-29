@@ -3,7 +3,7 @@
 /*
  * Get information as json
  */
-class JsonController extends MainController {
+class JsonController extends Controller {
 
 	public function __construct() {
 		parent::__construct();

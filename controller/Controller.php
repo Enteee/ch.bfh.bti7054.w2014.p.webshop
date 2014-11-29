@@ -32,12 +32,14 @@ abstract class Controller {
 		$this->template->addData($data);
 	}
 	
+	/**
+	 * Get current user. NULL if user is not logged in.
+	 */
 	protected function getUser() {
 		$gitkitUser = $this->gitkit->getUserInRequest();
 		if (isset($gitkitUser)) {
-			// user logged in
-			$token = $gitkitUser->getUserId();
-			
+			// user logged in			
+			$token = $gitkitUser->getUserId();			
 			$user = $this->repo->getUserByToken($token);
 			if (!isset($user)) {
 				// first time login -> create user in db
@@ -50,16 +52,16 @@ abstract class Controller {
 					->save();
 			}
 			return $user;
-		}
-		
-		if ($this->isDebug()) {
-			// testuser
-			return UserQuery::create()
-				->findPk(1);
-		}
-		
+		}		
 		// not logged in
 		return NULL;
+	}
+	
+	/**
+	 * Redirect a user.
+	 */
+	protected function redirect($location) {
+		header('Location: ' . $location);
 	}
 	
 	/**
@@ -69,6 +71,15 @@ abstract class Controller {
 		return $this->getUser() != NULL;
 	}
 	
+	/**
+	 * Is a user logged in.
+	 */
+	protected function assertUserIsLoggedIn() {
+		if (!$this->isLoggedIn()) {
+			throw new SecurityException();
+		}
+	}
+
 	/**
 	 * Is the debug mode on.
 	 */

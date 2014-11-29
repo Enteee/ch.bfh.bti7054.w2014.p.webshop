@@ -26,6 +26,7 @@ class SearchController extends MainController {
 		$reviews = $this->repo->getReviewsByProduct($product);
 		
 		// set data for view
+		$data['pageTitle'] = label('products');
 		$data['products'] = $products;
 		$data['reviews'] = $reviews;
 		

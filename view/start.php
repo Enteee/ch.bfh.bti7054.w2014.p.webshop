@@ -1,5 +1,5 @@
 <?php $this->view('header'); ?>
-					<p class="lead"><?php echo label('products'); ?></p>
+					<p class="lead"><?php echo $pageTitle; ?></p>
 					<!-- product details -->			
 <?php	foreach($products as $product): ?>
 					<div class="list-group-item cs-product-picture thumbnail cs-product-list-item">

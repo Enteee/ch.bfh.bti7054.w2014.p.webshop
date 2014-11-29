@@ -3,7 +3,12 @@
 			<div class="col-md-12">
 				<div class="row">
 					<h1 class="page-header"><?php echo $errorTitle; ?></h1>
-					<pre><?php echo $errorDescription; ?></pre>
+<?php if (isset($errorDescription)): ?>
+					<p class="lead"><?php echo $errorDescription; ?></p>
+<?php endif; ?>
+<?php if (isset($errorCode)): ?>
+					<pre><?php echo $error; ?></pre>
+<?php endif; ?>
 				</div>
 			</div>
 		</div>

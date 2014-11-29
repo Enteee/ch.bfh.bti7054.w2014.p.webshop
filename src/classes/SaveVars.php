@@ -92,7 +92,7 @@ class SaveVars{
 			unset($_REQUEST);
 		}
 
-		if(isset($_SERVER)){
+		if(isset($_SESSION)){
 			$this->globals[self::G_SESSION] = $_SESSION;
 			unset($_SESSION);
 		}

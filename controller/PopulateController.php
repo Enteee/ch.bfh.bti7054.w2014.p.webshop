@@ -90,7 +90,7 @@ class PopulateController extends Controller {
 				->setName('Hello world') 
 				->setDescription('The famous hello world snippets')
 			->setLocale('de_CH')
-				->setName('HAllo Welt')
+				->setName('Hallo Welt')
 				->setDescription('Das berühmte Hallo Welt Snippet');
 		$helloWorld->save();
 		

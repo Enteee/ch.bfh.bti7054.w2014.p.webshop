@@ -83,7 +83,7 @@
 						</li>
 <?php endforeach; ?>
 					</ul>
-					<!-- search form -->					
+					<!-- search form -->
 					<form class="navbar-form navbar-right" role="form" action="search" method="get">
 						<div class="form-group">
 							<div class="input-group">
@@ -105,7 +105,7 @@
 				<div class="col-md-3">
 					<!-- login form -->
 					<div class="form-group">
-						<label><?php echo label('userPanel'); ?></label>
+						<p class="lead"><?php echo label('userPanel'); ?></p>
 						<div id="signin"></div>
 					</div>
 					<!-- category navigation -->
@@ -145,7 +145,7 @@
 									<?php echo $shoppingCartTotalPrice; ?>&cent;
 								</div>
 							</div>
-						</li>						
+						</li>
 					</ul>
 <?php endif; ?>
 				</div>

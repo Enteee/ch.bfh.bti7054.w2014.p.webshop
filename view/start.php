@@ -1,6 +1,6 @@
 <?php $this->view('header'); ?>
-					<p class="lead"><?php echo $pageTitle; ?></p>
-					<!-- product details -->			
+					<p class="lead"><?php echo "$pageTitle"; ?></p>
+					<!-- product details -->
 <?php	foreach($products as $product): ?>
 					<div class="list-group-item cs-product-picture thumbnail cs-product-list-item">
 						<!--<img class="img-responsive" src="http://soniqdesigns.com/wp/wp-content/uploads/2013/05/MarkupCode.gif" alt="">-->

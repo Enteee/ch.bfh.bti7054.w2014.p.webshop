@@ -131,6 +131,24 @@ class PopulateController extends Controller {
 			->setText('Sehr geiles Produkt! Kann ich nur weiterempfehlen.')
 			->setRating(5);
 		$reviewHelloTest->save();
+		$reviewHelloTest = (new Review())
+			->setUser($userTest)
+			->setProduct($helloWorld)
+			->setText('Sehr geiles Produkt! Kann ich nur weiterempfehlen.')
+			->setRating(1);
+		$reviewHelloTest->save();
+		$reviewHelloTest = (new Review())
+			->setUser($userTest)
+			->setProduct($helloWorld)
+			->setText('Sehr geiles Produkt! Kann ich nur weiterempfehlen.')
+			->setRating(1);
+		$reviewHelloTest->save();
+		$reviewHelloTest = (new Review())
+			->setUser($userTest)
+			->setProduct($helloWorld)
+			->setText('Sehr geiles Produkt! Kann ich nur weiterempfehlen.')
+			->setRating(3);
+		$reviewHelloTest->save();
 
 		/*Offers*/
 		$offer1 = (new Offer())
@@ -147,7 +165,6 @@ class PopulateController extends Controller {
 			->setProduct($quickSort)
 			->setPrice(250);
 		$offer3->save();
-		
 	}
 	
 	public function addProgrammingLanguages($tagTypeProgrammingLanguage){

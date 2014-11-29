@@ -30,11 +30,9 @@ class Mvc {
 		$this->parseUri($_SERVER['REQUEST_URI']);
 		
 		$this->setLanguageByClient();
-		
 		$this->setLanguageByUri();
 		$this->setControllerByUri();
 		$this->setMethodByUri();
-		
 		
 		self::$lang->init();
 		
@@ -60,8 +58,11 @@ class Mvc {
 	}
 		
 	public function setLanguageByClient() {
-		// parse locale			
-		$clientLanguage = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+		// parse locale
+		$clientLanguage = '';
+		if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])){
+			$clientLanguage = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+		}
 		self::$lang->parseClientLanguage($clientLanguage);
 	}	
 	
@@ -75,9 +76,8 @@ class Mvc {
 				// set language				
 				self::$lang->setLocale($language, NULL);
 				return;
-			}	
+			}
 		}
-		
 		$this->redirect();
 	}
 	

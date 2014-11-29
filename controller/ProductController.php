@@ -31,8 +31,7 @@ class ProductController extends MainController {
 		$categoryId = $this->categoryId;
 		
 		// load data
-		$user = $this->getUser();
-		$products = $this->repo->getUsersOrders($categoryId, $searchstring, $user);
+		$products = $this->repo->getUsersOrders($categoryId, $searchstring, $this->vars->user);
 		
 		foreach ($products as $product){
 			$product->setLocale($this->lang->getLocale());
@@ -54,8 +53,7 @@ class ProductController extends MainController {
 		$categoryId = $this->categoryId;
 		
 		// load data
-		$user = $this->getUser();
-		$products = $this->repo->getUsersOffers($categoryId, $searchstring, $user);
+		$products = $this->repo->getUsersOffers($categoryId, $searchstring, $this->vars->user);
 		
 		foreach ($products as $product){
 			$product->setLocale($this->lang->getLocale());
@@ -103,8 +101,6 @@ class ProductController extends MainController {
 		
 		// TODO: validate all!
 	
-		$user = $this->getUser();
-		
 		$con = Propel::getConnection();
 		$con->beginTransaction();
 		try {
@@ -159,7 +155,7 @@ class ProductController extends MainController {
 			// code
 			$code = new Code();
 			$code
-				->setUser($user)
+				->setUser($this->vars->user)
 				->setOffer($offer)
 				->setFilename($file['name'])
 				->setFilesize($file['size'])

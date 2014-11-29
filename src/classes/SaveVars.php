@@ -42,14 +42,9 @@ class SaveVars{
 	/*EXTENDED_TYPES*/
 	const T_STRING_SQL = 401;
 	const T_STRING_HTML = 402;
-	const T_STRING_AID = 403;
 
 	/*Variables*/ 
 	private $vars;	// the variables struct:
-		// vars['name']{
-		//	data, (the variable data)	
-		//	type, (see Types)
-		//}
 
 	/*GLOBALS*/
 	const G_SERVER = 0; 
@@ -61,12 +56,14 @@ class SaveVars{
 	const G_ENV = 6;
 	const G_COOKIE = 7;
 
-	private $globals;	// Superglobal variables like 'GET/POST/ENV/SERVER
+	/* Superglobal variables like 'GET/POST/ENV/SERVER */
+	private $globals;
 
 	function __construct(){
+
 		$this->vars = array();
+
 		/*Make superglobals only accessible through this class*/
-		
 		if(isset($_SERVER)){
 			$this->globals[self::G_SERVER] = $_SERVER;
 			unset($_SERVER);
@@ -92,7 +89,7 @@ class SaveVars{
 			unset($_REQUEST);
 		}
 
-		if(isset($_SERVER)){
+		if(isset($_SESSION)){
 			$this->globals[self::G_SESSION] = $_SESSION;
 			unset($_SESSION);
 		}
@@ -108,6 +105,13 @@ class SaveVars{
 		}
 	}
 
+	function __destruct(){
+		/* Save used vars in session */
+		foreach($this->vars as $key => $val){
+			$this->globals[self::G_SESSION][$key] = $val;
+		}
+	}
+
 	//========================
 	/*Set/Get save variables*/
 
@@ -120,7 +124,7 @@ class SaveVars{
 	}
 
 	function __get($name){ // return a given variable for display
-		$ret = null;
+		$ret = NULL;
 		// does the varaible exist?
 		if(array_key_exists($name,$this->vars)){
 			$ret = $this->vars[$name]['data'];
@@ -133,18 +137,21 @@ class SaveVars{
 
 	// save global variable from type $type
 	// look in the global variables defined by lookup 
-	function save_global($name,$type,$lookup){
+	// if such a variable couldnt be found use the fallback function given
+	function save_global($name, $type, $lookup, $fallback = NULL){
 		$ret = false;
 		if(is_array($this->globals[$lookup])){ // does the lookup destination exist?
 			if(array_key_exists($name,$this->globals[$lookup])){ // does such a variable exist?
 				$ret = self::save_var($name,$this->globals[$lookup][$name],$type); // save the variable
+			}else if(isset($fallback)){
+				$ret = self::save_var($name,$fallback(),$type);
 			}
 		}
 		return $ret;
 	}
 
 	// save a completely unknown variable
-	function save_var($name,$data,$type){
+	function save_var($name, $data, $type){
 		$ret = false;
 		$type_valid = true;
 

@@ -22,6 +22,26 @@ abstract class Controller {
 		$this->repo = new Repository();
 		$this->vars = new SaveVars();
 		$this->gitkit = Gitkit_Client::createFromFile($config['gitkit']['server-config']);
+		$this->vars->save_global('user', SaveVars::T_OBJECT, SaveVars::G_SESSION,function(){
+			$user = NULL;
+			$gitkitUser = $this->gitkit->getUserInRequest();
+			if (isset($gitkitUser)) {
+				// user logged in			
+				$token = $gitkitUser->getUserId();			
+				$user = $this->repo->getUserByToken($token);
+				if (!isset($user)) {
+					// first time login -> create user in db
+					$user = new User();
+					$user
+						->setEmail($gitkitUser->getEmail())
+						->setToken($gitkitUser->getUserId())
+						->setCreadits(0)
+						->setActive(TRUE)
+						->save();
+				}
+			}
+			return $user;
+		});
 	}
 	
 	protected function view($name = NULL, $data = NULL) {
@@ -30,31 +50,6 @@ abstract class Controller {
 	
 	protected function addData($data) {
 		$this->template->addData($data);
-	}
-	
-	/**
-	 * Get current user. NULL if user is not logged in.
-	 */
-	protected function getUser() {
-		$gitkitUser = $this->gitkit->getUserInRequest();
-		if (isset($gitkitUser)) {
-			// user logged in			
-			$token = $gitkitUser->getUserId();			
-			$user = $this->repo->getUserByToken($token);
-			if (!isset($user)) {
-				// first time login -> create user in db
-				$user = new User();
-				$user
-					->setEmail($gitkitUser->getEmail())
-					->setToken($gitkitUser->getUserId())
-					->setCreadits(0)
-					->setActive(TRUE)
-					->save();
-			}
-			return $user;
-		}		
-		// not logged in
-		return NULL;
 	}
 	
 	/**
@@ -68,7 +63,7 @@ abstract class Controller {
 	 * Is a user logged in.
 	 */
 	protected function isLoggedIn() {
-		return $this->getUser() != NULL;
+		return $this->vars->user != NULL;
 	}
 	
 	/**
@@ -84,7 +79,7 @@ abstract class Controller {
 	 * Is the debug mode on.
 	 */
 	protected function isDebug() {
-		return error_reporting() & E_ERROR;
+		return $this->config['debug'] == true;
 	}
 }
 

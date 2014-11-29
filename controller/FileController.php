@@ -16,9 +16,9 @@ class FileController extends Controller {
 	
 	public function get() {
 
-		$user = $this->getUser();
+		$user = $this->vars->user;
 		if (!isset($user)) {
-			throw new Exception('user not allowed');			
+			throw new Exception('user not allowed');
 		}
 		
 		$code = CodeQuery::create()->findPk($this->vars->id);

@@ -42,7 +42,7 @@ $(document).ready(function() {
 				};
 				for(var i = 0; i < 5; i++){
 					if(product.avgRating > 0){
-						rating.append(( i <= Math.round(product.avgRating) ) ? '<span class="glyphicon glyphicon-star"></span>&nbsp;' : '<span class="glyphicon glyphicon-star-empty"></span>&nbsp;');
+						rating.append(( i < product.avgRating ) ? '<span class="glyphicon glyphicon-star"></span>&nbsp;' : '<span class="glyphicon glyphicon-star-empty"></span>&nbsp;');
 					}
 				}
 				reviewsCount.text(product.reviewsCount);

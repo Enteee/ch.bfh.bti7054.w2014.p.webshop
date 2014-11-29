@@ -42,6 +42,7 @@ $(document).ready(function() {
 	function getProduct(id) {
 		var product = null;
 		$.ajax({
+				type: "GET",
 				url: "/json?type=product&id=" + id,
 				context: $(this),
 				dataType: "json",
@@ -57,6 +58,7 @@ $(document).ready(function() {
 		$(this).off('click');
 		var id = $(this).find($('.cs-product-list-item-id')).val();
 		$.ajax({
+			type: "GET",
 			url: "/json?type=product&id=" + id,
 			context: $(this),
 			dataType: "json",
@@ -88,7 +90,7 @@ $(document).ready(function() {
 				}
 				reviewsCount.text(product.reviewsCount);
 				for(var review in product.reviews){
-					var template = reviews.find($('.cs-product-list-item-review-template'));
+					var template = reviews.find('.cs-product-list-item-review-template');
 					var newReview = template.clone();
 					var reviewData = product.reviews[review];
 					newReview.removeClass('cs-product-list-item-review-template');
@@ -104,17 +106,25 @@ $(document).ready(function() {
 						}
 					}
 					reviews.append(newReview);
-					
 				};
-				var hideables = $(this).find($('.cs-product-list-hideable')).not('[class*="template"]');
+				var hideables = $(this).find('.cs-product-list-hideable').not('[class*="template"]');
 				hideables.hide();
 				hideables.removeClass('hidden');
 				hideables.show('slow');
-				$(this).click(function(){
+				$(this).find('.cs-product-list-item-clickable').click(function(){
 					hideables.toggle('slow');
 				});
-				$(this).find($('.cs-product-list-item-clickable')).click(function(e){
-					e.stopPropagation();
+				$(this).find('.cs-product-list-item-review-new-add').click(function(){
+					// TODO: send review with PUT
+					$.ajax({
+						type: "PUT",
+						url: "/json?type=review",
+						context: $(this),
+						dataType: "json",
+					}).done(function(){
+
+					});
+					
 				});
 			}
 		});

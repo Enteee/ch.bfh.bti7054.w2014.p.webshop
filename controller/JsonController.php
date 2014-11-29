@@ -7,6 +7,7 @@ class JsonController extends MainController {
 
 	public function __construct() {
 		parent::__construct();
+		$this->vars->save_global('REQUEST_METHOD',SaveVars::T_STRING,SaveVars::G_SERVER);
 		$this->vars->save_global('type',SaveVars::T_STRING,SaveVars::G_GET);
 		$this->vars->save_global('id',SaveVars::T_INT,SaveVars::G_GET);
 		$this->vars->save_global('search', SaveVars::T_STRING, SaveVars::G_GET);
@@ -14,15 +15,23 @@ class JsonController extends MainController {
 
 	public function index() {
 		$object = null;
-		switch($this->vars->type){
-			case "product":
-				$object = $this->repo->getProductById($this->vars->id);
-				if(isset($object)){
-					$object->setLocale($this->lang->getLocale());
+			switch($this->vars->REQUEST_METHOD){
+			case "GET":
+				switch($this->vars->type){
+					case "product":
+						$object = $this->repo->getProductById($this->vars->id);
+						if(isset($object)){
+							$object->setLocale($this->lang->getLocale());
+						}
+					break;
+					case "review":
+						$object = $this->repo->getReviewById($this->vars->id);
+					break;
+					default:
+						// do nothing
 				}
 			break;
-			case "review":
-				$object = $this->repo->getReviewById($this->vars->id);
+			case "PUT":
 			break;
 			default:
 				// do nothing
@@ -37,7 +46,7 @@ class JsonController extends MainController {
 	public function products_ac() {
 		$products = $this->repo->getProductsBySearch($this->vars->search);
 		
-		$response = array();		
+		$response = array();
 		foreach ($products as $product) {
 			$product->setLocale($this->lang->getLocale());
 			$response[] = [

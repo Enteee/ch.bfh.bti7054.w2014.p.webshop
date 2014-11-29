@@ -42,8 +42,8 @@ class Mvc {
 	}
 
 	private function redirect() {
-		header('Location: ' . '/' . self::$lang->getLanguage() . $_SERVER['REQUEST_URI']);
-		exit;
+		header('Location: ' . '/' . self::$lang->getLanguage() . $_SERVER['REQUEST_URI'], true, 307);
+		exit();
 	}
 	
 	private function parseUri($uri) {

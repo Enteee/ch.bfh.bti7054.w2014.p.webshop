@@ -51,3 +51,7 @@ a.list-group-item.active > .badge,
 .gitkit-button {
 	width: 100%;
 }
+
+.cs-product-list-item-clickable{
+	cursor: pointer;
+}

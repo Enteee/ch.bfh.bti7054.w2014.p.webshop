@@ -52,6 +52,10 @@ class StartController extends MainController {
 		// todo: maybe in own controller?
 		$this->show();
 	}
+	
+	public function signin(){
+		$this->show();
+	}
 }
 
 ?>

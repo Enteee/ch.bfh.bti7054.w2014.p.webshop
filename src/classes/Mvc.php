@@ -40,8 +40,8 @@ class Mvc {
 	}
 
 	private function redirect() {
-		header('Location: ' . '/' . self::$lang->getLanguage() . $_SERVER['REQUEST_URI']);
-		exit;
+		header('Location: ' . '/' . self::$lang->getLanguage() . $_SERVER['REQUEST_URI'], true, 307);
+		exit();
 	}
 	
 	private function parseUri($uri) {
@@ -125,12 +125,20 @@ class Mvc {
 				$method = $this->methodName;
 				$this->controller->$method();
 			}
+		} catch (SecurityException $ex) {
+			$this->forbidden($ex);
 		} catch (Exception $ex) {
-			$this->exception($ex);
+			$this->error($ex);
 		}
 	}
+
+	private function forbidden($exception) {
+		$this->controllerName = $this->controllerNameError;
+		$this->controller = new $this->controllerName();
+		$this->controller->error403($exception);
+	}	
 	
-	private function exception($exception) {
+	private function error($exception) {
 		$this->controllerName = $this->controllerNameError;
 		$this->controller = new $this->controllerName();
 		$this->controller->error500($exception);

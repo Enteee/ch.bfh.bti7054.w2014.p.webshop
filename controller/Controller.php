@@ -32,36 +32,59 @@ abstract class Controller {
 		$this->template->addData($data);
 	}
 	
+	/**
+	 * Get current user. NULL if user is not logged in.
+	 */
 	protected function getUser() {
 		$gitkitUser = $this->gitkit->getUserInRequest();
 		if (isset($gitkitUser)) {
-			// user logged in
-			$token = $gitkitUser->getUserId();
-			
+			// user logged in			
+			$token = $gitkitUser->getUserId();			
 			$user = $this->repo->getUserByToken($token);
 			if (!isset($user)) {
 				// first time login -> create user in db
 				$user = new User();
-				$user->setEmail($gitkitUser->getEmail());
-				$user->setToken($gitkitUser->getUserId());
-				$user->setCreadits(0);
-				$user->setActive(TRUE);
-				
-				$user->save();
+				$user
+					->setEmail($gitkitUser->getEmail())
+					->setToken($gitkitUser->getUserId())
+					->setCreadits(0)
+					->setActive(TRUE)
+					->save();
 			}
-			return $user;			
-		}
-		
-		// TODO: remove!
-		// only user for testing because gitkit doesn't work!
-		return UserQuery::create()->findPk(1);		
-		
+			return $user;
+		}		
 		// not logged in
 		return NULL;
 	}
 	
+	/**
+	 * Redirect a user.
+	 */
+	protected function redirect($location) {
+		header('Location: ' . $location);
+	}
+	
+	/**
+	 * Is a user logged in.
+	 */
 	protected function isLoggedIn() {
 		return $this->getUser() != NULL;
+	}
+	
+	/**
+	 * Is a user logged in.
+	 */
+	protected function assertUserIsLoggedIn() {
+		if (!$this->isLoggedIn()) {
+			throw new SecurityException();
+		}
+	}
+
+	/**
+	 * Is the debug mode on.
+	 */
+	protected function isDebug() {
+		return error_reporting() & E_ERROR;
 	}
 }
 

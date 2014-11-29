@@ -20,17 +20,20 @@
 
 		<!-- CSS -->
 		<!-- External CSS -->
-		<link rel="stylesheet" type="text/css" href="//www.gstatic.com/authtoolkit/css/gitkit.css">
+		<link rel="stylesheet" type="text/css" href="//www.gstatic.com/authtoolkit/css/gitkit.css" />
 		<!-- jQuery UI -->
-		<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
-		<link rel="stylesheet" type="text/css" href="css/jquery-ui.structure.min.css">
-		<link rel="stylesheet" type="text/css" href="css/jquery-ui.theme.min.css">				
+		<link rel="stylesheet" type="text/css" href="plugin/bootstrap/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="plugin/jquery/jquery-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="plugin/jquery/jquery-ui.structure.min.css" />
+		<link rel="stylesheet" type="text/css" href="plugin/jquery/jquery-ui.theme.min.css" />
 		<!-- Bootstrap Core CSS -->
-		<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="plugin/bootstrap/css/bootstrap.min.css" />
+		<!-- Libraries -->
+		<link rel="stylesheet" type="text/css" href="plugin/select2/select2.css" />
+		<link rel="stylesheet" type="text/css" href="plugin/select2/select2-bootstrap.css" />
 		<!-- Custom CSS -->
-		<link rel="stylesheet" type="text/css" href="css/layout.main.css">
-		<link rel="stylesheet" type="text/css" href="css/style.main.css">
+		<link rel="stylesheet" type="text/css" href="css/layout.main.css" />
+		<link rel="stylesheet" type="text/css" href="css/style.main.css" />		
 		
 		<!-- favicon -->
 		<link rel="icon" type="image/gif" href="img/favicon.gif" />
@@ -50,9 +53,10 @@
 		</noscript>
 		<!-- Javascript -->
 		<!-- Microsoft READ THIS: http://www.rfc-editor.org/rfc/rfc4329.txt  !! You are obsolete !! -->
-		<script type="application/javascript" src="bootstrap/js/jquery-1.11.0.js"></script>
-		<script type="application/javascript" src="js/jquery-ui-1.11.2.min.js"></script>
-		<script type="application/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+		<script type="application/javascript" src="plugin/bootstrap/js/jquery-1.11.0.js"></script>
+		<script type="application/javascript" src="plugin/jquery/jquery-ui-1.11.2.min.js"></script>
+		<script type="application/javascript" src="plugin/bootstrap/js/bootstrap.min.js"></script>
+		<script type="application/javascript" src="plugin/select2/select2.min.js"></script>
 		<script type="application/javascript" src="//www.gstatic.com/authtoolkit/js/gitkit.js"></script>
 		<script type="application/javascript" src="js/signin.js"></script>
 		<script type="application/javascript" src="js/application.js"></script>
@@ -73,15 +77,11 @@
 				<!-- navigation, search form, login form -->
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
+<?php foreach ($navItems as $navItem): ?>
 						<li>
-							<a href="<?php echo lang(); ?>/start/codes"><span class="glyphicon glyphicon-user" title="My items"></span> <span class="cs-nav-text"><?php echo label('navMyItems'); ?></span></a>
+							<a href="<?php echo $navItem['url']; ?>"><span class="glyphicon <?php echo $navItem['icon']; ?>" title="<?php echo $navItem['text']; ?>"></span> <span class="cs-nav-text"><?php echo $navItem['text']; ?></span></a>
 						</li>
-						<li>
-							<a href="<?php echo lang(); ?>/start/products"><span class="glyphicon glyphicon-folder-open" title="My products"></span> <span class="cs-nav-text"><?php echo label('navMyProducts'); ?></span></a>
-						</li>
-						<li>
-							<a href="<?php echo lang(); ?>/product/add"><span class="glyphicon glyphicon-plus" title="Add product"></span> <span class="cs-nav-text"><?php echo label('navAddProduct'); ?></span></a>
-						</li>
+<?php endforeach; ?>
 					</ul>
 					<!-- search form -->					
 					<form class="navbar-form navbar-right" role="form" action="search" method="get">

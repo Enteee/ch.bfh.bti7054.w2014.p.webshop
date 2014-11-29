@@ -7,6 +7,10 @@ class ProductController extends MainController {
 
 	public function __construct() {
 		parent::__construct();
+		
+		$this->vars->save_global('category', SaveVars::T_INT, SaveVars::G_GET);
+		$this->vars->save_global('search', SaveVars::T_STRING, SaveVars::G_GET);
+		
 		$this->vars->save_global('product_id', SaveVars::T_INT, SaveVars::G_POST);
 		$this->vars->save_global('product_name', SaveVars::T_STRING, SaveVars::G_POST);
 		$this->vars->save_global('product_description', SaveVars::T_STRING, SaveVars::G_POST);
@@ -19,17 +23,61 @@ class ProductController extends MainController {
 	public function index() {
 	}
 	
-	public function add() {
-		$data = array();
+	public function orders() {
+		$this->assertUserIsLoggedIn();
+				
+		// get variables		
+		$searchstring = $this->vars->search;
+		$categoryId = $this->categoryId;
 		
-		$this->getUser();
-	
+		// load data
+		$user = $this->getUser();
+		$products = $this->repo->getUsersOrders($categoryId, $searchstring, $user);
+		
+		foreach ($products as $product){
+			$product->setLocale($this->lang->getLocale());
+		}
+		
+		// set data for view
+		$data['pageTitle'] = label('navMyItems');
+		$data['products'] = $products;
+		
 		// render template
-		$this->view('add_product', $data);
+		$this->view('start', $data);
+	}
+	
+	public function offers() {
+		$this->assertUserIsLoggedIn();
+				
+		// get variables		
+		$searchstring = $this->vars->search;
+		$categoryId = $this->categoryId;
+		
+		// load data
+		$user = $this->getUser();
+		$products = $this->repo->getUsersOffers($categoryId, $searchstring, $user);
+		
+		foreach ($products as $product){
+			$product->setLocale($this->lang->getLocale());
+		}
+		
+		// set data for view
+		$data['pageTitle'] = label('navMyProducts');
+		$data['products'] = $products;
+		
+		// render template
+		$this->view('start', $data);
+	}
+	
+	public function add() {
+		$this->assertUserIsLoggedIn();
+		
+		$this->view('add_product');
 	}
 	
 	public function save() {
-	
+		$this->assertUserIsLoggedIn();
+
 		// validate...
 		$file = $this->vars->product_file;		
 		if (!isset($file)) {
@@ -56,39 +104,89 @@ class ProductController extends MainController {
 		// TODO: validate all!
 	
 		$user = $this->getUser();
-	
-		// load product if exists
-		$product = ProductQuery::create()->findPk($this->vars->product_id);
-		if (!isset($product)) {
-			// create product, it doesn't already exist
-			$product = new Product();
-			foreach ($this->lang->getAllLocales() as $locale) {
-				$product->setLocale($locale);			
-				$product->setName($this->vars->product_name);
-				$product->setDescription($this->vars->product_description);
+		
+		$con = Propel::getConnection();
+		$con->beginTransaction();
+		try {
+			// load product if exists
+			$product = ProductQuery::create()->findPk($this->vars->product_id);
+			if (!isset($product)) {
+				// create product, it doesn't already exist
+				$product = new Product();
+				foreach ($this->lang->getAllLocales() as $locale) {
+					$product
+						->setLocale($locale)		
+							->setName($this->vars->product_name)
+							->setDescription($this->vars->product_description);
+				}
+				$product->setActive(true);
+				
+				$product->save();
+								
+				// categories
+				$categoryIds = $this->splitInts($this->vars->product_categories);
+				if (count($categoryIds) > 0) {
+					foreach ($categoryIds as $categoryId) {
+						$category = TagQuery::create()->getCategory($categoryId);
+						if (isset($category)) {
+							$product->addTag($category);
+						}
+					}
+					$product->save();
+				}
 			}
-			$product->setActive(true);
 			
-			$product->save();
+			// offer
+			$offer = new Offer();						
+			$offer
+				->setProduct($product)
+				->setPrice($this->vars->product_price)
+				->setActive(true)
+				->save();
+			
+			// programming languages
+			$plIds = $this->splitInts($this->vars->product_programminglanguages);
+			if (count($plIds) > 0) {
+				foreach ($plIds as $plId) {
+					$pl = TagQuery::create()->getProgrammingLanguage($plId);
+					if (isset($pl)) {
+						$offer->addTag($pl);
+					}
+				}
+				$offer->save();
+			}
+			
+			// code
+			$code = new Code();
+			$code
+				->setUser($user)
+				->setOffer($offer)
+				->setFilename($file['name'])
+				->setFilesize($file['size'])
+				->setMimetype($file['type'])
+				->setContent(file_get_contents($file['tmp_name']))
+				->setActive(true)		
+				->save();
+
+			$con->commit();
+			
+			// redirect
+			$this->redirect('/start');
+			
+		} catch (Exception $e) {
+			$con->rollback();
+			throw $e;
 		}
-		
-		$offer = new Offer();
-		$offer->setProduct($product);
-		$offer->setPrice($this->vars->product_price);
-		$offer->setActive(true);
-		
-		$offer->save();
-		
-		$code = new Code();
-		$code->setUser($user);
-		$code->setOffer($offer);
-		$code->setFilename($file['name']);
-		$code->setFilesize($file['size']);
-		$code->setMimetype($file['type']);
-		$code->setContent(file_get_contents($file['tmp_name']));
-		$code->setActive(true);
-		
-		$code->save();
+	}
+	
+	private function splitInts($input) {
+		$ids = array();
+		$parts = preg_split('`,`', $input);
+		foreach ($parts as $part) {
+			$id = filter_var($part, FILTER_VALIDATE_INT);
+			if ($id) { $ids[] = $id; }
+		}
+		return $ids;
 	}
 }
 

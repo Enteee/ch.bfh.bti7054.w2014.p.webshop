@@ -1,8 +1,38 @@
 $(document).ready(function() {
 
+	/* ---------- functions ---------- */
+	
+	function autocomplete(element, url, multiselect, freetext, mininputlength) {
+		var options = {
+			minimumInputLength: mininputlength,
+			multiple: multiselect,
+			allowClear: true,
+			ajax: {
+				url: url,
+				dataType: 'json',
+				data: function(term, page) {
+					return { search: term };
+				},
+				results: function(data, page) {
+					return { results: data };
+				}
+			}
+		}		
+		if (freetext) {
+			options['createSearchChoice'] = function(term, data) { 
+				if ($(data).filter(function() { return this.text.localeCompare(term)===0; }).length===0) {
+					return { id: -1, text:term };
+				}
+			};
+		}
+		// init select2
+		$(element).select2(options);
+	}
+
 	function getProduct(id) {
 		var product = null;
 		$.ajax({
+				type: "GET",
 				url: "/json?type=product&id=" + id,
 				context: $(this),
 				dataType: "json",
@@ -11,11 +41,14 @@ $(document).ready(function() {
 		return product;
 	}
 	
+	/* ---------- events ---------- */
+	
 	/* product list */
 	$('.cs-product-list-item').click(function(){
 		$(this).off('click');
 		var id = $(this).find($('.cs-product-list-item-id')).val();
 		$.ajax({
+			type: "GET",
 			url: "/json?type=product&id=" + id,
 			context: $(this),
 			dataType: "json",
@@ -47,7 +80,7 @@ $(document).ready(function() {
 				}
 				reviewsCount.text(product.reviewsCount);
 				for(var review in product.reviews){
-					var template = reviews.find($('.cs-product-list-item-review-template'));
+					var template = reviews.find('.cs-product-list-item-review-template');
 					var newReview = template.clone();
 					var reviewData = product.reviews[review];
 					newReview.removeClass('cs-product-list-item-review-template');
@@ -63,17 +96,25 @@ $(document).ready(function() {
 						}
 					}
 					reviews.append(newReview);
-					
 				};
-				var hideables = $(this).find($('.cs-product-list-hideable')).not('[class*="template"]');
+				var hideables = $(this).find('.cs-product-list-hideable').not('[class*="template"]');
 				hideables.hide();
 				hideables.removeClass('hidden');
 				hideables.show('slow');
-				$(this).click(function(){
+				$(this).find('.cs-product-list-item-clickable').click(function(){
 					hideables.toggle('slow');
 				});
-				$(this).find($('.cs-product-list-item-clickable')).click(function(e){
-					e.stopPropagation();
+				$(this).find('.cs-product-list-item-review-new-add').click(function(){
+					// TODO: send review with PUT
+					$.ajax({
+						type: "PUT",
+						url: "/json?type=review",
+						context: $(this),
+						dataType: "json",
+					}).done(function(){
+
+					});
+					
 				});
 			}
 		});
@@ -101,82 +142,33 @@ $(document).ready(function() {
 		}
 	});
 	
-	/* products */
-	$('#product_name').autocomplete({
-		minLength: 1,
-		source: function (request, response) {
-
-			var term = request.term;
-			var result = [];
+	/* autocompleter */
+	autocomplete('#product_id', '/de/json/products_select2', false, true, 0);
+	autocomplete('#product_categories', '/de/json/categories_select2', true, false, 0);
+	autocomplete('#product_programminglanguages', '/de/json/programminglanguages_select2', true, false, 1);
+	
+	/* select product */
+	$('#product_id').on('select2-selecting', function (e) {		
+		$('#product_name').val(e.choice.text);
+		if (e.choice.id == -1) {
+			// freetext for product
+			$('#product_description').prop('disabled', false);
+			$('#product_categories').select2('enable', true);
 			
-			$.ajax({
-				url: '/json/products_ac?search=' + term,
-				context: $(this),
-				dataType: 'json',
-				async: false
-			})
-			.done(function (json) { result = json; });
+			$('#product_description').val('');
+			$('#product_categories').select2('val', '');			
+		} else {
+			// already existing product
+			$('#product_description').prop('disabled', true);
+			$('#product_categories').select2('enable', false);
 			
-			response(result);
-		},
-		select: function(event, ui) {
-			var product = getProduct(ui.item.data);
-			if (product != null) {
-				$('#product_id').val(ui.item.data);
-				$('#product_description').val(product.description);
-				$('#product_description').prop('disabled', true);
-				var tags = [];
-				for (var key in product.tags){
-					tags.push(product.tags[key].name);
-				}
-				$('#product_categories').val(tags.join(', '));				
-				$('#product_categories').prop('disabled', true);
+			var tags = []
+			var product = getProduct(e.choice.id);
+			for (var key in product.tags) {
+				tags.push({ id: -1, text: product.tags[key].name });
 			}
+			$('#product_description').val(product.description);
+			$('#product_categories').select2('data', tags);
 		}
 	});
-	$('#product_name').on('keypress', function () {
-		$('#product_id').val('');
-		$('#product_description').prop('disabled', false);
-		$('#product_categories').prop('disabled', false);
-	});
-	
-	/* categories */
-	$('#product_categories').autocomplete({
-		minLength: 1,
-		source: function (request, response) {
-
-			var term = request.term;
-			var result = [];
-			
-			$.ajax({
-				url: '/json/categories_ac?search=' + term,
-				context: $(this),
-				dataType: 'json',
-				async: false
-			})
-			.done(function (json) { result = json; });
-			
-			response(result);
-		}
-	});
-	
-	/* programming languages */
-	$('#product_programminglanguages').autocomplete({
-		minLength: 1,
-		source: function (request, response) {
-
-			var term = request.term;
-			var result = [];
-			
-			$.ajax({
-				url: '/json/programminglanguages_ac?search=' + term,
-				context: $(this),
-				dataType: 'json',
-				async: false
-			})
-			.done(function (json) { result = json; });
-			
-			response(result);
-		}
-	});	
 });

@@ -14,7 +14,7 @@ class StartController extends MainController {
 	}
 	
 	public function show() {
-				
+		parent::show();
 		// get variables
 		$searchstring = $this->vars->search;
 		$categoryId = $this->vars->categoryId;

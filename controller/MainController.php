@@ -16,7 +16,9 @@ class MainController extends Controller {
 		$this->vars->saveGlobal('search',SaveVars::T_STRING,SaveVars::G_GET, function(){
 			return '';
 		});
+	}
 
+	protected function show(){
 		// set global data for view
 		$data['title'] = $this->lang->title;
 		$data['subtitle'] = $this->lang->subtitle;

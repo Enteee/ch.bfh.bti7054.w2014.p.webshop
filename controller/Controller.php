@@ -21,10 +21,15 @@ abstract class Controller {
 		$this->template = new Template();
 		$this->repo = new Repository();
 		$this->vars = new SaveVars();
-		$this->gitkit = Gitkit_Client::createFromFile($config['gitkit']['server-config']);
+		$this->vars->call_enabled_superglobals(function(){
+			$this->gitkit = Gitkit_Client::createFromFile($this->config['gitkit']['server-config']);
+		});
 		$this->vars->save_global('user', SaveVars::T_OBJECT, SaveVars::G_SESSION,function(){
 			$user = NULL;
-			$gitkitUser = $this->gitkit->getUserInRequest();
+			$gitkitUser;
+			$this->vars->call_enabled_superglobals(function() use (&$gitkitUser){
+				$gitkitUser = $this->gitkit->getUserInRequest();
+			});
 			if (isset($gitkitUser)) {
 				// user logged in			
 				$token = $gitkitUser->getUserId();			

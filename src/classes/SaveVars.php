@@ -21,6 +21,30 @@
 *	!!Wo0t!!
 */
 
+class DisabledGlobal implements arrayaccess {
+
+
+	public function disabled($offset = NULL, $value = NULL){
+		throw new RuntimeException("Invalid access to disabled globals; \$_[$offset] = $value");
+	}
+
+	public function offsetExists ( $offset ){
+		self::disabled($offset);
+	}
+
+	public function offsetGet ( $offset ){
+		self::disabled($offset);
+	}
+
+	public function offsetSet ( $offset , $value ){
+		self::disabled($offset, $value);
+	}
+
+	public function offsetUnset ( $offset ){
+		self::disabled($offset);
+	}
+}
+
 class SaveVars{
 
 	/*Variable Types*/
@@ -60,49 +84,9 @@ class SaveVars{
 	private $globals;
 
 	function __construct(){
-
 		$this->vars = array();
-
 		/*Make superglobals only accessible through this class*/
-		if(isset($_SERVER)){
-			$this->globals[self::G_SERVER] = $_SERVER;
-			unset($_SERVER);
-		}
-
-		if(isset($_GET)){
-			$this->globals[self::G_GET] = $_GET;
-			unset($_GET);
-		}
-
-		if(isset($_POST)){
-			$this->globals[self::G_POST] = $_POST; 
-			unset($_POST);
-		}
-
-		if(isset($_FILES)){
-			$this->globals[self::G_FILES] = $_FILES;
-			unset($_FILES);
-		}
-
-		if(isset($_REQUEST)){
-			$this->globals[self::G_REQUEST] = $_REQUEST;
-			unset($_REQUEST);
-		}
-
-		if(isset($_SESSION)){
-			$this->globals[self::G_SESSION] = $_SESSION;
-			unset($_SESSION);
-		}
-
-		if(isset($_ENV)){
-			$this->globals[self::G_ENV] = $_ENV;
-			unset($_ENV);
-		}
-
-		if(isset($_COOKIE)){
-			$this->globals[self::G_COOKIE] = $_COOKIE;
-			unset($_COOKIE);
-		}
+		self::disable_superglobals();
 	}
 
 	function __destruct(){
@@ -111,6 +95,100 @@ class SaveVars{
 			$this->globals[self::G_SESSION][$key] = $val;
 		}
 	}
+
+	/* Call cb with enabled superglobals */
+	public function call_enabled_superglobals(callable $cb){
+		self::enable_superglobals();
+		$cb();
+		self::disable_superglobals();
+	}
+
+	private function disable_superglobals(){
+		if(isset($_SERVER)){
+			$this->globals[self::G_SERVER] = $_SERVER;
+			unset($_SERVER);
+			$_SERVER = new DisabledGlobal();
+		}
+
+		if(isset($_GET)){
+			$this->globals[self::G_GET] = $_GET;
+			unset($_GET);
+			$_GET = new DisabledGlobal();
+		}
+
+		if(isset($_POST)){
+			$this->globals[self::G_POST] = $_POST; 
+			unset($_POST);
+			$_POST = new DisabledGlobal();
+		}
+
+		if(isset($_FILES)){
+			$this->globals[self::G_FILES] = $_FILES;
+			unset($_FILES);
+			$_FILES = new DisabledGlobal();
+		}
+
+		if(isset($_REQUEST)){
+			$this->globals[self::G_REQUEST] = $_REQUEST;
+			unset($_REQUEST);
+			$_REQUEST = new DisabledGlobal();
+		}
+
+		if(isset($_SESSION)){
+			$this->globals[self::G_SESSION] = $_SESSION;
+			unset($_SESSION);
+			$_SESSION = new DisabledGlobal();
+		}
+
+		if(isset($_ENV)){
+			$this->globals[self::G_ENV] = $_ENV;
+			unset($_ENV);
+			$_ENV = new DisabledGlobal();
+		}
+
+		if(isset($_COOKIE)){
+			$this->globals[self::G_COOKIE] = $_COOKIE;
+			unset($_COOKIE);
+			$_COOKIE = new DisabledGlobal();
+		}
+
+	}
+
+	private function enable_superglobals(){
+		if(isset($this->globals[self::G_SERVER])){
+			$_SERVER = $this->globals[self::G_SERVER];
+		}
+
+		if(isset($this->globals[self::G_GET])){
+			$_GET = $this->globals[self::G_GET];
+		}
+
+		if(isset($this->globals[self::G_POST])){
+			$_POST = $this->globals[self::G_POST];
+		}
+
+		if(isset($this->globals[self::G_FILES])){
+			$_FILES = $this->globals[self::G_FILES];
+		}
+
+		if(isset($this->globals[self::G_REQUEST])){
+			$_REQUEST = $this->globals[self::G_REQUEST];
+		}
+
+		if(isset($this->globals[self::G_SESSION])){
+			$_SESSION = $this->globals[self::G_SESSION];
+		}
+
+		if(isset($this->globals[self::G_ENV])){
+			$_ENV = $this->globals[self::G_ENV];
+		}
+
+		if(isset($this->globals[self::G_COOKIE])){
+			$_COOKIE = $this->globals[self::G_COOKIE];
+		}
+
+	}
+
 
 	//========================
 	/*Set/Get save variables*/
@@ -143,7 +221,7 @@ class SaveVars{
 		if(is_array($this->globals[$lookup])){ // does the lookup destination exist?
 			if(array_key_exists($name,$this->globals[$lookup])){ // does such a variable exist?
 				$ret = self::save_var($name,$this->globals[$lookup][$name],$type); // save the variable
-			}else if(isset($fallback)){
+			}else if(is_callable($fallback)){
 				$ret = self::save_var($name,$fallback(),$type);
 			}
 		}

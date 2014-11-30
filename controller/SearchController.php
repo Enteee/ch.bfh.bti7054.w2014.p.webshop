@@ -7,7 +7,6 @@ class SearchController extends MainController {
 
 	public function __construct() {
 		parent::__construct();
-		$this->vars->save_global('search',SaveVars::T_STRING,SaveVars::G_GET);
 	}
 
 	public function index() {

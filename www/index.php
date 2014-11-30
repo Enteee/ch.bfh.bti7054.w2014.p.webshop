@@ -49,7 +49,7 @@ if (isset($config['modules'])){
 
 /* Initialize SaveVars */
 // TODO: back in save all globals -> find solution for external libraries
-//$saveVars = new SaveVars();
+//SaveVars::get_instance();
 
 /* Initialize MVC */
 $mvc = new Mvc();

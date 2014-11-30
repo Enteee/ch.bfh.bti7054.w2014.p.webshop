@@ -20,32 +20,20 @@ abstract class Controller {
 		$this->lang = Mvc::$lang;
 		$this->template = new Template();
 		$this->repo = new Repository();
-		$this->vars = new SaveVars();
-		$this->vars->call_enabled_superglobals(function(){
-			$this->gitkit = Gitkit_Client::createFromFile($this->config['gitkit']['server-config']);
-		});
-		$this->vars->save_global('user', SaveVars::T_OBJECT, SaveVars::G_SESSION,function(){
-			$user = NULL;
-			$gitkitUser;
-			$this->vars->call_enabled_superglobals(function() use (&$gitkitUser){
-				$gitkitUser = $this->gitkit->getUserInRequest();
-			});
-			if (isset($gitkitUser)) {
-				// user logged in			
-				$token = $gitkitUser->getUserId();			
-				$user = $this->repo->getUserByToken($token);
-				if (!isset($user)) {
-					// first time login -> create user in db
-					$user = new User();
-					$user
-						->setEmail($gitkitUser->getEmail())
-						->setToken($gitkitUser->getUserId())
-						->setCreadits(0)
-						->setActive(TRUE)
-						->save();
+		$this->vars = SaveVars::getInstance();
+		$this->vars->saveGlobal('gitkitUser', SaveVars::T_ARRAY, SaveVars::G_SESSION, function(){
+			$this->vars->callEnabledSuperglobals(function() use (&$gitkitUser){
+				$gitkit = Gitkit_Client::createFromFile($this->config['gitkit']['server-config']);
+				$requestUser = $gitkit->getUserInRequest();
+				if (isset($requestUser)) {
+					$gitkitUser['email'] = $requestUser->getEmail();
+					$gitkitUser['token'] = $requestUser->getUserId();
 				}
-			}
-			return $user;
+			});
+			return $gitkitUser;
+		});
+		$this->vars->saveGlobal('userIsLoggedIn', SaveVars::T_BOOL, SaveVars::G_SESSION, function(){
+			return false;
 		});
 	}
 	
@@ -63,12 +51,38 @@ abstract class Controller {
 	protected function redirect($location) {
 		header('Location: ' . $location);
 	}
+
+	/*
+	* Gets the logged in user
+	*/
+	protected function getUser(){
+		$user = NULL;
+		$gitkitUser = $this->vars->gitkitUser;
+		if(	array_key_exists('email',$gitkitUser)
+			&& array_key_exists('token',$gitkitUser)){
+			$user = $this->repo->getUserByToken($gitkitUser['token']);
+			if (!isset($user)) {
+				// first time login -> create user in db
+				$user = new User();
+				$user
+					->setEmail($gitkitUser['email'])
+					->setToken($gitkitUser['token'])
+					->setCredits(0)
+					->setActive(TRUE)
+					->save();
+			}
+		}
+		return $user;
+	}
 	
 	/**
 	 * Is a user logged in.
 	 */
 	protected function isLoggedIn() {
-		return $this->vars->user != NULL;
+		$user = $this->getUser();
+		return 	$this->vars->userIsLoggedIn 
+				&& isset($user) 
+				&& $user->getActive();
 	}
 	
 	/**

@@ -7,10 +7,18 @@ class JsonController extends Controller {
 
 	public function __construct() {
 		parent::__construct();
-		$this->vars->save_global('REQUEST_METHOD',SaveVars::T_STRING,SaveVars::G_SERVER);
-		$this->vars->save_global('type',SaveVars::T_STRING,SaveVars::G_GET);
-		$this->vars->save_global('id',SaveVars::T_INT,SaveVars::G_GET);
-		$this->vars->save_global('search', SaveVars::T_STRING, SaveVars::G_GET);
+		$this->vars->saveGlobal('REQUEST_METHOD',SaveVars::T_STRING,SaveVars::G_SERVER, function(){
+			return 'none';
+		});
+		$this->vars->saveGlobal('type',SaveVars::T_STRING,SaveVars::G_GET, function(){
+			return '';
+		});
+		$this->vars->saveGlobal('id',SaveVars::T_INT,SaveVars::G_GET, function(){
+			return -1;
+		});
+		$this->vars->saveGlobal('search', SaveVars::T_STRING, SaveVars::G_GET, function(){
+			return '';
+		});
 	}
 
 	public function index() {

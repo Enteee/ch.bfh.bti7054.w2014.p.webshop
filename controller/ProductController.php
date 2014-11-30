@@ -8,16 +8,13 @@ class ProductController extends MainController {
 	public function __construct() {
 		parent::__construct();
 		
-		$this->vars->save_global('category', SaveVars::T_INT, SaveVars::G_GET);
-		$this->vars->save_global('search', SaveVars::T_STRING, SaveVars::G_GET);
-		
-		$this->vars->save_global('product_id', SaveVars::T_INT, SaveVars::G_POST);
-		$this->vars->save_global('product_name', SaveVars::T_STRING, SaveVars::G_POST);
-		$this->vars->save_global('product_description', SaveVars::T_STRING, SaveVars::G_POST);
-		$this->vars->save_global('product_categories', SaveVars::T_STRING, SaveVars::G_POST);
-		$this->vars->save_global('product_programminglanguages', SaveVars::T_STRING, SaveVars::G_POST);
-		$this->vars->save_global('product_price', SaveVars::T_INT, SaveVars::G_POST);
-		$this->vars->save_global('product_file', SaveVars::T_ARRAY, SaveVars::G_FILES);
+		$this->vars->saveGlobal('product_id', SaveVars::T_INT, SaveVars::G_POST);
+		$this->vars->saveGlobal('product_name', SaveVars::T_STRING, SaveVars::G_POST);
+		$this->vars->saveGlobal('product_description', SaveVars::T_STRING, SaveVars::G_POST);
+		$this->vars->saveGlobal('product_categories', SaveVars::T_STRING, SaveVars::G_POST);
+		$this->vars->saveGlobal('product_programminglanguages', SaveVars::T_STRING, SaveVars::G_POST);
+		$this->vars->saveGlobal('product_price', SaveVars::T_INT, SaveVars::G_POST);
+		$this->vars->saveGlobal('product_file', SaveVars::T_ARRAY, SaveVars::G_FILES);
 	}
 
 	public function index() {
@@ -28,7 +25,7 @@ class ProductController extends MainController {
 				
 		// get variables		
 		$searchstring = $this->vars->search;
-		$categoryId = $this->categoryId;
+		$categoryId = $this->vars->categoryId;
 		
 		// load data
 		$products = $this->repo->getUsersOrders($categoryId, $searchstring, $this->vars->user);
@@ -50,7 +47,7 @@ class ProductController extends MainController {
 				
 		// get variables		
 		$searchstring = $this->vars->search;
-		$categoryId = $this->categoryId;
+		$categoryId = $this->vars->categoryId;
 		
 		// load data
 		$products = $this->repo->getUsersOffers($categoryId, $searchstring, $this->vars->user);
@@ -161,7 +158,7 @@ class ProductController extends MainController {
 				->setFilesize($file['size'])
 				->setMimetype($file['type'])
 				->setContent(file_get_contents($file['tmp_name']))
-				->setActive(true)		
+				->setActive(true)
 				->save();
 
 			$con->commit();

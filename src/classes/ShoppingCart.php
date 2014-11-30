@@ -3,27 +3,31 @@
 class ShoppingCart {
 	
 	private static $cart;
-	private $offerIds = array();
-	
-	public static function get() {
-		if (isset(self::$cart)) {
-			return self::$cart;
+	private $vars;
+
+	private function __construct(){
+		$this->vars = SaveVars::getInstance();
+		$this->vars->saveGlobal('offerIds', SaveVars::T_ARRAY, SaveVars::G_SESSION, function(){
+			return array();
+		});
+	}
+
+	public static function getInstance() {
+		if (!isset(self::$cart)) {
+			self::$cart = new self;
 		}
-		self::$cart = new ShoppingCart();
-		self::$cart->load();
 		return self::$cart;
 	}
 	
 	public function addOffer(Offer $offer) {
-		$this->offerIds[] = $offer->getId();
+		$this->vars->offerIds[] = $offer->getId();
 	}
 	
 	public function removeOffer(Offer $offer) {
 		$id = $offer->getId();
-		if (in_array($id)) {
+		if(in_array($id,$this->vars->offerIds)) {
 			unset($this->offerIds[$id]);
 		}
-		$offerIds[] = $id;
 	}
 	
 	public function getOffers() {
@@ -39,16 +43,6 @@ class ShoppingCart {
 			return $offer->getSum();
 		}
 		return 0;
-	}
-	
-	private static function load() {
-		if (isset($_SESSION['ShoppingCart'])) {
-			$this->offerIds = unserialize($_SESSION['ShoppingCart']);
-		}
-	}
-	
-	public function save() {
-		$_SESSION['ShoppingCart'] = serialize($this->offerIds);
 	}
 }
 

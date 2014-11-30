@@ -7,7 +7,7 @@ class FileController extends Controller {
 
 	public function __construct() {
 		parent::__construct();
-		$this->vars->save_global('id', SaveVars::T_INT, SaveVars::G_GET);
+		$this->vars->saveGlobal('id', SaveVars::T_INT, SaveVars::G_GET);
 	}
 
 	public function index() {

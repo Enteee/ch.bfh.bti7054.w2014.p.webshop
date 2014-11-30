@@ -113,7 +113,7 @@
 					<nav>
 						<div class="list-group">
 <?php foreach($categories as $category):?>
-							<a href="<?php echo lang(); ?>/start/show?category=<?php echo $category->getId(); ?>" class="list-group-item<?php echo ($category->getId() == $activeCategoryId) ? ' active' : ''; ?>">
+							<a href="<?php echo lang(); ?>/start/show?categoryId=<?php echo $category->getId(); ?>" class="list-group-item<?php echo ($category->getId() == $activeCategoryId) ? ' active' : ''; ?>">
 								<span class="badge"><?php echo $category->getProductsCount(); ?></span>
 								<?php $category->setLocale($locale); echo $category->getName(); ?>
 							</a>

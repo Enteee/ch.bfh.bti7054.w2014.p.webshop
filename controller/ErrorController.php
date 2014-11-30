@@ -44,7 +44,7 @@ class ErrorController extends MainController {
 		
 		if ($this->isDebug()) {
 			// show exception if error reporting on
-			$error = $exception;
+			$errorDesc = $exception;
 		}
 		
 		// set data for view

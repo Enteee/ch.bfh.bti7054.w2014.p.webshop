@@ -7,8 +7,6 @@ class StartController extends MainController {
 
 	public function __construct() {
 		parent::__construct();
-		$this->vars->save_global('category',SaveVars::T_INT,SaveVars::G_GET);
-		$this->vars->save_global('search',SaveVars::T_STRING,SaveVars::G_GET);
 	}
 
 	public function index() {
@@ -17,13 +15,13 @@ class StartController extends MainController {
 	
 	public function show() {
 				
-		// get variables		
+		// get variables
 		$searchstring = $this->vars->search;
-		$categoryId = $this->categoryId;
+		$categoryId = $this->vars->categoryId;
 		
 		// load data
 		$products = array();
-		if (isset($categoryId)){
+		if ($categoryId >= 0){
 			$products = $this->repo->getProductsByTagId($categoryId, $searchstring);
 		} else {
 			$products = $this->repo->getProductsBySearch($searchstring);
@@ -55,6 +53,14 @@ class StartController extends MainController {
 	}
 	
 	public function signin(){
+		$this->vars->fallback('gitkitUser'); // fallback to gitkit user token
+		$this->vars->userIsLoggedIn = true;
+		$this->show();
+	}
+
+	public function signout(){
+		$this->vars->fallback('gitkitUser'); // fallback to gitkit user token
+		$this->vars->userIsLoggedIn = false;
 		$this->show();
 	}
 }

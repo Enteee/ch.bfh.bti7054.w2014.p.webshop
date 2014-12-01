@@ -163,6 +163,7 @@ We're selling source code on our webshop. People can upload source code and othe
 ### Task 5.3: Multiple Languages [done]
 
 * language resources are stored in a .json file
+* search works in any language
 
 ### Task 6.1: "Buy Now" Links [open]
 

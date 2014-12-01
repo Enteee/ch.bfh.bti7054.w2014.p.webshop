@@ -77,7 +77,7 @@ class PopulateController extends Controller {
 				->setName('Framework');
 		$tagSnippets->save();
 		
-		$this->addProgrammingLanguages($tagTypeProgrammingLanguage);
+		$programmingLanguages = $this->addProgrammingLanguages($tagTypeProgrammingLanguage);
 
 		/* Products */
 		$helloWorld = (new Product())
@@ -86,6 +86,13 @@ class PopulateController extends Controller {
 			->addTag($tagClasses)
 			->addTag($tagFullSoftware)
 			->addTag($tagFramework)
+			->addTag($programmingLanguages['C'])
+			->addTag($programmingLanguages['C++'])
+			->addTag($programmingLanguages['C#'])
+			->addTag($programmingLanguages['APL'])
+			->addTag($programmingLanguages['Alice'])
+			->addTag($programmingLanguages['D'])
+			->addTag($programmingLanguages['Dart'])
 			->setLocale('en_US')
 				->setName('Hello world') 
 				->setDescription('The famous hello world snippets')
@@ -97,6 +104,9 @@ class PopulateController extends Controller {
 		$bubbleSort = (new Product())
 			->addTag($tagSnippets)
 			->addTag($tagScripts)
+			->addTag($programmingLanguages['Alice'])
+			->addTag($programmingLanguages['D'])
+			->addTag($programmingLanguages['Dart'])
 			->setLocale('en_US')
 				->setName('Bubble sort') 
 				->setDescription('Basic sort method')
@@ -110,6 +120,10 @@ class PopulateController extends Controller {
 			->addTag($tagScripts)
 			->addTag($tagClasses)
 			->addTag($tagFullSoftware)
+			->addTag($programmingLanguages['C'])
+			->addTag($programmingLanguages['C++'])
+			->addTag($programmingLanguages['C#'])
+			->addTag($programmingLanguages['APL'])
 			->setLocale('en_US')
 				->setName('Quick sort') 
 				->setDescription('Fast sort method')
@@ -168,6 +182,7 @@ class PopulateController extends Controller {
 	}
 	
 	public function addProgrammingLanguages($tagTypeProgrammingLanguage){
+		$retPl;
 		$languages = array(
 			'A# .NET',
 			'A#',
@@ -863,15 +878,16 @@ class PopulateController extends Controller {
 			'ZOPL',
 			'ZPL');
 		foreach ($languages as $language) {
-			$pl = new Tag();
 			$pl = (new Tag())
 				->setTagType($tagTypeProgrammingLanguage)
 				->setLocale('en_US')
 					->setName($language) 
 				->setLocale('de_CH')
-					->setName($language)
-				->save();		
+					->setName($language);
+			$pl->save();
+			$retPl[$language] = $pl;
 		}
+		return $retPl;
 	}
 }
 

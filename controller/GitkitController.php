@@ -1,6 +1,6 @@
 <?php
 
-class GitkitController extends MainController {
+class GitkitController extends Controller {
 
 	public function __construct() {
 		parent::__construct();

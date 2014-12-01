@@ -11,6 +11,7 @@ class FileController extends Controller {
 	}
 
 	public function index() {
+		parent::index();
 		$this->get();
 	}
 	

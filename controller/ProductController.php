@@ -8,27 +8,44 @@ class ProductController extends MainController {
 	public function __construct() {
 		parent::__construct();
 		
-		$this->vars->saveGlobal('product_id', SaveVars::T_INT, SaveVars::G_POST);
-		$this->vars->saveGlobal('product_name', SaveVars::T_STRING, SaveVars::G_POST);
-		$this->vars->saveGlobal('product_description', SaveVars::T_STRING, SaveVars::G_POST);
-		$this->vars->saveGlobal('product_categories', SaveVars::T_STRING, SaveVars::G_POST);
-		$this->vars->saveGlobal('product_programminglanguages', SaveVars::T_STRING, SaveVars::G_POST);
-		$this->vars->saveGlobal('product_price', SaveVars::T_INT, SaveVars::G_POST);
-		$this->vars->saveGlobal('product_file', SaveVars::T_ARRAY, SaveVars::G_FILES);
+		$this->vars->saveGlobal('product_id', SaveVars::T_INT, SaveVars::G_POST, function(){
+			return -1;
+		});
+		$this->vars->saveGlobal('product_name', SaveVars::T_STRING, SaveVars::G_POST, function(){
+			return '';
+		});
+		$this->vars->saveGlobal('product_description', SaveVars::T_STRING, SaveVars::G_POST, function(){
+			return '';
+		});
+		$this->vars->saveGlobal('product_categories', SaveVars::T_STRING, SaveVars::G_POST, function(){
+			return '';
+		});
+		$this->vars->saveGlobal('product_programminglanguages', SaveVars::T_STRING, SaveVars::G_POST, function(){
+			return '';
+		});
+		$this->vars->saveGlobal('product_price', SaveVars::T_INT, SaveVars::G_POST, function(){
+			return -1;
+		});
+		$this->vars->saveGlobal('product_file', SaveVars::T_ARRAY, SaveVars::G_FILES, function(){
+			return array();
+		});
 	}
 
 	public function index() {
+		parent::index();
 	}
 	
 	public function orders() {
+		parent::index();
 		$this->assertUserIsLoggedIn();
 				
 		// get variables		
 		$searchstring = $this->vars->search;
 		$categoryId = $this->vars->categoryId;
+		$user = $this->getUser();
 		
 		// load data
-		$products = $this->repo->getUsersOrders($categoryId, $searchstring, $this->vars->user);
+		$products = $this->repo->getUsersOrders($categoryId, $searchstring, $user);
 		
 		foreach ($products as $product){
 			$product->setLocale($this->lang->getLocale());
@@ -43,14 +60,16 @@ class ProductController extends MainController {
 	}
 	
 	public function offers() {
+		parent::index();
 		$this->assertUserIsLoggedIn();
 				
 		// get variables		
 		$searchstring = $this->vars->search;
 		$categoryId = $this->vars->categoryId;
+		$user = $this->getUser();
 		
 		// load data
-		$products = $this->repo->getUsersOffers($categoryId, $searchstring, $this->vars->user);
+		$products = $this->repo->getUsersOffers($categoryId, $searchstring, $user);
 		
 		foreach ($products as $product){
 			$product->setLocale($this->lang->getLocale());
@@ -65,13 +84,16 @@ class ProductController extends MainController {
 	}
 	
 	public function add() {
+		parent::index();
 		$this->assertUserIsLoggedIn();
-		
 		$this->view('add_product');
 	}
 	
 	public function save() {
+		parent::index();
 		$this->assertUserIsLoggedIn();
+
+		$user = $this->getUser();
 
 		// validate...
 		$file = $this->vars->product_file;		
@@ -152,7 +174,7 @@ class ProductController extends MainController {
 			// code
 			$code = new Code();
 			$code
-				->setUser($this->vars->user)
+				->setUser($user)
 				->setOffer($offer)
 				->setFilename($file['name'])
 				->setFilesize($file['size'])

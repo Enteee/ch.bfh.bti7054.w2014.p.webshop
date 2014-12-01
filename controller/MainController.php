@@ -18,7 +18,7 @@ class MainController extends Controller {
 		});
 	}
 
-	protected function show(){
+	protected function index(){
 		// set global data for view
 		$data['title'] = $this->lang->title;
 		$data['subtitle'] = $this->lang->subtitle;

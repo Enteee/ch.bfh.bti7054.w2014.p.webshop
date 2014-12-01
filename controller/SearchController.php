@@ -10,6 +10,7 @@ class SearchController extends MainController {
 	}
 
 	public function index() {
+		parent::index();	
 		
 		// get variables		
 		$searchstring = $this->vars->search;

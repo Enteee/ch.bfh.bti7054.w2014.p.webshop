@@ -10,6 +10,7 @@ class ErrorController extends MainController {
 	}
 	
 	public function index() {
+		parent::index();
 		$this->error404();
 	}
 

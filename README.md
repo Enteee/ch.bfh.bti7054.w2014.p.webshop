@@ -139,6 +139,8 @@ We're selling source code on our webshop. People can upload source code and othe
 
 ### Task 3.1: Basic Design [done]
 
+* Bootstrap & jquery integrated
+
 ### Task 3.2: Content [done]
 
 ### Task 4.1: PHP Setup [done]
@@ -147,7 +149,14 @@ We're selling source code on our webshop. People can upload source code and othe
 
 ### Task 4.3: List of Products [done]
 
+* Animated list with jquery
+* More information on click
+* Start rating
+* AVG rating
+
 ### Task 5.1: External PHP Files [done]
+
+* Composer autoloader integrated
 
 ### Task 5.2: Multi-Page PHP File [done]
 
@@ -161,12 +170,15 @@ We're selling source code on our webshop. People can upload source code and othe
 
 ### Task 6.3: Shipping Address [open]
 
+* Do we really need this? Code is not 'shippable'.
+
 ### Task 6.4: Confirmation [open]
 
 ### Task 6.5: Refactoring and Code Beautification [done]
 
 * mvc pattern with controller classes and view templates [done]
 * uri routing: /{language}/{controller}/{method}
+* SaveVars: typed superglobals
 
 ### Task 7.1: Purchase Confirmation [open]
 
@@ -177,15 +189,18 @@ We're selling source code on our webshop. People can upload source code and othe
 ### Task 8.1: Cookies [done]
 
 * language of user is stored in a cookie
+* $_COOKIE wrapped in SaveVars
 
 ### Task 8.2: Shopping Cart [progress]
 
 ### Task 8.3: User Accounts [done]
 
-* problem solved by using *Google Identity Toolkit*
+* problem solved by using *Google Identity Toolkit* no need for password saving
 * login with Gmail account
 
 ### Task 9.1: OO Shopping Cart [done]
+
+* initial design
 
 ### Task 9.2 : OO Product List [done]
 
@@ -216,8 +231,6 @@ We're selling source code on our webshop. People can upload source code and othe
 
 ## Open issues
 
-* Bugfix: gitkit login (getUserInRequest returns NULL, even if the user is logged in)
-* Bugifx: Product details disappear by click on any element (should only work if clicking the title?)
 * Finish code upload page (inclusive categories and programming languages)
 * Add comment feature
 * Show bought products page

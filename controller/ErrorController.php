@@ -10,6 +10,7 @@ class ErrorController extends MainController {
 	}
 	
 	public function index() {
+		parent::index();
 		$this->error404();
 	}
 
@@ -44,7 +45,7 @@ class ErrorController extends MainController {
 		
 		if ($this->isDebug()) {
 			// show exception if error reporting on
-			$error = $exception;
+			$errorDesc = $exception;
 		}
 		
 		// set data for view

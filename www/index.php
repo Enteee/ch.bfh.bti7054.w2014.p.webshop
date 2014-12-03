@@ -29,10 +29,6 @@ if(!date_default_timezone_set($config['timezone'])){
 Propel::init($config['propel_conf']);
 set_include_path($config['propel_model'] . PATH_SEPARATOR . get_include_path());
 
-/* Set up google client */
-//$gitkitClient = Gitkit_Client::createFromFile($config['gitkit']['server-config']);
-//$gitkitUser = $gitkitClient->getUserInRequest();
-
 /* Load needed php modules */
 if (isset($config['modules'])){
 	foreach ($config['modules'] as $module) {
@@ -50,6 +46,10 @@ if (isset($config['modules'])){
 		}
 	}
 }
+
+/* Initialize SaveVars */
+// TODO: back in save all globals -> find solution for external libraries
+//SaveVars::get_instance();
 
 /* Initialize MVC */
 $mvc = new Mvc();

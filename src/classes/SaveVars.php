@@ -21,6 +21,30 @@
 *	!!Wo0t!!
 */
 
+class DisabledGlobal implements arrayaccess {
+
+
+	public function disabled($offset = NULL, $value = NULL){
+		throw new RuntimeException("Invalid access to disabled globals; \$_SUPERGLOBAL[$offset] = $value");
+	}
+
+	public function offsetExists ( $offset ){
+		self::disabled($offset);
+	}
+
+	public function offsetGet ( $offset ){
+		self::disabled($offset);
+	}
+
+	public function offsetSet ( $offset , $value ){
+		self::disabled($offset, $value);
+	}
+
+	public function offsetUnset ( $offset ){
+		self::disabled($offset);
+	}
+}
+
 class SaveVars{
 
 	/*Variable Types*/
@@ -42,14 +66,9 @@ class SaveVars{
 	/*EXTENDED_TYPES*/
 	const T_STRING_SQL = 401;
 	const T_STRING_HTML = 402;
-	const T_STRING_AID = 403;
 
 	/*Variables*/ 
-	private $vars;	// the variables struct:
-		// vars['name']{
-		//	data, (the variable data)	
-		//	type, (see Types)
-		//}
+	private $vars = array();	// the variables struct:
 
 	/*GLOBALS*/
 	const G_SERVER = 0; 
@@ -61,52 +80,128 @@ class SaveVars{
 	const G_ENV = 6;
 	const G_COOKIE = 7;
 
-	private $globals;	// Superglobal variables like 'GET/POST/ENV/SERVER
+	/* Superglobal variables like 'GET/POST/ENV/SERVER */
+	private static $SUPERGLOBALS_ENABLED = true;
+	private static $SUPERGLOBALS;
 
-	function __construct(){
-		$this->vars = array();
-		/*Make superglobals only accessible through this class*/
-		
-		if(isset($_SERVER)){
-			$this->globals[self::G_SERVER] = $_SERVER;
-			unset($_SERVER);
-		}
+	/* Singelton */
+	private static $INSTANCE;
 
-		if(isset($_GET)){
-			$this->globals[self::G_GET] = $_GET;
-			unset($_GET);
-		}
+	/* Default fallback */
+	private static $DEFAULT_FALLBACK;
 
-		if(isset($_POST)){
-			$this->globals[self::G_POST] = $_POST; 
-			unset($_POST);
-		}
+	private function __construct(){
+		self::$DEFAULT_FALLBACK = function(){};
+		// Make superglobals only accessible through this class
+		$this->disableSuperglobals();
+	}
 
-		if(isset($_FILES)){
-			$this->globals[self::G_FILES] = $_FILES;
-			unset($_FILES);
-		}
-
-		if(isset($_REQUEST)){
-			$this->globals[self::G_REQUEST] = $_REQUEST;
-			unset($_REQUEST);
-		}
-
-		if(isset($_SERVER)){
-			$this->globals[self::G_SESSION] = $_SESSION;
-			unset($_SESSION);
-		}
-
-		if(isset($_ENV)){
-			$this->globals[self::G_ENV] = $_ENV;
-			unset($_ENV);
-		}
-
-		if(isset($_COOKIE)){
-			$this->globals[self::G_COOKIE] = $_COOKIE;
-			unset($_COOKIE);
+	public function __destruct(){
+		// Enable superglobals again
+		$this->enableSuperglobals();
+		// Save used vars in session
+		session_unset();
+		foreach($this->vars as $key => $val){
+			$_SESSION[$key] = $val['data'];
 		}
 	}
+
+	public static function getInstance(){
+		if(!isset(self::$INSTANCE)){
+			self::$INSTANCE = new self;
+		}
+		return self::$INSTANCE;
+	}
+
+	/* Call cb with enabled superglobals */
+	public function callEnabledSuperglobals(callable $cb){
+		$this->enableSuperglobals();
+		$cb();
+		$this->disableSuperglobals();
+	}
+
+	private function disableSuperglobals(){
+		if(self::$SUPERGLOBALS_ENABLED){
+			if(isset($_SERVER)){
+				self::$SUPERGLOBALS[self::G_SERVER] = $_SERVER;
+				$_SERVER = new DisabledGlobal();
+			}
+
+			if(isset($_GET)){
+				self::$SUPERGLOBALS[self::G_GET] = $_GET;
+				$_GET = new DisabledGlobal();
+			}
+
+			if(isset($_POST)){
+				self::$SUPERGLOBALS[self::G_POST] = $_POST; 
+				$_POST = new DisabledGlobal();
+			}
+
+			if(isset($_FILES)){
+				self::$SUPERGLOBALS[self::G_FILES] = $_FILES;
+				$_FILES = new DisabledGlobal();
+			}
+
+			if(isset($_REQUEST)){
+				self::$SUPERGLOBALS[self::G_REQUEST] = $_REQUEST;
+				$_REQUEST = new DisabledGlobal();
+			}
+
+			if(isset($_SESSION)){
+				self::$SUPERGLOBALS[self::G_SESSION] = $_SESSION;
+				$_SESSION = new DisabledGlobal();
+			}
+
+			if(isset($_ENV)){
+				self::$SUPERGLOBALS[self::G_ENV] = $_ENV;
+				$_ENV = new DisabledGlobal();
+			}
+
+			if(isset($_COOKIE)){
+				self::$SUPERGLOBALS[self::G_COOKIE] = $_COOKIE;
+				$_COOKIE = new DisabledGlobal();
+			}
+			self::$SUPERGLOBALS_ENABLED = false;
+		}
+	}
+
+	private function enableSuperglobals(){
+		if(!self::$SUPERGLOBALS_ENABLED){
+			if(isset(self::$SUPERGLOBALS[self::G_SERVER])){
+				$_SERVER = self::$SUPERGLOBALS[self::G_SERVER];
+			}
+
+			if(isset(self::$SUPERGLOBALS[self::G_GET])){
+				$_GET = self::$SUPERGLOBALS[self::G_GET];
+			}
+
+			if(isset(self::$SUPERGLOBALS[self::G_POST])){
+				$_POST = self::$SUPERGLOBALS[self::G_POST];
+			}
+
+			if(isset(self::$SUPERGLOBALS[self::G_FILES])){
+				$_FILES = self::$SUPERGLOBALS[self::G_FILES];
+			}
+
+			if(isset(self::$SUPERGLOBALS[self::G_REQUEST])){
+				$_REQUEST = self::$SUPERGLOBALS[self::G_REQUEST];
+			}
+
+			if(isset(self::$SUPERGLOBALS[self::G_SESSION])){
+				$_SESSION = self::$SUPERGLOBALS[self::G_SESSION];
+			}
+
+			if(isset(self::$SUPERGLOBALS[self::G_ENV])){
+				$_ENV = self::$SUPERGLOBALS[self::G_ENV];
+			}
+
+			if(isset(self::$SUPERGLOBALS[self::G_COOKIE])){
+				$_COOKIE = self::$SUPERGLOBALS[self::G_COOKIE];
+			}	
+			self::$SUPERGLOBALS_ENABLED = true;
+		}
+	}
+
 
 	//========================
 	/*Set/Get save variables*/
@@ -115,17 +210,36 @@ class SaveVars{
 	function __set($name,$data){
 		// does the varaible exist?
 		if(array_key_exists($name,$this->vars)){
-			$ret = self::save_var($name,$data,$this->vars[$name]['type']);
+			$this->saveVar($name,$data,$this->vars[$name]['type']);
+		}else{
+			throw new InvalidArgumentException('name');
 		}
 	}
 
 	function __get($name){ // return a given variable for display
-		$ret = null;
+		$ret = NULL;
 		// does the varaible exist?
 		if(array_key_exists($name,$this->vars)){
 			$ret = $this->vars[$name]['data'];
+		}else{
+			throw new InvalidArgumentException('name');
 		}
 		return $ret;
+	}
+
+	function fallback($name){
+		// does the varaible exist?
+		if(array_key_exists($name,$this->vars)){
+			$type = $this->vars[$name]['type'];
+			$fallback = $this->vars[$name]['fallback'];
+			if(is_callable($fallback)){
+				$this->saveVar($name,$fallback(),$type,$fallback);
+			}else{
+				throw new InvalidArgumentException('fallback');
+			}
+		}else{
+			throw new InvalidArgumentException('name');
+		}
 	}
 
 	//=================
@@ -133,174 +247,173 @@ class SaveVars{
 
 	// save global variable from type $type
 	// look in the global variables defined by lookup 
-	function save_global($name,$type,$lookup){
-		$ret = false;
-		if(is_array($this->globals[$lookup])){ // does the lookup destination exist?
-			if(array_key_exists($name,$this->globals[$lookup])){ // does such a variable exist?
-				$ret = self::save_var($name,$this->globals[$lookup][$name],$type); // save the variable
+	// if such a variable couldnt be found use the fallback function given
+	function saveGlobal($name, $type, $lookup, callable $fallback = NULL){
+		if(is_array(self::$SUPERGLOBALS[$lookup])){ // does the lookup destination exist?
+			if(array_key_exists($name,self::$SUPERGLOBALS[$lookup])){ // does such a variable exist?
+				$this->saveVar($name,self::$SUPERGLOBALS[$lookup][$name],$type,$fallback); // save the variable
+			}else if(is_callable($fallback)){
+				$this->saveVar($name,$fallback(),$type,$fallback);
+			}else{
+				throw new InvalidArgumentException('name');
 			}
+		}else{
+			throw new InvalidArgumentException('lookup');
 		}
-		return $ret;
 	}
 
 	// save a completely unknown variable
-	function save_var($name,$data,$type){
-		$ret = false;
-		$type_valid = true;
-
+	function saveVar($name, $data, $type, callable $fallback = NULL){
 		switch ($type){ // make save variable now
 			// basic
-			case self::T_NULL: $data = self::save_null((unset)$data); break;
-			case self::T_SCALAR: $data = self::save_scalar($data); break;
-			case self::T_ARRAY: $data = self::save_array((array)$data); break;
-			case self::T_NUMERIC: $data = self::save_numeric($data); break;
-			case self::T_STRING: $data = self::save_string((string)$data); break;
-			case self::T_BOOL: $data = self::save_bool((bool)$data); break;
-			case self::T_INT: $data = self::save_integer((int)$data); break;
-			case self::T_LONG: $data = self::save_long((int)$data); break;
-			case self::T_DOUBLE: $data = self::save_double((float)$data); break;
-			case self::T_FLOAT: $data = self::save_float((float)$data); break;
-			case self::T_RESOURCE: $data = self::save_resource($data); break;
-			case self::T_CALLABLE: $data = self::save_callable($data); break;
-			case self::T_OBJECT: $data = self::save_object((object)$data); break;
+			case self::T_NULL: $data = $this->saveNull((unset)$data); break;
+			case self::T_SCALAR: $data = $this->saveScalar($data); break;
+			case self::T_ARRAY: $data = $this->saveArray((array)$data); break;
+			case self::T_NUMERIC: $data = $this->saveNumeric($data); break;
+			case self::T_STRING: $data = $this->saveString((string)$data); break;
+			case self::T_BOOL: $data = $this->saveBool((bool)$data); break;
+			case self::T_INT: $data = $this->saveInteger((int)$data); break;
+			case self::T_LONG: $data = $this->saveLong((int)$data); break;
+			case self::T_DOUBLE: $data = $this->saveDouble((float)$data); break;
+			case self::T_FLOAT: $data = $this->saveFloat((float)$data); break;
+			case self::T_RESOURCE: $data = $this->saveResource($data); break;
+			case self::T_CALLABLE: $data = $this->saveCallable($data); break;
+			case self::T_OBJECT: $data = $this->saveObject((object)$data); break;
 			// extended
-			case self::T_STRING_SQL: $data = self::save_sql(self::save_string($data)); break;
-			case self::T_STRING_HTML: $data = self::save_html(self::save_string($data)); break;
+			case self::T_STRING_SQL: $data = $this->saveSql($this->save_string($data)); break;
+			case self::T_STRING_HTML: $data = $this->saveHtml($this->save_string($data)); break;
 
 			// not valid type
 			default: 
-				$type_valid = false;
+				throw new InvalidArgumentException('type');
 			break;
 		}
 
 		// save the variable
-		if($type_valid == true){
-			$this->vars[$name]['data'] = $data;
-			$this->vars[$name]['type'] = $type;
-			$ret = true;
-		}
+		$this->vars[$name]['data'] = $data;
+		$this->vars[$name]['type'] = $type;
+		$this->vars[$name]['fallback'] = $fallback;
 
-		return $ret;
-	}	
+	}
 
 	//===================
 	/*MAKE-SAVE-Methods*/
-	private function save_null($var){
-		if( $var == null
-		|| !is_null($var)){
-			return null; // not a valid variable of this type
+	private function saveNull($data){
+		if( !isset($data)
+		|| !is_null($data)){
+			throw new InvalidArgumentException('data');
 		}
-		return $var;
+		return $data;
 	}
 
-	private function save_scalar($var){
-		if( $var == null
-		|| !is_scalar($var)){
-			return null; // not a valid variable of this type
+	private function saveScalar($data){
+		if( !isset($data)
+		|| !is_scalar($data)){
+			throw new InvalidArgumentException('data');
 		}
-		return $var;
+		return $data;
 	}
 
-	private function save_array($var){
-		if( $var == null
-		|| !is_array($var)){
-			return null; // not a valid variable of this type
+	private function saveArray($data){
+		if( !isset($data)
+		|| !is_array($data)){
+			throw new InvalidArgumentException('data');
 		}
-		return $var;
+		return $data;
 	}
 
-	private function save_numeric($var){
-		if( $var == null
-		|| !is_numeric($var)){
-			return null; // not a valid variable of this type
+	private function saveNumeric($data){
+		if( !isset($data)
+		|| !is_numeric($data)){
+			throw new InvalidArgumentException('data');
 		}
-		return $var;
+		return $data;
 	}
 
-	private function save_string($var){
-		if( $var == null
-		|| !is_string($var)){
-			return null; // not a valid variable of this type
+	private function saveString($data){
+		if( !isset($data)
+		|| !is_string($data)){
+			throw new InvalidArgumentException('data');
 		}
-		return $var;
+		return $data;
 	}
 
-	private function save_bool($var){
-		if( $var == null
-		|| !is_bool($var)){
-			return null; // not a valid variable of this type
+	private function saveBool($data){
+		if( !isset($data)
+		|| !is_bool($data)){
+			throw new InvalidArgumentException('data');
 		}
-		return $var;
+		return $data;
 	}
 
-	private function save_integer($var){
-		if( $var == null
-		|| !is_integer($var)){
-			return null; // not a valid variable of this type
+	private function saveInteger($data){
+		if( !isset($data)
+		|| !is_integer($data)){
+			throw new InvalidArgumentException('data');
 		}
-		return $var;
+		return $data;
 	}
 
-	private function save_long($var){
-		if( $var == null
-		|| !is_long($var)){
-			return null; // not a valid variable of this type
+	private function saveLong($data){
+		if( !isset($data)
+		|| !is_long($data)){
+			throw new InvalidArgumentException('data');
 		}
-		return $var;
+		return $data;
 	}
 
-	private function save_double($var){
-		if( $var == null
-		|| !is_double($var)){
-			return null; // not a valid variable of this type
+	private function saveDouble($data){
+		if( !isset($data)
+		|| !is_double($data)){
+			throw new InvalidArgumentException('data');
 		}
-		return $var;
+		return $data;
 	}
 
-	private function save_float($var){
-		if( $var == null
-		|| !is_float($var)){
-			return null; // not a valid variable of this type
+	private function saveFloat($data){
+		if( !isset($data)
+		|| !is_float($data)){
+			throw new InvalidArgumentException('data');
 		}
-		return $var;
+		return $data;
 	}
 
-	private function save_resource($var){
-		if( $var == null
-		|| !is_resource($var)){
-			return null; // not a valid variable of this type
+	private function saveResource($data){
+		if( !isset($data)
+		|| !is_resource($data)){
+			throw new InvalidArgumentException('data');
 		}
-		return $var;
+		return $data;
 	}
 
-	private function save_callable($var){
-		if( $var == null
-		|| !is_callable($var)){
-			return null; // not a valid variable of this type
+	private function saveCallable($data){
+		if( !isset($data)
+		|| !is_callable($data)){
+			throw new InvalidArgumentException('data');
 		}
-		return $var;
+		return $data;
 	}
 
-	private function save_object($var){
-		if( $var == null
-		|| !is_object($var)){
-			return null; // not a valid variable of this type
+	private function saveObject($data){
+		if( !isset($data)
+		|| !is_object($data)){
+			throw new InvalidArgumentException('data');
 		}
-		return $var;
+		return $data;
 	}
 
-	private function save_sql($var){
-		if( $var == null ){
-			return null;
+	private function saveSql($data){
+		if( !isset($data) ){
+			throw new InvalidArgumentException('data');
 		}
-		return addslashes($var);
+		return addslashes($data);
 	}
 
-	private function save_html($var){
-		if( $var == null){
-			return null;
+	private function saveHtml($data){
+		if( !isset($data)){
+			throw new InvalidArgumentException('data');
 		}
-		return htmlentities($var,ENT_QUOTES);
+		return htmlentities($data,ENT_QUOTES);
 	}
 
 }

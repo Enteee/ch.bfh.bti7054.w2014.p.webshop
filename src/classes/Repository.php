@@ -62,6 +62,7 @@ class Repository {
 				->useProductI18nQuery()
 					->filterByName('%' . $searchstring . '%')
 				->endUse()
+				->groupBy('id')
 				->find();
 		} else {
 			return $this->getAllProducts();
@@ -71,16 +72,20 @@ class Repository {
 	public function getProductsByTagId($tag_id, $searchstring = NULL) {
 		if (isset($searchstring)) {
 			return ProductQuery::create()
-				->filterByName($searchstring)
+				->useProductI18nQuery()
+					->filterByName('%'. $searchstring. '%')
+				->endUse()
 				->useProductTagQuery()
 					->filterByTagId($tag_id)
 				->endUse()
+				->groupBy('id')
 				->find();
 		} else {
 			return ProductQuery::create()
 				->useProductTagQuery()
 					->filterByTagId($tag_id)
 				->endUse()
+				->groupBy('id')
 				->find();
 		}
 	}

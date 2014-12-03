@@ -99,9 +99,9 @@ $(document).ready(function() {
 				var hideables = $(this).find($('.cs-product-list-hideable')).not('[class*="template"]');
 				hideables.hide();
 				hideables.removeClass('hidden');
-				hideables.show('slow');
+				hideables.slideToggle('fast');
 				$(this).click(function(){
-					hideables.toggle('slow');
+					hideables.slideToggle('fast');
 				});
 				$(this).find($('.cs-product-list-item-clickable')).click(function(e){
 					e.stopPropagation();

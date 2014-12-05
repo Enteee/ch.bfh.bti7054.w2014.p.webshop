@@ -100,7 +100,8 @@ $(document).ready(function() {
 				hideables.hide();
 				hideables.removeClass('hidden');
 				hideables.slideToggle('fast');
-				$(this).click(function(){
+				$(this).find('.cs-product-list-item-clickable').click(function(){
+					console.log('Penis');
 					hideables.slideToggle('fast');
 				});
 				$(this).find($('.cs-product-list-item-clickable')).click(function(e){

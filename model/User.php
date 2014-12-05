@@ -15,4 +15,16 @@
  */
 class User extends BaseUser
 {
+	public function hasOffer($offerNeedle) {
+		if (!isset($offerNeedle)) {
+			throw new Exception('offerNeedle is null.');
+		}
+		$orders = $this->getOrders();
+		foreach ($orders as $order) {
+			if ($order->getOffer() == $offerNeedle) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

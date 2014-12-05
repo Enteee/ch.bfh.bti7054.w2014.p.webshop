@@ -48,7 +48,13 @@ abstract class Controller {
 	/**
 	 * Redirect a user.
 	 */
-	protected function redirect($location) {
+	protected function redirect($location, $appendLanguage = TRUE) {
+		if (!str_starts_with($location, '/')) {
+			$location = '/' . $location;
+		}
+		if ($appendLanguage) {
+			$location = $location . '/' . $this->lang->getLanguage() . '/';
+		}	
 		header('Location: ' . $location);
 	}
 

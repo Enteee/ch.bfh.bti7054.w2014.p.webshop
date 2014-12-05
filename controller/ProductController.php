@@ -29,6 +29,9 @@ class ProductController extends MainController {
 		$this->vars->saveGlobal('product_file', SaveVars::T_ARRAY, SaveVars::G_FILES, function(){
 			return array();
 		});
+		$this->vars->saveGlobal('offer_id', SaveVars::T_INT, SaveVars::G_GET, function(){
+			return -1;
+		});
 	}
 
 	public function index() {
@@ -43,10 +46,16 @@ class ProductController extends MainController {
 		$searchstring = $this->vars->search;
 		$categoryId = $this->vars->categoryId;
 		$user = $this->getUser();
+		if (strlen($searchstring) == 0) {
+			$searchstring = NULL;
+		}
+		if ($categoryId < 0) {
+			$categoryId = NULL;
+		}
 		
 		// load data
 		$products = $this->repo->getUsersOrders($categoryId, $searchstring, $user);
-		
+
 		foreach ($products as $product){
 			$product->setLocale($this->lang->getLocale());
 		}
@@ -67,6 +76,12 @@ class ProductController extends MainController {
 		$searchstring = $this->vars->search;
 		$categoryId = $this->vars->categoryId;
 		$user = $this->getUser();
+		if (strlen($searchstring) == 0) {
+			$searchstring = NULL;
+		}
+		if ($categoryId < 0) {
+			$categoryId = NULL;
+		}
 		
 		// load data
 		$products = $this->repo->getUsersOffers($categoryId, $searchstring, $user);
@@ -96,7 +111,7 @@ class ProductController extends MainController {
 		$user = $this->getUser();
 
 		// validate...
-		$file = $this->vars->product_file;		
+		$file = $this->vars->product_file;
 		if (!isset($file)) {
 			throw new Exception('no file uploaded');
 		}		
@@ -137,9 +152,9 @@ class ProductController extends MainController {
 				$product->setActive(true);
 				
 				$product->save();
-								
+				
 				// categories
-				$categoryIds = $this->splitInts($this->vars->product_categories);
+				$categoryIds = split_to_ints($this->vars->product_categories);
 				if (count($categoryIds) > 0) {
 					foreach ($categoryIds as $categoryId) {
 						$category = TagQuery::create()->getCategory($categoryId);
@@ -152,7 +167,7 @@ class ProductController extends MainController {
 			}
 			
 			// offer
-			$offer = new Offer();						
+			$offer = new Offer();
 			$offer
 				->setProduct($product)
 				->setPrice($this->vars->product_price)
@@ -160,7 +175,7 @@ class ProductController extends MainController {
 				->save();
 			
 			// programming languages
-			$plIds = $this->splitInts($this->vars->product_programminglanguages);
+			$plIds = split_to_ints($this->vars->product_programminglanguages);
 			if (count($plIds) > 0) {
 				foreach ($plIds as $plId) {
 					$pl = TagQuery::create()->getProgrammingLanguage($plId);
@@ -194,14 +209,18 @@ class ProductController extends MainController {
 		}
 	}
 	
-	private function splitInts($input) {
-		$ids = array();
-		$parts = preg_split('`,`', $input);
-		foreach ($parts as $part) {
-			$id = filter_var($part, FILTER_VALIDATE_INT);
-			if ($id) { $ids[] = $id; }
-		}
-		return $ids;
+	public function order() {
+		parent::index();
+		$this->assertUserIsLoggedIn();
+		
+		// collect data...
+		$offerId = $this->vars->offer_id;
+		$user = $this->getUser();
+		
+		$this->repo->saveOrder($offerId, $user);
+			
+		// redirect
+		$this->redirect('/product/orders');
 	}
 }
 

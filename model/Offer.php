@@ -15,4 +15,12 @@
  */
 class Offer extends BaseOffer
 {
+	public function getProviderUser() {
+		if ($this->countCodes() > 0) {
+			// user of first uploaded code of this offer
+			return $this->getCodes()[0]->getUser();
+		}
+		// no uploaded code files yet
+		return NULL;
+	}
 }

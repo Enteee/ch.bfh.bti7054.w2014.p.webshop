@@ -51,6 +51,9 @@ if (isset($config['modules'])){
 // TODO: back in save all globals -> find solution for external libraries
 //SaveVars::get_instance();
 
+/* Incluce extension function */
+require_once  '../src/extensions.php';
+
 /* Initialize MVC */
 $mvc = new Mvc();
 $mvc->init();

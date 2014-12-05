@@ -73,7 +73,7 @@ class Mvc {
 			if (Language::isLanguageValid($language)) {
 				// remove segment
 				array_shift($this->segments);
-				// set language				
+				// set language
 				self::$lang->setLocale($language, NULL);
 				return;
 			}
@@ -114,22 +114,37 @@ class Mvc {
 
 			// call method
 			if (method_exists($this->controller, $this->methodName)) {
-				$method = $this->methodName;
-				$this->controller->$method();
+				$this->callMethod();
 			} else {
 				$this->methodName = $this->methodNameFallback;
 				if (!method_exists($this->controller, $this->methodName)) {
 					throw new Exception('Controller has no index method.');
 				}
 				// call fallback method
-				$method = $this->methodName;
-				$this->controller->$method();
+				$this->callMethod();
 			}
 		} catch (SecurityException $ex) {
 			$this->forbidden($ex);
 		} catch (Exception $ex) {
 			$this->error($ex);
 		}
+	}
+	
+	private function callMethod() {
+		$rflClass = new ReflectionClass($this->controller);
+		$rflMethod = $rflClass->getMethod($this->methodName);
+		$rflParameters = $rflMethod->getParameters();
+		$args = array();
+		if (count($rflParameters) > 0) {		
+			for ($i = 0; $i < count($rflParameters); $i++) {
+				if (count($this->segments) > $i) {
+					$args[] = $this->segments[$i];
+				} else {
+					$args[] = NULL;
+				}
+			}
+		}
+		call_user_func_array(array($this->controller, $this->methodName), $args);
 	}
 
 	private function forbidden($exception) {

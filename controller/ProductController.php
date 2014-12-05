@@ -41,8 +41,8 @@ class ProductController extends MainController {
 	public function orders() {
 		parent::index();
 		$this->assertUserIsLoggedIn();
-				
-		// get variables		
+		
+		// get variables
 		$searchstring = $this->vars->search;
 		$categoryId = $this->vars->categoryId;
 		$user = $this->getUser();

@@ -147,6 +147,12 @@
 							</div>
 						</li>
 					</ul>
+					<div>
+						<form action="product/buy" method="get">
+							<button type="submit" class="btn btn-default btn-block"><?php echo label('buy'); ?></button>
+						</form>
+						<br />
+					</div>
 <?php endif; ?>
 				</div>
 				<!-- right content -->

@@ -88,6 +88,10 @@
 		"en" : "search...",
 		"de" : "suchen..."
 	},
+	"buy": {
+		"en" : "buy",
+		"de" : "kaufen"
+	},
 	"tags": {
 		"en" : "Tags",
 		"de" : "Tags"

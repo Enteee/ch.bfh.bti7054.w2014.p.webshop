@@ -93,13 +93,13 @@ class Repository {
 	public function getUsersOrders($tag_id = NULL, $searchstring = NULL, $user = NULL) {
 		$query = ProductQuery::create();
 		
-		if (isset($tag_id)) {
+		if (isset($tag_id) && $tag_id > 0) {
 			$query
 				->useProductTagQuery()
 					->filterByTagId($tag_id)
 				->endUse();
 		}
-		if (isset($searchstring)) {
+		if (isset($searchstring) && strlen($searchstring) > 0) {
 			$query
 				->useProductI18nQuery()
 					->filterByName('%' . $searchstring . '%')
@@ -119,13 +119,13 @@ class Repository {
 	public function getUsersOffers($tag_id = NULL, $searchstring = NULL, $user = NULL) {
 		$query = ProductQuery::create();
 		
-		if (isset($tag_id)) {
+		if (isset($tag_id) && $tag_id > 0) {
 			$query
 				->useProductTagQuery()
 					->filterByTagId($tag_id)
 				->endUse();
 		}
-		if (isset($searchstring)) {
+		if (isset($searchstring) && strlen($searchstring) > 0) {
 			$query
 				->useProductI18nQuery()
 					->filterByName('%' . $searchstring . '%')

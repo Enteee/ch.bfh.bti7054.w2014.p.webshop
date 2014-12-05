@@ -46,12 +46,6 @@ class ProductController extends MainController {
 		$searchstring = $this->vars->search;
 		$categoryId = $this->vars->categoryId;
 		$user = $this->getUser();
-		if (strlen($searchstring) == 0) {
-			$searchstring = NULL;
-		}
-		if ($categoryId < 0) {
-			$categoryId = NULL;
-		}
 		
 		// load data
 		$products = $this->repo->getUsersOrders($categoryId, $searchstring, $user);
@@ -76,12 +70,6 @@ class ProductController extends MainController {
 		$searchstring = $this->vars->search;
 		$categoryId = $this->vars->categoryId;
 		$user = $this->getUser();
-		if (strlen($searchstring) == 0) {
-			$searchstring = NULL;
-		}
-		if ($categoryId < 0) {
-			$categoryId = NULL;
-		}
 		
 		// load data
 		$products = $this->repo->getUsersOffers($categoryId, $searchstring, $user);

@@ -51,7 +51,13 @@ a.list-group-item.active > .badge,
 .gitkit-button {
 	width: 100%;
 }
-
+#signin .gitkit-account-chip {
+	border: none;
+	background: none;
+}
 .cs-product-list-item-clickable{
 	cursor: pointer;
+}
+.list-group-item.no-padding {
+	padding: 0;
 }

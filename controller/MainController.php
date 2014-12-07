@@ -28,7 +28,7 @@ class MainController extends Controller {
 			'keywords' => 'codeshop,code,shop,snippets,buy'
 		);
 		$data['locale'] = $this->lang->getLocale();
-				
+		
 		// navigation
 		$navItems = array();
 		if ($this->isLoggedIn()) {
@@ -37,6 +37,12 @@ class MainController extends Controller {
 			$navItems[] = array('url' => lang() . '/product/add', 'text' => label('navAddProduct'), 'icon' => 'glyphicon-plus');
 		}
 		$data['navItems'] = $navItems;
+		
+		// user details
+		$data['userCredits'] = 0;
+		if ($this->isLoggedIn()) {
+			$data['userCredits'] = $this->getUser()->getCredits();
+		}
 		
 		// side nav
 		$categories = $this->repo->getAllCategories();

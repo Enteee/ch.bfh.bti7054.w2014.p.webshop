@@ -9,13 +9,14 @@ class Repository {
 			->find();
 	}
 	
-	public function getCategoriesBySearch($searchstring = NULL) {		
+	public function getCategoriesBySearch($searchstring = NULL) {
 		if (isset($searchstring)) {
 			$tagType = TagTypeQuery::create()->findPk(Tag::CATEGORY);
 			return TagQuery::create()
 				->filterByTagType($tagType)
 				->useTagI18nQuery()
 					->filterByName('%' . $searchstring . '%')
+					->filterByLocale(Mvc::$lang->getLocale())
 				->endUse()
 				->find();
 		} else {
@@ -30,7 +31,7 @@ class Repository {
 			->find();
 	}
 	
-	public function getProgrammingLanguagesBySearch($searchstring = NULL) {		
+	public function getProgrammingLanguagesBySearch($searchstring = NULL) {
 		if (isset($searchstring)) {
 			$tagType = TagTypeQuery::create()->findPk(Tag::PROGRAMMING_LANGUAGE);
 			return TagQuery::create()

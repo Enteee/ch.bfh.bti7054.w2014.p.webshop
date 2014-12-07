@@ -104,6 +104,10 @@
 		"en" : "Price",
 		"de" : "Preis"
 	},
+	"credits": {
+		"en" : "Credits",
+		"de" : "Guthaben"
+	},
 	"codeFile": {
 		"en" : "Code file",
 		"de" : "Code Datei"

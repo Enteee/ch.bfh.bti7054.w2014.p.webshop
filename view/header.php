@@ -106,7 +106,22 @@
 					<!-- login form -->
 					<div class="form-group">
 						<p class="lead"><?php echo label('userPanel'); ?></p>
-						<div id="signin"></div>
+						
+						<ul class="list-group">
+							<li class="list-group-item no-padding">
+								<div id="signin"></div>
+							</li>
+							<li class="list-group-item">
+								<div class="row">
+									<div class="col-xs-8">
+										<?php echo label('credits') ?>
+									</div>
+									<div class="col-xs-4 text-right">
+										<b><?php echo $userCredits; ?></b>&cent;
+									</div>
+								</div>
+							</li>
+						</ul>
 					</div>
 					<!-- category navigation -->
 					<p class="lead"><?php echo label('categories'); ?></p>
@@ -127,22 +142,27 @@
 	<?php foreach($shoppingCartItems as $shoppingCartItem):?>
 						<li class="list-group-item">
 							<div class="row">
-								<div class="col-xs-7">
+								<div class="col-xs-2 text-right">
+									<button type="button" class="btn btn-xs btn-default">
+										<span class="glyphicon glyphicon-remove"></span>
+									</button>
+								</div>
+								<div class="col-xs-6">
 									<?php echo $shoppingCartItem->getProduct()->getName(); ?>
 								</div>
-								<div class="col-xs-5 text-right">
-									<?php echo $shoppingCartItem->getPrice(); ?>&cent;
+								<div class="col-xs-4 text-right">
+									<b><?php echo $shoppingCartItem->getPrice(); ?></b>&cent;
 								</div>
 							</div>
 						</li>
 	<?php endforeach; ?>
 						<li class="list-group-item list-group-item-info">
 							<div class="row">
-								<div class="col-xs-7">
+								<div class="col-xs-6 col-xs-offset-2">
 									Total
 								</div>
-								<div class="col-xs-5 text-right">
-									<?php echo $shoppingCartTotalPrice; ?>&cent;
+								<div class="col-xs-4 text-right">
+									<b><?php echo $shoppingCartTotalPrice; ?></b>&cent;
 								</div>
 							</div>
 						</li>

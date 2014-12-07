@@ -6,8 +6,11 @@ require_once '../conf/config.php';
 /* Autoloader */
 require_once '../src/autoload.php';
 
+/* Incluce extension functions */
+require_once  '../src/extensions.php';
+
 /* Set up composer autoload */
-require_once($config['composer']['autoload.php']);
+require_once $config['composer']['autoload.php'];
 
 /* Session */
 session_start();
@@ -50,9 +53,6 @@ if (isset($config['modules'])){
 /* Initialize SaveVars */
 // TODO: back in save all globals -> find solution for external libraries
 //SaveVars::get_instance();
-
-/* Incluce extension function */
-require_once  '../src/extensions.php';
 
 /* Initialize MVC */
 $mvc = new Mvc();

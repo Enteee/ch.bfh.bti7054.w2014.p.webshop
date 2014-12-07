@@ -20,6 +20,7 @@ abstract class Controller {
 		$this->lang = Mvc::$lang;
 		$this->template = new Template();
 		$this->repo = new Repository();
+		
 		$this->vars = SaveVars::getInstance();
 		$this->vars->saveGlobal('gitkitUser', SaveVars::T_ARRAY, SaveVars::G_SESSION, function(){
 			$this->vars->callEnabledSuperglobals(function() use (&$gitkitUser){
@@ -29,11 +30,8 @@ abstract class Controller {
 					$gitkitUser['email'] = $requestUser->getEmail();
 					$gitkitUser['token'] = $requestUser->getUserId();
 				}
-			});
+			}, TRUE /* allow NULL */);
 			return $gitkitUser;
-		});
-		$this->vars->saveGlobal('userIsLoggedIn', SaveVars::T_BOOL, SaveVars::G_SESSION, function(){
-			return false;
 		});
 	}
 	
@@ -54,7 +52,7 @@ abstract class Controller {
 		}
 		if ($appendLanguage) {
 			$location = $location . '/' . $this->lang->getLanguage() . '/';
-		}	
+		}
 		header('Location: ' . $location);
 	}
 
@@ -86,9 +84,7 @@ abstract class Controller {
 	 */
 	protected function isLoggedIn() {
 		$user = $this->getUser();
-		return 	$this->vars->userIsLoggedIn 
-				&& isset($user) 
-				&& $user->getActive();
+		return isset($user) && $user->getActive();
 	}
 	
 	/**

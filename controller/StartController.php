@@ -54,13 +54,12 @@ class StartController extends MainController {
 	
 	public function signin(){
 		$this->vars->fallback('gitkitUser'); // fallback to gitkit user token
-		$this->vars->userIsLoggedIn = true;
 		$this->show();
 	}
 
 	public function signout(){
 		$this->vars->fallback('gitkitUser'); // fallback to gitkit user token
-		$this->vars->userIsLoggedIn = false;
+		$this->vars->gitkitUser = NULL;
 		$this->show();
 	}
 }

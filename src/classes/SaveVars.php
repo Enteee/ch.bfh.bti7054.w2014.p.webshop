@@ -232,8 +232,9 @@ class SaveVars{
 		if(array_key_exists($name,$this->vars)){
 			$type = $this->vars[$name]['type'];
 			$fallback = $this->vars[$name]['fallback'];
+			$allowNull = $this->vars[$name]['allowNull'];;
 			if(is_callable($fallback)){
-				$this->saveVar($name,$fallback(),$type,$fallback);
+				$this->saveVar($name,$fallback(),$type,$fallback, $allowNull);
 			}else{
 				throw new InvalidArgumentException('fallback');
 			}
@@ -248,12 +249,12 @@ class SaveVars{
 	// save global variable from type $type
 	// look in the global variables defined by lookup 
 	// if such a variable couldnt be found use the fallback function given
-	function saveGlobal($name, $type, $lookup, callable $fallback = NULL){
+	function saveGlobal($name, $type, $lookup, callable $fallback = NULL, $allowNull = FALSE){
 		if(is_array(self::$SUPERGLOBALS[$lookup])){ // does the lookup destination exist?
 			if(array_key_exists($name,self::$SUPERGLOBALS[$lookup])){ // does such a variable exist?
-				$this->saveVar($name,self::$SUPERGLOBALS[$lookup][$name],$type,$fallback); // save the variable
+				$this->saveVar($name,self::$SUPERGLOBALS[$lookup][$name],$type,$fallback, $allowNull); // save the variable
 			}else if(is_callable($fallback)){
-				$this->saveVar($name,$fallback(),$type,$fallback);
+				$this->saveVar($name,$fallback(),$type,$fallback, $allowNull);
 			}else{
 				throw new InvalidArgumentException('name');
 			}
@@ -263,154 +264,141 @@ class SaveVars{
 	}
 
 	// save a completely unknown variable
-	function saveVar($name, $data, $type, callable $fallback = NULL){
+	function saveVar($name, $data, $type, callable $fallback = NULL, $allowNull = FALSE){
 		switch ($type){ // make save variable now
 			// basic
-			case self::T_NULL: $data = $this->saveNull((unset)$data); break;
-			case self::T_SCALAR: $data = $this->saveScalar($data); break;
-			case self::T_ARRAY: $data = $this->saveArray((array)$data); break;
-			case self::T_NUMERIC: $data = $this->saveNumeric($data); break;
-			case self::T_STRING: $data = $this->saveString((string)$data); break;
-			case self::T_BOOL: $data = $this->saveBool((bool)$data); break;
-			case self::T_INT: $data = $this->saveInteger((int)$data); break;
-			case self::T_LONG: $data = $this->saveLong((int)$data); break;
-			case self::T_DOUBLE: $data = $this->saveDouble((float)$data); break;
-			case self::T_FLOAT: $data = $this->saveFloat((float)$data); break;
-			case self::T_RESOURCE: $data = $this->saveResource($data); break;
-			case self::T_CALLABLE: $data = $this->saveCallable($data); break;
-			case self::T_OBJECT: $data = $this->saveObject((object)$data); break;
+			case self::T_NULL: $data = $this->saveNull((unset)$data, $allowNull); break;
+			case self::T_SCALAR: $data = $this->saveScalar($data, $allowNull); break;
+			case self::T_ARRAY: $data = $this->saveArray((array)$data, $allowNull); break;
+			case self::T_NUMERIC: $data = $this->saveNumeric($data, $allowNull); break;
+			case self::T_STRING: $data = $this->saveString((string)$data, $allowNull); break;
+			case self::T_BOOL: $data = $this->saveBool((bool)$data, $allowNull); break;
+			case self::T_INT: $data = $this->saveInteger((int)$data, $allowNull); break;
+			case self::T_LONG: $data = $this->saveLong((int)$data, $allowNull); break;
+			case self::T_DOUBLE: $data = $this->saveDouble((float)$data, $allowNull); break;
+			case self::T_FLOAT: $data = $this->saveFloat((float)$data, $allowNull); break;
+			case self::T_RESOURCE: $data = $this->saveResource($data, $allowNull); break;
+			case self::T_CALLABLE: $data = $this->saveCallable($data, $allowNull); break;
+			case self::T_OBJECT: $data = $this->saveObject((object)$data, $allowNull); break;
 			// extended
-			case self::T_STRING_SQL: $data = $this->saveSql($this->save_string($data)); break;
-			case self::T_STRING_HTML: $data = $this->saveHtml($this->save_string($data)); break;
+			case self::T_STRING_SQL: $data = $this->saveSql($this->save_string($data), $allowNull); break;
+			case self::T_STRING_HTML: $data = $this->saveHtml($this->save_string($data), $allowNull); break;
 
 			// not valid type
 			default: 
 				throw new InvalidArgumentException('type');
 			break;
 		}
-
 		// save the variable
 		$this->vars[$name]['data'] = $data;
 		$this->vars[$name]['type'] = $type;
 		$this->vars[$name]['fallback'] = $fallback;
+		$this->vars[$name]['allowNull'] = $allowNull;
 
 	}
 
 	//===================
 	/*MAKE-SAVE-Methods*/
-	private function saveNull($data){
-		if( !isset($data)
-		|| !is_null($data)){
+	private function saveNull($data, $allowNull = FALSE){
+		if( (!$allowNull && !isset($data) ) || !is_null($data)){
 			throw new InvalidArgumentException('data');
 		}
 		return $data;
 	}
 
-	private function saveScalar($data){
-		if( !isset($data)
-		|| !is_scalar($data)){
+	private function saveScalar($data, $allowNull = FALSE){
+		if( (!$allowNull && !isset($data) ) || !is_scalar($data)){
 			throw new InvalidArgumentException('data');
 		}
 		return $data;
 	}
 
-	private function saveArray($data){
-		if( !isset($data)
-		|| !is_array($data)){
+	private function saveArray($data, $allowNull = FALSE){
+		if( (!$allowNull && !isset($data) ) || !is_array($data)){
 			throw new InvalidArgumentException('data');
 		}
 		return $data;
 	}
 
-	private function saveNumeric($data){
-		if( !isset($data)
-		|| !is_numeric($data)){
+	private function saveNumeric($data, $allowNull = FALSE){
+		if( (!$allowNull && !isset($data) ) || !is_numeric($data)){
 			throw new InvalidArgumentException('data');
 		}
 		return $data;
 	}
 
-	private function saveString($data){
-		if( !isset($data)
-		|| !is_string($data)){
+	private function saveString($data, $allowNull = FALSE){
+		if( (!$allowNull && !isset($data) ) || !is_string($data)){
 			throw new InvalidArgumentException('data');
 		}
 		return $data;
 	}
 
-	private function saveBool($data){
-		if( !isset($data)
-		|| !is_bool($data)){
+	private function saveBool($data, $allowNull = FALSE){
+		if( (!$allowNull && !isset($data) ) || !is_bool($data)){
 			throw new InvalidArgumentException('data');
 		}
 		return $data;
 	}
 
-	private function saveInteger($data){
-		if( !isset($data)
-		|| !is_integer($data)){
+	private function saveInteger($data, $allowNull = FALSE){
+		if( (!$allowNull && !isset($data) ) || !is_integer($data)){
 			throw new InvalidArgumentException('data');
 		}
 		return $data;
 	}
 
-	private function saveLong($data){
-		if( !isset($data)
-		|| !is_long($data)){
+	private function saveLong($data, $allowNull = FALSE){
+		if( (!$allowNull && !isset($data) ) || !is_long($data)){
 			throw new InvalidArgumentException('data');
 		}
 		return $data;
 	}
 
-	private function saveDouble($data){
-		if( !isset($data)
-		|| !is_double($data)){
+	private function saveDouble($data, $allowNull = FALSE){
+		if( (!$allowNull && !isset($data) ) || !is_double($data)){
 			throw new InvalidArgumentException('data');
 		}
 		return $data;
 	}
 
-	private function saveFloat($data){
-		if( !isset($data)
-		|| !is_float($data)){
+	private function saveFloat($data, $allowNull = FALSE){
+		if( (!$allowNull && !isset($data) ) || !is_float($data)){
 			throw new InvalidArgumentException('data');
 		}
 		return $data;
 	}
 
-	private function saveResource($data){
-		if( !isset($data)
-		|| !is_resource($data)){
+	private function saveResource($data, $allowNull = FALSE){
+		if( (!$allowNull && !isset($data) ) || !is_resource($data)){
 			throw new InvalidArgumentException('data');
 		}
 		return $data;
 	}
 
-	private function saveCallable($data){
-		if( !isset($data)
-		|| !is_callable($data)){
+	private function saveCallable($data, $allowNull = FALSE){
+		if( (!$allowNull && !isset($data) ) || !is_callable($data)){
 			throw new InvalidArgumentException('data');
 		}
 		return $data;
 	}
 
-	private function saveObject($data){
-		if( !isset($data)
-		|| !is_object($data)){
+	private function saveObject($data, $allowNull = FALSE){
+		if( (!$allowNull && !isset($data) ) || !is_object($data)){
 			throw new InvalidArgumentException('data');
 		}
 		return $data;
 	}
 
-	private function saveSql($data){
-		if( !isset($data) ){
+	private function saveSql($data, $allowNull = FALSE){
+		if( !$allowNull && !isset($data) ){
 			throw new InvalidArgumentException('data');
 		}
 		return addslashes($data);
 	}
 
-	private function saveHtml($data){
-		if( !isset($data)){
+	private function saveHtml($data, $allowNull = FALSE){
+		if( !$allowNull && !isset($data) ){
 			throw new InvalidArgumentException('data');
 		}
 		return htmlentities($data,ENT_QUOTES);

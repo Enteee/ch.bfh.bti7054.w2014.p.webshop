@@ -22,7 +22,7 @@ class Mvc {
 	public function __construct() {
 		self::$lang = new Language();
 		$this->segments  = array();
-		$this->controllerNameDefault = 'StartController';
+		$this->controllerNameDefault = 'ProductController';
 		$this->controllerNameError = 'ErrorController';
 	}
 	

@@ -7,8 +7,7 @@ class GitkitController extends Controller {
 	}
 
 	public function index() {
-		// render template
-		$this->view('gitkit', NULL);
+		$this->view();
 	}
 }
 

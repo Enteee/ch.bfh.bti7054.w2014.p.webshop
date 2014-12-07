@@ -36,6 +36,31 @@ class ProductController extends MainController {
 
 	public function index() {
 		parent::index();
+		$this->show();
+	}
+	
+	public function show() {
+		parent::index();
+		// get variables
+		$searchstring = $this->vars->search;
+		$categoryId = $this->vars->categoryId;
+		
+		// load data
+		$products = array();
+		if ($categoryId >= 0){
+			$products = $this->repo->getProductsByTagId($categoryId, $searchstring);
+		} else {
+			$products = $this->repo->getProductsBySearch($searchstring);
+		}
+		foreach($products as $product){
+			$product->setLocale($this->lang->getLocale());
+		}
+		// set data for view
+		$data['pageTitle'] = label('products');
+		$data['products'] = $products;
+		
+		// render template
+		$this->view('product_list', $data);
 	}
 	
 	public function orders() {
@@ -59,7 +84,7 @@ class ProductController extends MainController {
 		$data['products'] = $products;
 		
 		// render template
-		$this->view('start', $data);
+		$this->view('product_list', $data);
 	}
 	
 	public function offers() {
@@ -83,13 +108,14 @@ class ProductController extends MainController {
 		$data['products'] = $products;
 		
 		// render template
-		$this->view('start', $data);
+		$this->view('product_list', $data);
 	}
 	
 	public function add() {
 		parent::index();
 		$this->assertUserIsLoggedIn();
-		$this->view('add_product');
+		
+		$this->view('product_add');
 	}
 	
 	public function save() {
@@ -189,7 +215,7 @@ class ProductController extends MainController {
 			$con->commit();
 			
 			// redirect
-			$this->redirect('/start');
+			$this->redirect('product/show');
 			
 		} catch (Exception $e) {
 			$con->rollback();
@@ -197,18 +223,77 @@ class ProductController extends MainController {
 		}
 	}
 	
-	public function order() {
+	public function toShoppingCart($offerId) {
 		parent::index();
 		$this->assertUserIsLoggedIn();
 		
-		// collect data...
-		$offerId = $this->vars->offer_id;
-		$user = $this->getUser();
+		$offerId = intval($offerId);
+		if ($offerId > 0) {
 		
-		$this->repo->saveOrder($offerId, $user);
+			$offer = OfferQuery::create()
+				->filterById($offerId)
+				->filterByActive(TRUE)
+				->findOne();
+			if (!isset($offer)) {
+				throw new Exception('no active offer with this id.');
+			}
 			
+			$user = $this->getUser();
+			if ($user->hasOffer($offer)) {
+				throw new Exception('user already bought this.');
+			}
+			
+			// add to shopping cart
+			$cart = ShoppingCart::getInstance();
+			$cart->addOffer($offer);
+		}
+		
 		// redirect
-		$this->redirect('/product/orders');
+		$this->redirect('product/orders');
+	}
+	
+	public function buy() {
+		parent::index();
+		$this->assertUserIsLoggedIn();
+		
+		$user = $this->getUser();
+		$cart = ShoppingCart::getInstance();
+		
+		// make order
+		$offers = $cart->getOffers();
+		$this->repo->saveOrder($offers, $user);
+		
+		// clear shopping cart
+		$cart->clear();
+		
+		// redirect
+		$this->redirect('product/orders');
+	}
+	
+
+	public function search() {
+		parent::index();
+		
+		// get variables
+		$searchstring = $this->vars->search;
+		
+		// load data
+		$products = array();
+		if (isset($categoryId)){
+			$products = $this->repo->getProductsByTagId($categoryId, $searchstring);
+		} else {
+			$products = $this->repo->getProductsBySearch($searchstring);
+		}
+		$product = ProductQuery::create()->findPk(1);
+		$reviews = $this->repo->getReviewsByProduct($product);
+		
+		// set data for view
+		$data['pageTitle'] = label('products');
+		$data['products'] = $products;
+		$data['reviews'] = $reviews;
+		
+		// render template
+		$this->view('product_list', $data);
 	}
 }
 

@@ -35,7 +35,14 @@ abstract class Controller {
 		});
 	}
 	
+	private function getDefaultViewName() {
+		return strtolower(preg_replace('~Controller$~i', '', get_class($this)));
+	}
+	
 	protected function view($name = NULL, $data = NULL) {
+		if (!isset($name)) {
+			$name = $this->getDefaultViewName();
+		}
 		$this->template->view($name, $data);
 	}
 	
@@ -47,15 +54,15 @@ abstract class Controller {
 	 * Redirect a user.
 	 */
 	protected function redirect($location, $appendLanguage = TRUE) {
-		if (!str_starts_with($location, '/')) {
-			$location = '/' . $location;
-		}
+		// remove trailing slash
+		$location = preg_replace('~^/~', '', $location);
+		// append language?
 		if ($appendLanguage) {
-			$location = $location . '/' . $this->lang->getLanguage() . '/';
+			$location = $this->lang->getLanguage() . '/' . $location;
 		}
-		header('Location: ' . $location);
+		header('Location: ' . '/' . $location);
 	}
-
+	
 	/*
 	* Gets the logged in user
 	*/

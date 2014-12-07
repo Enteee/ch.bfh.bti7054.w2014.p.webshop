@@ -37,6 +37,7 @@ class Repository {
 				->filterByTagType($tagType)
 				->useTagI18nQuery()
 					->filterByName('%' . $searchstring . '%')
+					->filterByLocale(Mvc::$lang->getLocale())
 				->endUse()
 				->find();
 		} else {
@@ -48,8 +49,6 @@ class Repository {
 		return ProductQuery::create()
 			->find();
 	}
-	
-	
 
 	public function getProductById($product_id) {
 		return ProductQuery::create()
@@ -202,56 +201,64 @@ class Repository {
 		return NULL;
 	}
 	
-	public function saveOrder($offerId, $orderUser) {
+	public function saveOrder($offers, $orderUser) {
+		if (!isset($offers)) {
+			throw new InvalidArgumentException('offers is null.');
+		}
+		if (!isset($orderUser)) {
+			throw new Exception('no user.');
+		}
+		if (count($offers) == 0) {
+			return;
+		}
 		$con = Propel::getConnection();
 		$con->beginTransaction();
 		try {
-			// check user
-			if (!isset($orderUser)) {
-				throw new Exception('no user.');
-			}			
 			$credits = $orderUser->getCredits();
 			
-			// load offer
-			$offer = OfferQuery::create()->findPk($offerId);
-			if (!isset($offer)) {
-				throw new Exception('offer not found.');
-			}
+			// make an order for every offer
+			foreach ($offers as $offer) {
 			
-			// user doen't have ordered this offer yet?
-			if ($orderUser->hasOffer($offer)) {
-				throw new Exception('user already bought this.');
-			}
-			
-			$providerUser = $offer->getProviderUser();
-			if ($providerUser == $orderUser) {
-				throw new Exception('provider and buyer are the same user.');
-			}
-			
-			$price = $offer->getPrice();
-			if ($price > $credits) {
-				throw new Exception('user has not enought credits to make this order.');
-			}
-			
-			// save order
-			$order = new Order();
-			$order
-				->setUser($orderUser)
-				->setOffer($offer)
-				->setPaidPrice($price)
-				->setActive(1)
-				->save();
-			
-			// transfer credits from buyer...
-			$orderUser
-				->setCredits($credits - $price)
-				->save();
-			// ... to provider
-			if (isset($providerUser)) {
-				$providerCredits = $providerUser->getCredits();
-				$providerUser
-					->setCredits($providerCredits + $price)
+				if (!isset($offer)) {
+					throw new Exception('offer is null.');
+				}
+				
+				// user doen't have ordered this offer yet?
+				if ($orderUser->hasOffer($offer)) {
+					throw new Exception('user already bought this.');
+				}
+				
+				$providerUser = $offer->getProviderUser();
+				if ($providerUser == $orderUser) {
+					throw new Exception('provider and buyer are the same user.');
+				}
+				
+				$price = $offer->getPrice();
+				if ($price > $credits) {
+					throw new Exception('user has not enought credits to make this order.');
+				}
+				
+				// save order
+				$order = new Order();
+				$order
+					->setUser($orderUser)
+					->setOffer($offer)
+					->setPaidPrice($price)
+					->setActive(1)
 					->save();
+				
+				// transfer credits from buyer...
+				$credits -= $price;
+				$orderUser
+					->setCredits($credits)
+					->save();
+				// ... to provider
+				if (isset($providerUser)) {
+					$providerCredits = $providerUser->getCredits();
+					$providerUser
+						->setCredits($providerCredits + $price)
+						->save();
+				}
 			}
 			
 			$con->commit();

@@ -84,7 +84,7 @@
 <?php endforeach; ?>
 					</ul>
 					<!-- search form -->
-					<form class="navbar-form navbar-right" role="form" action="search" method="get">
+					<form class="navbar-form navbar-right" role="form" action="product/search" method="get">
 						<div class="form-group">
 							<div class="input-group">
 								<input type="text" class="form-control" name="search" placeholder="<?php echo label('search'); ?>">
@@ -113,7 +113,7 @@
 					<nav>
 						<div class="list-group">
 <?php foreach($categories as $category):?>
-							<a href="<?php echo lang(); ?>/start/show?categoryId=<?php echo $category->getId(); ?>" class="list-group-item<?php echo ($category->getId() == $activeCategoryId) ? ' active' : ''; ?>">
+							<a href="<?php echo lang(); ?>/product/show?categoryId=<?php echo $category->getId(); ?>" class="list-group-item<?php echo ($category->getId() == $activeCategoryId) ? ' active' : ''; ?>">
 								<span class="badge"><?php echo $category->getProductsCount(); ?></span>
 								<?php $category->setLocale($locale); echo $category->getName(); ?>
 							</a>
@@ -148,7 +148,7 @@
 						</li>
 					</ul>
 					<div>
-						<form action="product/buy" method="get">
+						<form action="product/buy" method="post">
 							<button type="submit" class="btn btn-default btn-block"><?php echo label('buy'); ?></button>
 						</form>
 						<br />

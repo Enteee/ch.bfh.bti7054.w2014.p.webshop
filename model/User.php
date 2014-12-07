@@ -15,16 +15,15 @@
  */
 class User extends BaseUser
 {
-	public function hasOffer($offerNeedle) {
-		if (!isset($offerNeedle)) {
-			throw new Exception('offerNeedle is null.');
+	public function hasOffer(Offer $offer) {
+		if (!isset($offer)) {
+			throw new InvalidArgumentException('offer is null.');
 		}
-		$orders = $this->getOrders();
-		foreach ($orders as $order) {
-			if ($order->getOffer() == $offerNeedle) {
-				return true;
-			}
-		}
-		return false;
+		$count = OrderQuery::create()
+			->filterByUser($this)
+			->filterByOffer($offer)
+			->filterByActive(TRUE)
+			->count();
+		return $count > 0;
 	}
 }

@@ -24,4 +24,5 @@ class Review extends BaseReview implements JsonSerializable
 			'email' => $this->getUser()->getEmail(),
 		];
 	}
+
 }

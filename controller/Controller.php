@@ -66,7 +66,7 @@ abstract class Controller {
 	/*
 	* Gets the logged in user
 	*/
-	protected function getUser(){
+	protected function getUser() {
 		$user = NULL;
 		$gitkitUser = $this->vars->gitkitUser;
 		if(	array_key_exists('email',$gitkitUser)

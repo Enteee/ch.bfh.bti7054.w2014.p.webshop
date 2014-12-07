@@ -66,6 +66,7 @@ class SaveVars{
 	/*EXTENDED_TYPES*/
 	const T_STRING_SQL = 401;
 	const T_STRING_HTML = 402;
+	const T_STRING_JSON = 403;
 
 	/*Variables*/ 
 	private $vars = array();	// the variables struct:
@@ -252,9 +253,9 @@ class SaveVars{
 	function saveGlobal($name, $type, $lookup, callable $fallback = NULL, $allowNull = FALSE){
 		if(is_array(self::$SUPERGLOBALS[$lookup])){ // does the lookup destination exist?
 			if(array_key_exists($name,self::$SUPERGLOBALS[$lookup])){ // does such a variable exist?
-				$this->saveVar($name,self::$SUPERGLOBALS[$lookup][$name],$type,$fallback, $allowNull); // save the variable
+				$this->saveVar($name, self::$SUPERGLOBALS[$lookup][$name], $type, $fallback, $allowNull); // save the variable
 			}else if(is_callable($fallback)){
-				$this->saveVar($name,$fallback(),$type,$fallback, $allowNull);
+				$this->saveVar($name, $fallback(), $type, $fallback, $allowNull);
 			}else{
 				throw new InvalidArgumentException('name');
 			}
@@ -281,10 +282,9 @@ class SaveVars{
 			case self::T_CALLABLE: $data = $this->saveCallable($data, $allowNull); break;
 			case self::T_OBJECT: $data = $this->saveObject((object)$data, $allowNull); break;
 			// extended
-			case self::T_STRING_SQL: $data = $this->saveSql($this->save_string($data), $allowNull); break;
-			case self::T_STRING_HTML: $data = $this->saveHtml($this->save_string($data), $allowNull); break;
-
-			// not valid type
+			case self::T_STRING_SQL: $data = $this->saveSql($this->saveString((string)$data, $allowNull), $allowNull); break;
+			case self::T_STRING_HTML: $data = $this->saveHtml($this->saveString((string)$data, $allowNull), $allowNull); break;
+			case self::T_STRING_JSON: $data = $this->saveJson($this->saveString((string)$data, $allowNull), $allowNull);  break;
 			default: 
 				throw new InvalidArgumentException('type');
 			break;
@@ -402,6 +402,13 @@ class SaveVars{
 			throw new InvalidArgumentException('data');
 		}
 		return htmlentities($data,ENT_QUOTES);
+	}
+
+	private function saveJson($data, $allowNull = FALSE){
+		if( !$allowNull && !isset($data) ){
+			throw new InvalidArgumentException('data');
+		}
+		return json_decode($data); 
 	}
 
 }

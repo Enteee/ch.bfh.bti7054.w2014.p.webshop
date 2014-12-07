@@ -39,6 +39,26 @@ $(document).ready(function() {
 		}).done(function (json){ product = json; });
 		return product;
 	}
+
+	function addReview(productListItem, reviewData) {
+		var reviews = productListItem.find('.cs-product-list-item-reviews');
+		var template = reviews.find('.cs-product-list-item-review-template');
+		var newReview = template.clone();
+		newReview.removeClass('cs-product-list-item-review-template');
+		newReview.find('.cs-product-list-item-review-email').text(reviewData.email);
+		newReview.find('.cs-product-list-item-review-text').text(reviewData.text);
+		newReview.find('.cs-product-list-item-review-created-at').text(reviewData.createdAt);
+		var reviewRating = newReview.find('.cs-product-list-item-review-rating');
+		for(var i=0;i < 5;i++){
+			if(i < reviewData.rating){
+				reviewRating.append('<span class="glyphicon glyphicon-star"></span>&nbsp;');
+			}else{
+				reviewRating.append('<span class="glyphicon glyphicon-star-empty"></span>&nbsp;');
+			}
+		}
+		reviews.append(newReview);
+		return newReview;
+	}
 	
 	/* ---------- events ---------- */
 	
@@ -78,55 +98,57 @@ $(document).ready(function() {
 				}
 				reviewsCount.text(product.reviewsCount);
 				for(var review in product.reviews){
-					var template = reviews.find($('.cs-product-list-item-review-template'));
-					var newReview = template.clone();
-					var reviewData = product.reviews[review];
-					newReview.removeClass('cs-product-list-item-review-template');
-					newReview.find('.cs-product-list-item-review-email').text(reviewData.email);
-					newReview.find('.cs-product-list-item-review-text').text(reviewData.text);
-					newReview.find('.cs-product-list-item-review-created-at').text(reviewData.createdAt);
-					var reviewRating = newReview.find('.cs-product-list-item-review-rating');
-					for(var i=0;i < 5;i++){
-						if(i < reviewData.rating){
-							reviewRating.append('<span class="glyphicon glyphicon-star"></span>&nbsp;');
-						}else{
-							reviewRating.append('<span class="glyphicon glyphicon-star-empty"></span>&nbsp;');
-						}
-					}
-					reviews.append(newReview);
-					
+					addReview($(this),product.reviews[review]);
 				};
-				var hideables = $(this).find($('.cs-product-list-hideable')).not('[class*="template"]');
+				var hideables = $(this).find('.cs-product-list-hideable').not('[class*="template"]');
 				hideables.hide();
 				hideables.removeClass('hidden');
 				hideables.slideToggle('fast');
 				$(this).find('.cs-product-list-item-clickable').click(function(){
-					console.log('Penis');
 					hideables.slideToggle('fast');
 				});
-				$(this).find($('.cs-product-list-item-clickable')).click(function(e){
+				$(this).find('.cs-product-list-item-clickable').click(function(e){
 					e.stopPropagation();
+				});
+				$(this).find('.cs-product-list-item-review-new-add').click(function(e){
+					var productListItemDom = $(this).parents('.cs-product-list-item');
+					var addNewReview = {
+						'productId' : productListItemDom.find('.cs-product-list-item-id').val(),
+						'text' : productListItemDom.find('.cs-product-list-item-review-new-text').val(),
+						'rating' : productListItemDom.find('.cs-product-list-item-review-new-rating-val').val(),
+					};
+					$.ajax({
+						type: 'POST',
+						url: '/json?type=review',
+						data: { 'object' : JSON.stringify(addNewReview) },
+						context: productListItemDom,
+						dataType: 'json',
+					}).done(function(review){
+						addReview($(this),review).hide().removeClass('hidden').slideToggle('fast');
+						$(this).find('.cs-product-list-item-review-new-text').val(''),
+						$(this).find('.cs-product-list-item-review-new-rating-val').val('4').trigger('change');
+					});
 				});
 			}
 		});
 	});
 
 	$('.cs-product-list-item-review-new-rating-1').mouseenter(function(){
-		$(this).siblings('.cs-product-list-item-review-rating-val').val('1').change();
+		$(this).siblings('.cs-product-list-item-review-new-rating-val').val('1').change();
 	});
 	$('.cs-product-list-item-review-new-rating-2').mouseenter(function(){
-		$(this).siblings('.cs-product-list-item-review-rating-val').val('2').change();
+		$(this).siblings('.cs-product-list-item-review-new-rating-val').val('2').change();
 	});
 	$('.cs-product-list-item-review-new-rating-3').mouseenter(function(){
-		$(this).siblings('.cs-product-list-item-review-rating-val').val('3').change();
+		$(this).siblings('.cs-product-list-item-review-new-rating-val').val('3').change();
 	});
 	$('.cs-product-list-item-review-new-rating-4').mouseenter(function(){
-		$(this).siblings('.cs-product-list-item-review-rating-val').val('4').change();
+		$(this).siblings('.cs-product-list-item-review-new-rating-val').val('4').change();
 	});
 	$('.cs-product-list-item-review-new-rating-5').mouseenter(function(){
-		$(this).siblings('.cs-product-list-item-review-rating-val').val('5').change();
+		$(this).siblings('.cs-product-list-item-review-new-rating-val').val('5').change();
 	});
-	$('.cs-product-list-item-review-rating-val').change(function(){
+	$('.cs-product-list-item-review-new-rating-val').change(function(){
 		var val = $(this).val();
 		for(var i=1;i <= 5;i++){
 			$(this).siblings('.cs-product-list-item-review-new-rating-'+i).removeClass('glyphicon-star glyphicon-star-empty').addClass( ( i <= val ) ? 'glyphicon-star' : 'glyphicon-star-empty');

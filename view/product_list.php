@@ -27,33 +27,37 @@
 								<input class="" type="checkbox"></input>  
 							</div>
 							<div class="hidden cs-product-list-item-rating cs-product-list-hideable">
-								<p class="pull-right"><?php echo label('reviews')?>&nbsp;<span class="badge cs-product-list-item-reviews-count"></span></p>
+								&nbsp;<p class="pull-right"><?php echo label('reviews')?>&nbsp;<span class="badge cs-product-list-item-reviews-count"></span></p>
 							</div>
 							<!-- reviews -->
 							<div class="hidden well well-sm cs-product-list-hideable">
 								<div class="cs-product-list-item-reviews">
 									<div class="hidden row cs-product-list-item-review cs-product-list-item-review-template cs-product-list-hideable">
 										<div class="col-md-12">
-											<p class="cs-product-list-item-review-email"></p>
-											<div class="cs-product-list-item-review-rating"></div>
+											<span class="cs-product-list-item-review-email"></span>
 											<span class="pull-right cs-product-list-item-review-created-at"></span>
+											<div class="cs-product-list-item-review-rating"></div>
 											<p class="cs-product-list-item-review-text"></p>
 										</div>
 									</div>
 								</div>
-								<textarea class="form-control cs-product-list-item-review-new-text" rows="5" placeholder="<?php echo label('writeReview') ?>"></textarea>
-								<div class="text-right">
-								<p>
-									<?php echo label('rating'); ?>:
-									<span class="glyphicon glyphicon-star cs-product-list-item-review-new-rating-1"></span>
-									<span class="glyphicon glyphicon-star cs-product-list-item-review-new-rating-2"></span>
-									<span class="glyphicon glyphicon-star cs-product-list-item-review-new-rating-3"></span>
-									<span class="glyphicon glyphicon-star cs-product-list-item-review-new-rating-4"></span>
-									<span class="glyphicon glyphicon-star-empty cs-product-list-item-review-new-rating-5"></span>
-									<input class="hidden cs-product-list-item-review-rating-val" type="hidden" name="id" value="4" />
-								</p>
-									<button type="button" class="btn btn-default btn-sm cs-product-list-item-review-new-add"><?php echo label('addReview'); ?></a>
+	<?php if ($isLoggedIn): ?>
+								<div class="cs-product-list-item-review-new">
+									<textarea class="form-control cs-product-list-item-review-new-text" rows="5" placeholder="<?php echo label('writeReview') ?>"></textarea>
+									<div class="text-right">
+										<p>
+											<?php echo label('rating'); ?>:
+											<span class="glyphicon glyphicon-star cs-product-list-item-review-new-rating-1"></span>
+											<span class="glyphicon glyphicon-star cs-product-list-item-review-new-rating-2"></span>
+											<span class="glyphicon glyphicon-star cs-product-list-item-review-new-rating-3"></span>
+											<span class="glyphicon glyphicon-star cs-product-list-item-review-new-rating-4"></span>
+											<span class="glyphicon glyphicon-star-empty cs-product-list-item-review-new-rating-5"></span>
+											<input class="hidden cs-product-list-item-review-new-rating-val" type="hidden" name="id" value="4" />
+										</p>
+										<button type="button" class="btn btn-default btn-sm cs-product-list-item-review-new-add"><?php echo label('addReview'); ?></a>
+									</div>
 								</div>
+	<?php endif; ?>
 							</div>
 						</div>
 					</div>

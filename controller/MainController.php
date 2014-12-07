@@ -28,6 +28,7 @@ class MainController extends Controller {
 			'keywords' => 'codeshop,code,shop,snippets,buy'
 		);
 		$data['locale'] = $this->lang->getLocale();
+		$data['isLoggedIn'] = $this->isLoggedIn();
 		
 		// navigation
 		$navItems = array();

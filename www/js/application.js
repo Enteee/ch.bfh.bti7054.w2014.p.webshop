@@ -86,10 +86,10 @@ $(document).ready(function() {
 					tags.append('<span class="label label-default">'+ product.tags[tag].name +'</span>&nbsp;');
 				};
 				for(var language in product.programmingLanguage){
-					programmingLanguage.append('<option>'+ language +'</option>');
+					programmingLanguage.append('<option>'+ product.programmingLanguage[language].name +'</option>');
 				};
 				for(var version in product.versions){
-					programmingLanguage.append('<option>'+ version +'</option>');
+					versions.append('<option>'+ product.versions[version].name +'</option>');
 				};
 				for(var i = 0; i < 5; i++){
 					if(product.avgRating > 0){

@@ -46,14 +46,16 @@ class ErrorController extends MainController {
 		$errorNr = '500';
 		$errorDesc = $this->lang->error500;
 		
+		$errorCode = NULL;
 		if ($this->isDebug()) {
 			// show exception if error reporting on
-			$errorDesc = $exception;
+			$errorCode = $exception;
 		}
 		
 		// set data for view
 		$data['errorTitle'] = $this->lang->errorTitle . ' ' . $errorNr;
 		$data['errorDescription'] = $errorDesc;
+		$data['errorCode'] = $errorCode;
 		
 		// render template
 		$this->view('error', $data);

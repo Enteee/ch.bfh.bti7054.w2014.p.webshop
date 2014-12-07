@@ -18,6 +18,10 @@ textarea {
 	 resize:none;
 }
 
+.scroll {
+	overflow: scroll;
+}
+
 /* ---------- changes on bootstrap style ---------- */
 
 /* badge in list-group */

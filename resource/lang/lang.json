@@ -12,17 +12,17 @@
 		"de" : "Nie mehr selber Code schreiben!",
 		"en" : "Never code again!"
 	},
-	"navMyItems": {
-		"en" : "My items",
-		"de" : "Meine Codes"
+	"navMyOrders": {
+		"en" : "My orders",
+		"de" : "Meine Bestellungen"
 	},
-	"navMyProducts": {
-		"en" : "My products",
-		"de" : "Meine Produkte"
+	"navMyOffers": {
+		"en" : "My offers",
+		"de" : "Meine Angebote"
 	},
-	"navAddProduct": {
-		"en" : "Add product",
-		"de" : "Produkt hinzufügen"
+	"navAddOffer": {
+		"en" : "Add offer",
+		"de" : "Angebot hinzufügen"
 	},
 	"userPanel": {
 		"en" : "User panel",
@@ -47,6 +47,10 @@
 	"writeReview": {
 		"en" : "write review...",
 		"de" : "kommentar schreiben..."
+	},
+	"offer": {
+		"en" : "offer",
+		"de" : "Angebot"
 	},
 	"version": {
 		"en" : "version",

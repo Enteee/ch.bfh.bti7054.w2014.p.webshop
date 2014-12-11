@@ -18,6 +18,8 @@
 								<span><?php echo label('programmingLanguage'); ?>:</span>
 								<select class="cs-product-list-item-options-programming-language">
 								</select>
+								<span><?php echo label('offer'); ?>:</span>
+								<select class="cs-product-list-item-options-offer">
 								<span><?php echo label('version'); ?>:</span>
 								<select class="cs-product-list-item-options-version">
 								</select>

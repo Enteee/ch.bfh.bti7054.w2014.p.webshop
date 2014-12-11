@@ -167,6 +167,8 @@ We're selling source code on our webshop. People can upload source code and othe
 
 ### Task 6.1: "Buy Now" Links [open]
 
+* Show price for products (+ dynamic pricing, customization)
+
 ### Task 6.2: Select Options [done]
 
 ### Task 6.3: Shipping Address [open]
@@ -174,6 +176,11 @@ We're selling source code on our webshop. People can upload source code and othe
 * Do we really need this? Code is not 'shippable'.
 
 ### Task 6.4: Confirmation [open]
+
+* Checkout shopping cart
+ * Input customer data (form) + Validation
+ * Confirmation email
+* Important: email sending
 
 ### Task 6.5: Refactoring and Code Beautification [done]
 
@@ -193,6 +200,8 @@ We're selling source code on our webshop. People can upload source code and othe
 * $_COOKIE wrapped in SaveVars
 
 ### Task 8.2: Shopping Cart [progress]
+
+* Put into shopping cart
 
 ### Task 8.3: User Accounts [done]
 
@@ -219,8 +228,11 @@ We're selling source code on our webshop. People can upload source code and othe
 
 * create database via propel generator
 * populate controller to insert data
+* Db administartion area
 
 ### Task 11.1: Web Service Integration [progress]
+
+* Do we really need this? The ajax controller is kind of a REST controller itself.
 
 ### Task 12.1: XML
 
@@ -231,13 +243,6 @@ We're selling source code on our webshop. People can upload source code and othe
 ### Task 12.4: Regular Expressions
 
 ## Open issues
-
-* Finish code upload page (inclusive categories and programming languages)
-* Add comment feature
-* Show bought products page
-* Show uploaded products page
-* Implement shopping cart real
-
 
 
 

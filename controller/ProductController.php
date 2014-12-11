@@ -80,7 +80,7 @@ class ProductController extends MainController {
 		}
 		
 		// set data for view
-		$data['pageTitle'] = label('navMyItems');
+		$data['pageTitle'] = label('navMyOrders');
 		$data['products'] = $products;
 		
 		// render template
@@ -104,7 +104,7 @@ class ProductController extends MainController {
 		}
 		
 		// set data for view
-		$data['pageTitle'] = label('navMyProducts');
+		$data['pageTitle'] = label('navMyOffers');
 		$data['products'] = $products;
 		
 		// render template

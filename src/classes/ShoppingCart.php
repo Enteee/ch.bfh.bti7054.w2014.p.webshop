@@ -20,7 +20,7 @@ class ShoppingCart {
 	public function addOffer(Offer $offer) {
 		if (!isset($offer)) {
 			throw new InvalidArgumentException('offer is null.');
-		}	
+		}
 		$offerId = $offer->getId();
 		if (!in_array($offerId, $this->vars->offerIds)) {
 			$ids = $this->vars->offerIds;

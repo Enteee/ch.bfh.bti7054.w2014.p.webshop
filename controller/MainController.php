@@ -7,7 +7,7 @@ class MainController extends Controller {
 
 	public function __construct() {
 		parent::__construct();
-		
+
 		// save variables
 		$this->vars->saveGlobal('categoryId',SaveVars::T_NUMERIC,SaveVars::G_GET,function(){
 			return NULL;
@@ -37,9 +37,24 @@ class MainController extends Controller {
 		// navigation
 		$navItems = array();
 		if ($this->isLoggedIn()) {
-			$navItems[] = array('url' => lang() . '/products/orders', 'text' => label('navMyOrders'), 'icon' => 'glyphicon-user');
-			$navItems[] = array('url' => lang() . '/products/offers', 'text' => label('navMyOffers'), 'icon' => 'glyphicon-folder-open');
-			$navItems[] = array('url' => lang() . '/product/add', 'text' => label('navAddOffer'), 'icon' => 'glyphicon-plus');
+			$navItems[] = array(
+				'url' => lang() . '/products/orders',
+				'text' => label('navMyOrders'),
+				'icon' => 'glyphicon-user',
+				'active' => (Mvc::getInstance()->getControllerName() == 'ProductsController' && Mvc::getInstance()->getMethod() == 'orders') ? 'active' : '',
+			);
+			$navItems[] = array(
+				'url' => lang() . '/products/offers',
+ 				'text' => label('navMyOffers'),
+				'icon' => 'glyphicon-folder-open',
+				'active' => (Mvc::getInstance()->getControllerName() == 'ProductsController' && Mvc::getInstance()->getMethod() == 'offers') ? 'active' : '',
+			);
+			$navItems[] = array(
+				'url' => lang() . '/product/add',
+				'text' => label('navAddOffer'),
+				'icon' => 'glyphicon-plus',
+				'active' => (Mvc::getInstance()->getControllerName() == 'ProductController' ) ? 'active' : '',
+			);
 		}
 		$data['navItems'] = $navItems;
 		

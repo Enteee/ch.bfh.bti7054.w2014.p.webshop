@@ -7,6 +7,17 @@ class Mvc {
 
 	const CONTROLLER_SUFFIX = 'Controller';
 
+	/* Singleton */
+	private static $INSTANCE;
+
+	public static function getInstance() {
+		if(!isset(self::$INSTANCE)){
+			self::$INSTANCE = new self;
+		}
+		return self::$INSTANCE;
+	}
+	
+
 	protected $lang;
 
 	protected $segments;
@@ -19,13 +30,13 @@ class Mvc {
 	protected $methodName;
 	protected $methodNameFallback = 'index';
 
-	public function __construct() {
+	private function __construct() {
 		$this->lang = Language::getInstance();
 		$this->segments  = array();
 		$this->controllerNameDefault = 'ProductsController';
 		$this->controllerNameError = 'ErrorController';
 	}
-	
+
 	public function init() {
 		if (!isset($_SERVER['REQUEST_URI'])) {
 			throw Exception('request uri not found.');
@@ -94,11 +105,19 @@ class Mvc {
 		}
 	}
 	
+	public function getControllerName(){
+		return $this->controllerName;
+	}
+	
 	private function setMethodByUri() {
 		// method over uri?
 		if (count($this->segments) > 0) {
 			$this->methodName = strtolower(array_shift($this->segments));
 		}
+	}
+
+	public function getMethod(){
+		return $this->methodName;
 	}
 	
 	private function controllerExists($name) {

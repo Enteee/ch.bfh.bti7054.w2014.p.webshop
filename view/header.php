@@ -78,7 +78,7 @@
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 <?php foreach ($navItems as $navItem): ?>
-						<li>
+						<li class="<?php echo $navItem['active']; ?>">
 							<a href="<?php echo $navItem['url']; ?>"><span class="glyphicon <?php echo $navItem['icon']; ?>" title="<?php echo $navItem['text']; ?>"></span> <span class="cs-nav-text"><?php echo $navItem['text']; ?></span></a>
 						</li>
 <?php endforeach; ?>

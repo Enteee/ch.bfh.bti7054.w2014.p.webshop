@@ -55,6 +55,13 @@ abstract class BaseOrder extends BaseObject implements Persistent
     protected $paid_price;
 
     /**
+     * The value for the with_comments field.
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $with_comments;
+
+    /**
      * The value for the active field.
      * Note: this column has a database default value of: true
      * @var        boolean
@@ -112,6 +119,7 @@ abstract class BaseOrder extends BaseObject implements Persistent
     public function applyDefaultValues()
     {
         $this->paid_price = 0;
+        $this->with_comments = true;
         $this->active = true;
     }
 
@@ -167,6 +175,17 @@ abstract class BaseOrder extends BaseObject implements Persistent
     {
 
         return $this->paid_price;
+    }
+
+    /**
+     * Get the [with_comments] column value.
+     *
+     * @return boolean
+     */
+    public function getWithComments()
+    {
+
+        return $this->with_comments;
     }
 
     /**
@@ -343,6 +362,35 @@ abstract class BaseOrder extends BaseObject implements Persistent
     } // setPaidPrice()
 
     /**
+     * Sets the value of the [with_comments] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Order The current object (for fluent API support)
+     */
+    public function setWithComments($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->with_comments !== $v) {
+            $this->with_comments = $v;
+            $this->modifiedColumns[] = OrderPeer::WITH_COMMENTS;
+        }
+
+
+        return $this;
+    } // setWithComments()
+
+    /**
      * Sets the value of the [active] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
@@ -431,6 +479,10 @@ abstract class BaseOrder extends BaseObject implements Persistent
                 return false;
             }
 
+            if ($this->with_comments !== true) {
+                return false;
+            }
+
             if ($this->active !== true) {
                 return false;
             }
@@ -461,9 +513,10 @@ abstract class BaseOrder extends BaseObject implements Persistent
             $this->user_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
             $this->offer_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
             $this->paid_price = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
-            $this->active = ($row[$startcol + 4] !== null) ? (boolean) $row[$startcol + 4] : null;
-            $this->created_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-            $this->updated_at = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->with_comments = ($row[$startcol + 4] !== null) ? (boolean) $row[$startcol + 4] : null;
+            $this->active = ($row[$startcol + 5] !== null) ? (boolean) $row[$startcol + 5] : null;
+            $this->created_at = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->updated_at = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -473,7 +526,7 @@ abstract class BaseOrder extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 7; // 7 = OrderPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = OrderPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Order object", $e);
@@ -735,6 +788,9 @@ abstract class BaseOrder extends BaseObject implements Persistent
         if ($this->isColumnModified(OrderPeer::PAID_PRICE)) {
             $modifiedColumns[':p' . $index++]  = '[paid_price]';
         }
+        if ($this->isColumnModified(OrderPeer::WITH_COMMENTS)) {
+            $modifiedColumns[':p' . $index++]  = '[with_comments]';
+        }
         if ($this->isColumnModified(OrderPeer::ACTIVE)) {
             $modifiedColumns[':p' . $index++]  = '[active]';
         }
@@ -766,6 +822,9 @@ abstract class BaseOrder extends BaseObject implements Persistent
                         break;
                     case '[paid_price]':
                         $stmt->bindValue($identifier, $this->paid_price, PDO::PARAM_INT);
+                        break;
+                    case '[with_comments]':
+                        $stmt->bindValue($identifier, $this->with_comments, PDO::PARAM_BOOL);
                         break;
                     case '[active]':
                         $stmt->bindValue($identifier, $this->active, PDO::PARAM_BOOL);
@@ -941,12 +1000,15 @@ abstract class BaseOrder extends BaseObject implements Persistent
                 return $this->getPaidPrice();
                 break;
             case 4:
-                return $this->getActive();
+                return $this->getWithComments();
                 break;
             case 5:
-                return $this->getCreatedAt();
+                return $this->getActive();
                 break;
             case 6:
+                return $this->getCreatedAt();
+                break;
+            case 7:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -982,9 +1044,10 @@ abstract class BaseOrder extends BaseObject implements Persistent
             $keys[1] => $this->getUserId(),
             $keys[2] => $this->getOfferId(),
             $keys[3] => $this->getPaidPrice(),
-            $keys[4] => $this->getActive(),
-            $keys[5] => $this->getCreatedAt(),
-            $keys[6] => $this->getUpdatedAt(),
+            $keys[4] => $this->getWithComments(),
+            $keys[5] => $this->getActive(),
+            $keys[6] => $this->getCreatedAt(),
+            $keys[7] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1045,12 +1108,15 @@ abstract class BaseOrder extends BaseObject implements Persistent
                 $this->setPaidPrice($value);
                 break;
             case 4:
-                $this->setActive($value);
+                $this->setWithComments($value);
                 break;
             case 5:
-                $this->setCreatedAt($value);
+                $this->setActive($value);
                 break;
             case 6:
+                $this->setCreatedAt($value);
+                break;
+            case 7:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1081,9 +1147,10 @@ abstract class BaseOrder extends BaseObject implements Persistent
         if (array_key_exists($keys[1], $arr)) $this->setUserId($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setOfferId($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setPaidPrice($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setActive($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setCreatedAt($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setUpdatedAt($arr[$keys[6]]);
+        if (array_key_exists($keys[4], $arr)) $this->setWithComments($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setActive($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setCreatedAt($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setUpdatedAt($arr[$keys[7]]);
     }
 
     /**
@@ -1099,6 +1166,7 @@ abstract class BaseOrder extends BaseObject implements Persistent
         if ($this->isColumnModified(OrderPeer::USER_ID)) $criteria->add(OrderPeer::USER_ID, $this->user_id);
         if ($this->isColumnModified(OrderPeer::OFFER_ID)) $criteria->add(OrderPeer::OFFER_ID, $this->offer_id);
         if ($this->isColumnModified(OrderPeer::PAID_PRICE)) $criteria->add(OrderPeer::PAID_PRICE, $this->paid_price);
+        if ($this->isColumnModified(OrderPeer::WITH_COMMENTS)) $criteria->add(OrderPeer::WITH_COMMENTS, $this->with_comments);
         if ($this->isColumnModified(OrderPeer::ACTIVE)) $criteria->add(OrderPeer::ACTIVE, $this->active);
         if ($this->isColumnModified(OrderPeer::CREATED_AT)) $criteria->add(OrderPeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(OrderPeer::UPDATED_AT)) $criteria->add(OrderPeer::UPDATED_AT, $this->updated_at);
@@ -1168,6 +1236,7 @@ abstract class BaseOrder extends BaseObject implements Persistent
         $copyObj->setUserId($this->getUserId());
         $copyObj->setOfferId($this->getOfferId());
         $copyObj->setPaidPrice($this->getPaidPrice());
+        $copyObj->setWithComments($this->getWithComments());
         $copyObj->setActive($this->getActive());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
@@ -1342,6 +1411,7 @@ abstract class BaseOrder extends BaseObject implements Persistent
         $this->user_id = null;
         $this->offer_id = null;
         $this->paid_price = null;
+        $this->with_comments = null;
         $this->active = null;
         $this->created_at = null;
         $this->updated_at = null;

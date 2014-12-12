@@ -28,31 +28,63 @@ $(document).ready(function() {
 		// init select2
 		$(element).select2(options);
 	}
-
-	function getProduct(id) {
+	
+	/* ---------- ajax functions ---------- */
+	
+	function getProduct(productId) {
 		var product = null;
 		$.ajax({
-				url: "/json?type=product&id=" + id,
-				context: $(this),
-				dataType: "json",
-				async: false
+			url: "/json?type=product&id=" + productId,
+			context: $(this),
+			dataType: "json",
+			async: false
 		}).done(function (json){ product = json; });
 		return product;
 	}
+	
+	function getReviews(productId) {
+		var reviews = null;
+		$.ajax({
+			url: "/json/reviews?productId=" + productId,
+			context: $(this),
+			dataType: "json",
+			async: false
+		}).done(function (json){ reviews = json; });
+		return reviews;
+	}
+	
+	function showReviews(productId) {
+		var ratingSum = 0;
+		var ratingCount = 0;
+		var reviews = getReviews(productId);
+		for (var reviewId in reviews) {
+			var review = reviews[reviewId];
+			appendReview(review);
+			ratingSum += review.rating;
+			ratingCount++;
+		}
+		var ratingAvg = Math.round(ratingSum / ratingCount);
+		
+		var reviews = $(this).find('.cs-product-list-item-reviews');
+		var rating = $('.cs-product-list-item-rating').first();
+		var reviewsCount = $('.cs-product-list-item-reviews-count').first();
+	}
 
-	function addReview(productListItem, reviewData) {
-		var reviews = productListItem.find('.cs-product-list-item-reviews');
-		var template = reviews.find('.cs-product-list-item-review-template');
+	function appendReview(reviewData) {
+		var reviews = $('.cs-product-list-item-reviews').first();
+		var template = $('.cs-product-list-item-review-template').first();
 		var newReview = template.clone();
+		
 		newReview.removeClass('cs-product-list-item-review-template');
+		newReview.removeClass('hidden');
 		newReview.find('.cs-product-list-item-review-email').text(reviewData.email);
 		newReview.find('.cs-product-list-item-review-text').text(reviewData.text);
 		newReview.find('.cs-product-list-item-review-created-at').text(reviewData.createdAt);
 		var reviewRating = newReview.find('.cs-product-list-item-review-rating');
-		for(var i=0;i < 5;i++){
-			if(i < reviewData.rating){
+		for (var i=0; i < 5; i++) {
+			if (i < reviewData.rating){
 				reviewRating.append('<span class="glyphicon glyphicon-star"></span>&nbsp;');
-			}else{
+			} else {
 				reviewRating.append('<span class="glyphicon glyphicon-star-empty"></span>&nbsp;');
 			}
 		}
@@ -61,78 +93,36 @@ $(document).ready(function() {
 	}
 	
 	/* ---------- events ---------- */
-	
-	/* product list */
-	$('.cs-product-list-item').click(function(){
-		$(this).off('click');
-		var id = $(this).find($('.cs-product-list-item-id')).val();
-		$.ajax({
-			url: "/json?type=product&id=" + id,
-			context: $(this),
-			dataType: "json",
-		}).done(function(product){
-			if(product != null){
-				var price = $(this).find('.cs-product-list-item-price');
-				var name = $(this).find('.cs-product-list-item-name');
-				var tags = $(this).find('.cs-product-list-item-tags');
-				var description = $(this).find('.cs-product-list-item-description');
-				var options = $(this).find('.cs-product-list-item-options'); 
-				var programmingLanguage = $(this).find('.cs-product-list-item-options-programming-language');
-				var offers = $(this).find('.cs-product-list-item-options-offers');
-				var reviews = $(this).find('.cs-product-list-item-reviews');
-				var rating = $(this).find('.cs-product-list-item-rating');
-				var reviewsCount = $(this).find('.cs-product-list-item-reviews-count');
-				for(var tag in product.tags){
-					tags.append('<span class="label label-default">'+ product.tags[tag].name +'</span>&nbsp;');
-				};
-				for(var language in product.programmingLanguage){
-					programmingLanguage.append('<option value="' + language + '">'+ product.programmingLanguage[language].name +'</option>');
-				};
-				for(var offer in product.offers){
-					offers.append('<option value="' + offer + '">'+ product.offers[offer].price +'&cent;</option>');
-				};
-				for(var i = 0; i < 5; i++){
-					if(product.avgRating > 0){
-						rating.append(( i <= Math.round(product.avgRating) ) ? '<span class="glyphicon glyphicon-star"></span>&nbsp;' : '<span class="glyphicon glyphicon-star-empty"></span>&nbsp;');
-					}
-				}
-				reviewsCount.text(product.reviewsCount);
-				for(var review in product.reviews){
-					addReview($(this),product.reviews[review]);
-				};
-				var hideables = $(this).find('.cs-product-list-hideable').not('[class*="template"]');
-				hideables.hide();
-				hideables.removeClass('hidden');
-				hideables.slideToggle('fast');
-				$(this).find('.cs-product-list-item-clickable').click(function(){
-					hideables.slideToggle('fast');
-				});
-				$(this).find('.cs-product-list-item-clickable').click(function(e){
-					e.stopPropagation();
-				});
-				$(this).find('.cs-product-list-item-review-new-add').click(function(e){
-					var productListItemDom = $(this).parents('.cs-product-list-item');
-					var addNewReview = {
-						'productId' : productListItemDom.find('.cs-product-list-item-id').val(),
-						'text' : productListItemDom.find('.cs-product-list-item-review-new-text').val(),
-						'rating' : productListItemDom.find('.cs-product-list-item-review-new-rating-val').val(),
-					};
-					$.ajax({
-						type: 'POST',
-						url: '/json?type=review',
-						data: { 'object' : JSON.stringify(addNewReview) },
-						context: productListItemDom,
-						dataType: 'json',
-					}).done(function(review){
-						addReview($(this),review).hide().removeClass('hidden').slideToggle('fast');
-						$(this).find('.cs-product-list-item-review-new-text').val(''),
-						$(this).find('.cs-product-list-item-review-new-rating-val').val('4').trigger('change');
-					});
-				});
-			}
-		});
-	});
 
+	/* reviews */
+
+	// load all reviews
+	var productId = $('.cs-product-list-item-id').first().val();
+	showReviews(productId);
+
+	$(this).find('.cs-product-list-item-review-new-add').click(function(e){
+		var productListItemDom = $(this).parents('.cs-product-list-item');
+		var addNewReview = {
+			'productId' : $('.cs-product-list-item-id').first().val(),
+			'text' : $('.cs-product-list-item-review-new-text').first().val(),
+			'rating' : $('.cs-product-list-item-review-new-rating-val').first().val(),
+		};
+		if (addNewReview.text != '') {
+			$.ajax({
+				type: 'POST',
+				url: '/json?type=review',
+				data: { 'object' : JSON.stringify(addNewReview) },
+				context: productListItemDom,
+				dataType: 'json',
+			}).done(function(review){
+				appendReview(review);
+				$('.cs-product-list-item-review-new-text').first().val(''),
+				$('.cs-product-list-item-review-new-rating-val').first().val('4').trigger('change');
+			});
+		}
+	});
+	
+	/* rating */
 	$('.cs-product-list-item-review-new-rating-1').mouseenter(function(){
 		$(this).siblings('.cs-product-list-item-review-new-rating-val').val('1').change();
 	});

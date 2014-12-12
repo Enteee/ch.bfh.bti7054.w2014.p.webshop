@@ -169,6 +169,16 @@ class Repository {
 			->find();
 	}
 	
+	public function getProgrammingLanguagesByOffer($offer) {
+		$tagType = TagTypeQuery::create()->findPk(Tag::PROGRAMMING_LANGUAGE);
+		return TagQuery::create()
+			->filterByTagType($tagType)
+			->useOfferTagQuery()
+				->filterByOffer($offer)
+			->endUse()
+			->find();
+	}
+	
 	public function getVersionsByProduct($product) {
 		return CodeQuery::create()
 			->useOfferQuery()

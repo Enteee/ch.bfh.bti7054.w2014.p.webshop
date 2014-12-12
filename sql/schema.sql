@@ -113,6 +113,7 @@ CREATE TABLE [cs_order]
     [user_id] INTEGER NOT NULL,
     [offer_id] INTEGER NOT NULL,
     [paid_price] INTEGER DEFAULT 0 NOT NULL,
+    [with_comments] INTEGER(1) DEFAULT 1 NOT NULL,
     [active] INTEGER(1) DEFAULT 1 NOT NULL,
     [created_at] TIMESTAMP,
     [updated_at] TIMESTAMP

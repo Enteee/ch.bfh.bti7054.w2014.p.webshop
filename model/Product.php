@@ -31,10 +31,9 @@ class Product extends BaseProduct implements JsonSerializable
 
 	public function getCategories(){
 		return TagQuery::create()
+			->filterByProduct($this)
+			->filterByActive(TRUE)
 			->filterByTagType(TagType::getCategoryTagType())
-			->useProductTagQuery()
-				->filterByProduct($this)
-			->endUse()
 			->find();
 	}
 
@@ -47,5 +46,16 @@ class Product extends BaseProduct implements JsonSerializable
 		$repo = new Repository();
 		return $repo->getOffersByProduct($this);
 	}
-
+	
+	public function getStartingFromPrice() {
+		$cheapest = OfferQuery::create()
+			->filterByProduct($this)
+			->filterByActive(TRUE)
+			->orderByPrice()
+			->findOne();
+		if (isset($cheapest)) {
+			return $cheapest->getPrice();
+		}
+		return 0;
+	}
 }

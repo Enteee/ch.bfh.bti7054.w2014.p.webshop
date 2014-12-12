@@ -42,6 +42,7 @@ class OrderTableMap extends TableMap
         $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'cs_user', 'id', true, null, null);
         $this->addForeignKey('offer_id', 'OfferId', 'INTEGER', 'cs_offer', 'id', true, null, null);
         $this->addColumn('paid_price', 'PaidPrice', 'INTEGER', true, null, 0);
+        $this->addColumn('with_comments', 'WithComments', 'BOOLEAN', true, 1, true);
         $this->addColumn('active', 'Active', 'BOOLEAN', true, 1, true);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);

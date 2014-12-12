@@ -24,6 +24,6 @@ class Tag extends BaseTag implements JsonSerializable
 
 	public function getProductsCount() {
 		$repo = new Repository();
-		return $repo->getProductCountByTag($this);		
+		return $repo->getProductCountByTag($this);
 	}
 }

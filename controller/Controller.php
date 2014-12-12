@@ -17,7 +17,7 @@ abstract class Controller {
 		
 		// init ressource objects
 		$this->config = $config; 
-		$this->lang = Mvc::$lang;
+		$this->lang = Language::getInstance();
 		$this->template = new Template();
 		$this->repo = new Repository();
 		

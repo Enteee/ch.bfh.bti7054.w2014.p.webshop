@@ -32,6 +32,7 @@ class MainController extends Controller {
 		
 		// search 
 		$data['searchAction'] = $searchAction;
+		$data['searchTerm'] = $this->vars->search;
 		
 		// navigation
 		$navItems = array();

@@ -19,16 +19,6 @@
 *	=================/ /=====================
 *	!!Wo0t!!
 */
-
-// template functions
-function lang() {
-	return Mvc::$lang->getLanguage();
-}
-
-function label($key) {
-	return Mvc::$lang->$key;;
-}
-
 class Template {
 
 	const DEFAULT_VIEW = 'start';

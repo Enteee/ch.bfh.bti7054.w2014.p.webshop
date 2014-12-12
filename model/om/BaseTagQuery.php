@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a query for the 'tag' table.
+ * Base class that represents a query for the 'cs_tag' table.
  *
  *
  *
@@ -170,7 +170,7 @@ abstract class BaseTagQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `type_id`, `parent_id`, `active`, `created_at`, `updated_at` FROM `tag` WHERE `id` = :p0';
+        $sql = 'SELECT [id], [type_id], [parent_id], [active], [created_at], [updated_at] FROM [cs_tag] WHERE [id] = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -952,7 +952,7 @@ abstract class BaseTagQuery extends ModelCriteria
 
     /**
      * Filter the query by a related Offer object
-     * using the offer_tag table as cross reference
+     * using the cs_offer_tag table as cross reference
      *
      * @param   Offer $offer the related object to use as filter
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
@@ -969,7 +969,7 @@ abstract class BaseTagQuery extends ModelCriteria
 
     /**
      * Filter the query by a related Product object
-     * using the product_tag table as cross reference
+     * using the cs_product_tag table as cross reference
      *
      * @param   Product $product the related object to use as filter
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL

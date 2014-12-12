@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a query for the 'offer_tag' table.
+ * Base class that represents a query for the 'cs_offer_tag' table.
  *
  *
  *
@@ -142,7 +142,7 @@ abstract class BaseOfferTagQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `offer_id`, `tag_id` FROM `offer_tag` WHERE `id` = :p0';
+        $sql = 'SELECT [id], [offer_id], [tag_id] FROM [cs_offer_tag] WHERE [id] = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

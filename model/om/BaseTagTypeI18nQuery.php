@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a query for the 'tag_type_i18n' table.
+ * Base class that represents a query for the 'cs_tag_type_i18n' table.
  *
  *
  *
@@ -126,7 +126,7 @@ abstract class BaseTagTypeI18nQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `locale`, `name` FROM `tag_type_i18n` WHERE `id` = :p0 AND `locale` = :p1';
+        $sql = 'SELECT [id], [locale], [name] FROM [cs_tag_type_i18n] WHERE [id] = :p0 AND [locale] = :p1';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);

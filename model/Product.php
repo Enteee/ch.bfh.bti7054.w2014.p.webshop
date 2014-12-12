@@ -19,6 +19,7 @@ class Product extends BaseProduct implements JsonSerializable
 		return [
 			'name' => $this->getName(),
 			'tags' => $this->getTags(),
+			'categories' => $this->getCategories(),
 			'description' => $this->getDescription(),
 			'programmingLanguage' => $this->getProgrammingLanguages(),
 			'offers' => $this->getOffersByProduct(),
@@ -26,6 +27,15 @@ class Product extends BaseProduct implements JsonSerializable
 			'reviews' => $this->getReviews(),
 			'avgRating' => $this->getAvgRating(),
 		];
+	}
+
+	public function getCategories(){
+		return TagQuery::create()
+			->filterByTagType(TagType::getCategoryTagType())
+			->useProductTagQuery()
+				->filterByProduct($this)
+			->endUse()
+			->find();
 	}
 
 	public function getProgrammingLanguages() {

@@ -9,9 +9,9 @@ class MainController extends Controller {
 		parent::__construct();
 		
 		// save variables
-		$this->vars->saveGlobal('categoryId',SaveVars::T_INT,SaveVars::G_GET,function(){
-			return -1;
-		});
+		$this->vars->saveGlobal('categoryId',SaveVars::T_NUMERIC,SaveVars::G_GET,function(){
+			return NULL;
+		},true);
 
 		$this->vars->saveGlobal('search',SaveVars::T_STRING,SaveVars::G_GET, function(){
 			return '';

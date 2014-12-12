@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a query for the 'code' table.
+ * Base class that represents a query for the 'cs_code' table.
  *
  *
  *
@@ -170,7 +170,7 @@ abstract class BaseCodeQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `user_id`, `offer_id`, `filename`, `filesize`, `mimetype`, `content`, `active`, `created_at`, `updated_at` FROM `code` WHERE `id` = :p0';
+        $sql = 'SELECT [id], [user_id], [offer_id], [filename], [filesize], [mimetype], [content], [active], [created_at], [updated_at] FROM [cs_code] WHERE [id] = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

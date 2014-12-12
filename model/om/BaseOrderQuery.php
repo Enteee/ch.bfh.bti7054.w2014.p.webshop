@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a query for the 'order' table.
+ * Base class that represents a query for the 'cs_order' table.
  *
  *
  *
@@ -158,7 +158,7 @@ abstract class BaseOrderQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `user_id`, `offer_id`, `paid_price`, `active`, `created_at`, `updated_at` FROM `order` WHERE `id` = :p0';
+        $sql = 'SELECT [id], [user_id], [offer_id], [paid_price], [active], [created_at], [updated_at] FROM [cs_order] WHERE [id] = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

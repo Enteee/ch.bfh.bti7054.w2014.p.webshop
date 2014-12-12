@@ -3,7 +3,7 @@
 class Repository {
 
 	public function getAllCategories() {
-		$tagType = TagTypeQuery::create()->findPk(Tag::CATEGORY);
+		$tagType = TagType::getCategoryTagType();
 		return TagQuery::create()
 			->filterByTagType($tagType)
 			->find();
@@ -11,7 +11,7 @@ class Repository {
 	
 	public function getCategoriesBySearch($searchstring = NULL) {
 		if (isset($searchstring)) {
-			$tagType = TagTypeQuery::create()->findPk(Tag::CATEGORY);
+			$tagType = TagType::getCategoryTagType();
 			return TagQuery::create()
 				->filterByTagType($tagType)
 				->useTagI18nQuery()
@@ -93,7 +93,7 @@ class Repository {
 	public function getUsersOrders($tag_id = NULL, $searchstring = NULL, $user = NULL) {
 		$query = ProductQuery::create();
 		
-		if (isset($tag_id) && $tag_id > 0) {
+		if (isset($tag_id)) {
 			$query
 				->useProductTagQuery()
 					->filterByTagId($tag_id)

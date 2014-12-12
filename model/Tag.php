@@ -1,7 +1,4 @@
 <?php
-
-
-
 /**
  * Skeleton subclass for representing a row from the 'tag' table.
  *

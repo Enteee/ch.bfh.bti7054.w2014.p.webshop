@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a row from the 'product' table.
+ * Base class that represents a row from the 'cs_product' table.
  *
  *
  *
@@ -202,7 +202,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
      *
      * @param string $format The date/time format string (either date()-style or strftime()-style).
      *				 If format is null, then the raw DateTime object will be returned.
-     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
     public function getCreatedAt($format = 'Y-m-d H:i:s')
@@ -211,11 +211,6 @@ abstract class BaseProduct extends BaseObject implements Persistent
             return null;
         }
 
-        if ($this->created_at === '0000-00-00 00:00:00') {
-            // while technically this is not a default value of null,
-            // this seems to be closest in meaning.
-            return null;
-        }
 
         try {
             $dt = new DateTime($this->created_at);
@@ -242,7 +237,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
      *
      * @param string $format The date/time format string (either date()-style or strftime()-style).
      *				 If format is null, then the raw DateTime object will be returned.
-     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
     public function getUpdatedAt($format = 'Y-m-d H:i:s')
@@ -251,11 +246,6 @@ abstract class BaseProduct extends BaseObject implements Persistent
             return null;
         }
 
-        if ($this->updated_at === '0000-00-00 00:00:00') {
-            // while technically this is not a default value of null,
-            // this seems to be closest in meaning.
-            return null;
-        }
 
         try {
             $dt = new DateTime($this->updated_at);
@@ -556,6 +546,13 @@ abstract class BaseProduct extends BaseObject implements Persistent
             if ($ret) {
                 $deleteQuery->delete($con);
                 $this->postDelete($con);
+                // i18n behavior
+
+                // emulate delete cascade
+                ProductI18nQuery::create()
+                    ->filterByProduct($this)
+                    ->delete($con);
+
                 $con->commit();
                 $this->setDeleted(true);
             } else {
@@ -789,23 +786,23 @@ abstract class BaseProduct extends BaseObject implements Persistent
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(ProductPeer::ID)) {
-            $modifiedColumns[':p' . $index++]  = '`id`';
+            $modifiedColumns[':p' . $index++]  = '[id]';
         }
         if ($this->isColumnModified(ProductPeer::ACTIVE)) {
-            $modifiedColumns[':p' . $index++]  = '`active`';
+            $modifiedColumns[':p' . $index++]  = '[active]';
         }
         if ($this->isColumnModified(ProductPeer::CREATED_AT)) {
-            $modifiedColumns[':p' . $index++]  = '`created_at`';
+            $modifiedColumns[':p' . $index++]  = '[created_at]';
         }
         if ($this->isColumnModified(ProductPeer::UPDATED_AT)) {
-            $modifiedColumns[':p' . $index++]  = '`updated_at`';
+            $modifiedColumns[':p' . $index++]  = '[updated_at]';
         }
         if ($this->isColumnModified(ProductPeer::AVG_RATING)) {
-            $modifiedColumns[':p' . $index++]  = '`avg_rating`';
+            $modifiedColumns[':p' . $index++]  = '[avg_rating]';
         }
 
         $sql = sprintf(
-            'INSERT INTO `product` (%s) VALUES (%s)',
+            'INSERT INTO [cs_product] (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -814,19 +811,19 @@ abstract class BaseProduct extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`id`':
+                    case '[id]':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case '`active`':
-                        $stmt->bindValue($identifier, (int) $this->active, PDO::PARAM_INT);
+                    case '[active]':
+                        $stmt->bindValue($identifier, $this->active, PDO::PARAM_BOOL);
                         break;
-                    case '`created_at`':
+                    case '[created_at]':
                         $stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
                         break;
-                    case '`updated_at`':
+                    case '[updated_at]':
                         $stmt->bindValue($identifier, $this->updated_at, PDO::PARAM_STR);
                         break;
-                    case '`avg_rating`':
+                    case '[avg_rating]':
                         $stmt->bindValue($identifier, $this->avg_rating, PDO::PARAM_INT);
                         break;
                 }
@@ -2322,7 +2319,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
 
     /**
      * Gets a collection of Tag objects related by a many-to-many relationship
-     * to the current object by way of the product_tag cross-reference table.
+     * to the current object by way of the cs_product_tag cross-reference table.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -2357,7 +2354,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
 
     /**
      * Sets a collection of Tag objects related by a many-to-many relationship
-     * to the current object by way of the product_tag cross-reference table.
+     * to the current object by way of the cs_product_tag cross-reference table.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
@@ -2385,7 +2382,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
 
     /**
      * Gets the number of Tag objects related by a many-to-many relationship
-     * to the current object by way of the product_tag cross-reference table.
+     * to the current object by way of the cs_product_tag cross-reference table.
      *
      * @param Criteria $criteria Optional query object to filter the query
      * @param boolean $distinct Set to true to force count distinct
@@ -2415,7 +2412,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
 
     /**
      * Associate a Tag object to this object
-     * through the product_tag cross reference table.
+     * through the cs_product_tag cross reference table.
      *
      * @param  Tag $tag The ProductTag object to relate
      * @return Product The current object (for fluent API support)
@@ -2456,7 +2453,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
 
     /**
      * Remove a Tag object to this object
-     * through the product_tag cross reference table.
+     * through the cs_product_tag cross reference table.
      *
      * @param Tag $tag The ProductTag object to relate
      * @return Product The current object (for fluent API support)
@@ -2607,7 +2604,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
      */
     public function computeAvgRating(PropelPDO $con)
     {
-        $stmt = $con->prepare('SELECT AVG(rating) FROM `review` WHERE review.product_id = :p1');
+        $stmt = $con->prepare('SELECT AVG(rating) FROM [cs_review] WHERE cs_review.product_id = :p1');
         $stmt->bindValue(':p1', $this->getId());
         $stmt->execute();
 

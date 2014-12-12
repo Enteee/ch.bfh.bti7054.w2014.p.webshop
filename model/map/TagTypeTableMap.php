@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'tag_type' table.
+ * This class defines the structure of the 'cs_tag_type' table.
  *
  *
  *
@@ -32,7 +32,7 @@ class TagTypeTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('tag_type');
+        $this->setName('cs_tag_type');
         $this->setPhpName('TagType');
         $this->setClassname('TagType');
         $this->setPackage('model');
@@ -50,7 +50,7 @@ class TagTypeTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Tag', 'Tag', RelationMap::ONE_TO_MANY, array('id' => 'type_id', ), null, null, 'Tags');
+        $this->addRelation('Tag', 'Tag', RelationMap::ONE_TO_MANY, array('id' => 'type_id', ), 'RESTRICT', 'RESTRICT', 'Tags');
         $this->addRelation('TagTypeI18n', 'TagTypeI18n', RelationMap::ONE_TO_MANY, array('id' => 'id', ), 'CASCADE', null, 'TagTypeI18ns');
     } // buildRelations()
 

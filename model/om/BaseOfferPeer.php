@@ -2,7 +2,7 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'offer' table.
+ * Base static class for performing query and update operations on the 'cs_offer' table.
  *
  *
  *
@@ -15,7 +15,7 @@ abstract class BaseOfferPeer
     const DATABASE_NAME = 'codeshop';
 
     /** the table name for this class */
-    const TABLE_NAME = 'offer';
+    const TABLE_NAME = 'cs_offer';
 
     /** the related Propel class for this table */
     const OM_CLASS = 'Offer';
@@ -33,22 +33,22 @@ abstract class BaseOfferPeer
     const NUM_HYDRATE_COLUMNS = 6;
 
     /** the column name for the id field */
-    const ID = 'offer.id';
+    const ID = 'cs_offer.id';
 
     /** the column name for the product_id field */
-    const PRODUCT_ID = 'offer.product_id';
+    const PRODUCT_ID = 'cs_offer.product_id';
 
     /** the column name for the price field */
-    const PRICE = 'offer.price';
+    const PRICE = 'cs_offer.price';
 
     /** the column name for the active field */
-    const ACTIVE = 'offer.active';
+    const ACTIVE = 'cs_offer.active';
 
     /** the column name for the created_at field */
-    const CREATED_AT = 'offer.created_at';
+    const CREATED_AT = 'cs_offer.created_at';
 
     /** the column name for the updated_at field */
-    const UPDATED_AT = 'offer.updated_at';
+    const UPDATED_AT = 'cs_offer.updated_at';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -375,7 +375,7 @@ abstract class BaseOfferPeer
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to offer
+     * Method to invalidate the instance pool of all tables related to cs_offer
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -831,7 +831,7 @@ abstract class BaseOfferPeer
     }
 
     /**
-     * Deletes all rows from the offer table.
+     * Deletes all rows from the cs_offer table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).

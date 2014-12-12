@@ -2,7 +2,7 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'review' table.
+ * Base static class for performing query and update operations on the 'cs_review' table.
  *
  *
  *
@@ -15,7 +15,7 @@ abstract class BaseReviewPeer
     const DATABASE_NAME = 'codeshop';
 
     /** the table name for this class */
-    const TABLE_NAME = 'review';
+    const TABLE_NAME = 'cs_review';
 
     /** the related Propel class for this table */
     const OM_CLASS = 'Review';
@@ -33,28 +33,28 @@ abstract class BaseReviewPeer
     const NUM_HYDRATE_COLUMNS = 8;
 
     /** the column name for the id field */
-    const ID = 'review.id';
+    const ID = 'cs_review.id';
 
     /** the column name for the user_id field */
-    const USER_ID = 'review.user_id';
+    const USER_ID = 'cs_review.user_id';
 
     /** the column name for the product_id field */
-    const PRODUCT_ID = 'review.product_id';
+    const PRODUCT_ID = 'cs_review.product_id';
 
     /** the column name for the text field */
-    const TEXT = 'review.text';
+    const TEXT = 'cs_review.text';
 
     /** the column name for the rating field */
-    const RATING = 'review.rating';
+    const RATING = 'cs_review.rating';
 
     /** the column name for the active field */
-    const ACTIVE = 'review.active';
+    const ACTIVE = 'cs_review.active';
 
     /** the column name for the created_at field */
-    const CREATED_AT = 'review.created_at';
+    const CREATED_AT = 'cs_review.created_at';
 
     /** the column name for the updated_at field */
-    const UPDATED_AT = 'review.updated_at';
+    const UPDATED_AT = 'cs_review.updated_at';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -385,7 +385,7 @@ abstract class BaseReviewPeer
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to review
+     * Method to invalidate the instance pool of all tables related to cs_review
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -1234,7 +1234,7 @@ abstract class BaseReviewPeer
     }
 
     /**
-     * Deletes all rows from the review table.
+     * Deletes all rows from the cs_review table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).

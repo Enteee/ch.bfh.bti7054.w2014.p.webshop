@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'tag_i18n' table.
+ * This class defines the structure of the 'cs_tag_i18n' table.
  *
  *
  *
@@ -32,13 +32,13 @@ class TagI18nTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('tag_i18n');
+        $this->setName('cs_tag_i18n');
         $this->setPhpName('TagI18n');
         $this->setClassname('TagI18n');
         $this->setPackage('model');
         $this->setUseIdGenerator(false);
         // columns
-        $this->addForeignPrimaryKey('id', 'Id', 'INTEGER' , 'tag', 'id', true, null, null);
+        $this->addForeignPrimaryKey('id', 'Id', 'INTEGER' , 'cs_tag', 'id', true, null, null);
         $this->addPrimaryKey('locale', 'Locale', 'VARCHAR', true, 5, 'en_US');
         $this->addColumn('name', 'Name', 'VARCHAR', true, 200, null);
         // validators

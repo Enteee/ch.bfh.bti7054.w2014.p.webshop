@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'product' table.
+ * This class defines the structure of the 'cs_product' table.
  *
  *
  *
@@ -32,7 +32,7 @@ class ProductTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('product');
+        $this->setName('cs_product');
         $this->setPhpName('Product');
         $this->setClassname('Product');
         $this->setPackage('model');
@@ -51,11 +51,11 @@ class ProductTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Review', 'Review', RelationMap::ONE_TO_MANY, array('id' => 'product_id', ), null, null, 'Reviews');
-        $this->addRelation('Offer', 'Offer', RelationMap::ONE_TO_MANY, array('id' => 'product_id', ), null, null, 'Offers');
-        $this->addRelation('ProductTag', 'ProductTag', RelationMap::ONE_TO_MANY, array('id' => 'product_id', ), null, null, 'ProductTags');
+        $this->addRelation('Review', 'Review', RelationMap::ONE_TO_MANY, array('id' => 'product_id', ), 'RESTRICT', 'RESTRICT', 'Reviews');
+        $this->addRelation('Offer', 'Offer', RelationMap::ONE_TO_MANY, array('id' => 'product_id', ), 'RESTRICT', 'RESTRICT', 'Offers');
+        $this->addRelation('ProductTag', 'ProductTag', RelationMap::ONE_TO_MANY, array('id' => 'product_id', ), 'RESTRICT', 'RESTRICT', 'ProductTags');
         $this->addRelation('ProductI18n', 'ProductI18n', RelationMap::ONE_TO_MANY, array('id' => 'id', ), 'CASCADE', null, 'ProductI18ns');
-        $this->addRelation('Tag', 'Tag', RelationMap::MANY_TO_MANY, array(), null, null, 'Tags');
+        $this->addRelation('Tag', 'Tag', RelationMap::MANY_TO_MANY, array(), 'RESTRICT', 'RESTRICT', 'Tags');
     } // buildRelations()
 
     /**

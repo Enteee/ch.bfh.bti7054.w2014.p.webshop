@@ -8,30 +8,6 @@ class ProductController extends MainController {
 	public function __construct() {
 		parent::__construct();
 		
-		$this->vars->saveGlobal('product_id', SaveVars::T_INT, SaveVars::G_POST, function(){
-			return -1;
-		});
-		$this->vars->saveGlobal('product_name', SaveVars::T_STRING, SaveVars::G_POST, function(){
-			return '';
-		});
-		$this->vars->saveGlobal('product_description', SaveVars::T_STRING, SaveVars::G_POST, function(){
-			return '';
-		});
-		$this->vars->saveGlobal('product_categories', SaveVars::T_STRING, SaveVars::G_POST, function(){
-			return '';
-		});
-		$this->vars->saveGlobal('product_programminglanguages', SaveVars::T_STRING, SaveVars::G_POST, function(){
-			return '';
-		});
-		$this->vars->saveGlobal('product_price', SaveVars::T_INT, SaveVars::G_POST, function(){
-			return -1;
-		});
-		$this->vars->saveGlobal('product_file', SaveVars::T_ARRAY, SaveVars::G_FILES, function(){
-			return array();
-		});
-		$this->vars->saveGlobal('offer_id', SaveVars::T_INT, SaveVars::G_GET, function(){
-			return -1;
-		});
 	}
 
 	public function index() {
@@ -128,60 +104,57 @@ class ProductController extends MainController {
 		$user = $this->getUser();
 
 		// validate...
-		$file = $this->vars->product_file;
-		if (!isset($file)) {
-			throw new Exception('no file uploaded');
-		}		
-		if (!is_uploaded_file($file['tmp_name'])) {
-			throw new Exception('no file uploaded');
-		}
-		if ($file['error'] != UPLOAD_ERR_OK) {
-			$message = 'Error uploading file';
-			switch($file['error']) {
-				case UPLOAD_ERR_INI_SIZE:
-				case UPLOAD_ERR_FORM_SIZE:
-					throw new Exception('file too large');
-				case UPLOAD_ERR_PARTIAL:
-					throw new Exception('file upload was not completed.');
-				case UPLOAD_ERR_NO_FILE:
-					throw new Exception('zero-length file uploaded');
-				default:
-					throw new Exception('internal error');
+		// TODO: validate strings
+		$this->vars->saveGlobal('product_id', SaveVars::T_NUMERIC, SaveVars::G_POST);
+		$this->vars->saveVar('product', SaveVars::T_OBJECT, $this->repo->getProductById($this->vars->product_id), function(){
+			return (new Product())->setActive(true);
+		});
+		$this->vars->saveGlobal('product_name', SaveVars::T_STRING, SaveVars::G_POST);
+		$this->vars->saveGlobal('product_description', SaveVars::T_STRING, SaveVars::G_POST, function(){
+			return $this->vars->product->getDescription();
+		});
+		$this->vars->saveGlobal('product_categories', SaveVars::T_STRING, SaveVars::G_POST, function(){
+			$product_categories = NULL;
+			foreach($this->vars->product->getCategories() as $category){
+				$product_categories .= $category->getId() . ',';
 			}
-		}
-		
-		// TODO: validate all!
+			rtrim($product_categories, ",");
+			return $product_categories;
+		});
+		$this->vars->saveGlobal('product_programminglanguages', SaveVars::T_STRING, SaveVars::G_POST, function(){
+			$product_programmingLanguages = NULL;
+			foreach($this->vars->product->getProgrammingLanguages() as $programmingLanguage){
+				$product_programmingLanguages .= $programmingLanguage->getId() . ',';
+			}
+			rtrim($product_programmingLanguages, ",");
+			return $product_programmingLanguages;
+		});
+		$this->vars->saveGlobal('product_price', SaveVars::T_NUMERIC, SaveVars::G_POST, function(){
+			return $this->vars->product->getPrice();
+		});
+		$this->vars->saveGlobal('product_file', SaveVars::T_ARRAY_UPLOADED_FILE, SaveVars::G_FILES);
+		$file = $this->vars->product_file;
 	
 		$con = Propel::getConnection();
 		$con->beginTransaction();
 		try {
-			// load product if exists
-			$product = ProductQuery::create()->findPk($this->vars->product_id);
-			if (!isset($product)) {
-				// create product, it doesn't already exist
-				$product = new Product();
-				foreach ($this->lang->getAllLocales() as $locale) {
-					$product
-						->setLocale($locale)		
-							->setName($this->vars->product_name)
-							->setDescription($this->vars->product_description);
-				}
-				$product->setActive(true);
-				
-				$product->save();
-				
-				// categories
-				$categoryIds = split_to_ints($this->vars->product_categories);
-				if (count($categoryIds) > 0) {
-					foreach ($categoryIds as $categoryId) {
-						$category = TagQuery::create()->getCategory($categoryId);
-						if (isset($category)) {
-							$product->addTag($category);
-						}
+			$product = $this->vars->product;
+			foreach ($this->lang->getAllLocales() as $locale) {
+				$product
+					->setLocale($locale)
+						->setName($this->vars->product_name)
+						->setDescription($this->vars->product_description);
+			}
+			$categoryIds = split_to_ints($this->vars->product_categories);
+			if (count($categoryIds) > 0) {
+				foreach ($categoryIds as $categoryId) {
+					$category = TagQuery::create()->getCategory($categoryId);
+					if (isset($category)) {
+						$product->addTag($category);
 					}
-					$product->save();
 				}
 			}
+			$product->save();
 			
 			// offer
 			$offer = new Offer();

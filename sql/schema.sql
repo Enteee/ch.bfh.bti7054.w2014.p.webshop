@@ -1,284 +1,277 @@
 
-# This is a fix for InnoDB in MySQL >= 4.1.x
-# It "suspends judgement" for fkey relationships until are tables are set.
-SET FOREIGN_KEY_CHECKS = 0;
+-----------------------------------------------------------------------
+-- cs_code
+-----------------------------------------------------------------------
 
--- ---------------------------------------------------------------------
--- code
--- ---------------------------------------------------------------------
+DROP TABLE IF EXISTS [cs_code];
 
-DROP TABLE IF EXISTS `code`;
-
-CREATE TABLE `code`
+CREATE TABLE [cs_code]
 (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `user_id` INTEGER NOT NULL,
-    `offer_id` INTEGER NOT NULL,
-    `filename` VARCHAR(200) NOT NULL,
-    `filesize` INTEGER DEFAULT 0 NOT NULL,
-    `mimetype` VARCHAR(200) NOT NULL,
-    `content` LONGBLOB NOT NULL,
-    `active` TINYINT(1) DEFAULT 1 NOT NULL,
-    `created_at` DATETIME,
-    `updated_at` DATETIME,
-    PRIMARY KEY (`id`),
-    INDEX `code_user` (`user_id`),
-    INDEX `code_offer` (`offer_id`),
-    CONSTRAINT `code_user`
-        FOREIGN KEY (`user_id`)
-        REFERENCES `user` (`id`),
-    CONSTRAINT `code_offer`
-        FOREIGN KEY (`offer_id`)
-        REFERENCES `offer` (`id`)
-) ENGINE=InnoDB;
+    [id] INTEGER NOT NULL PRIMARY KEY,
+    [user_id] INTEGER NOT NULL,
+    [offer_id] INTEGER NOT NULL,
+    [filename] VARCHAR(200) NOT NULL,
+    [filesize] INTEGER DEFAULT 0 NOT NULL,
+    [mimetype] VARCHAR(200) NOT NULL,
+    [content] LONGBLOB NOT NULL,
+    [active] INTEGER(1) DEFAULT 1 NOT NULL,
+    [created_at] TIMESTAMP,
+    [updated_at] TIMESTAMP
+);
 
--- ---------------------------------------------------------------------
--- review
--- ---------------------------------------------------------------------
+CREATE INDEX [code_user] ON [cs_code] ([user_id]);
 
-DROP TABLE IF EXISTS `review`;
+CREATE INDEX [code_offer] ON [cs_code] ([offer_id]);
 
-CREATE TABLE `review`
+-- SQLite does not support foreign keys; this is just for reference
+-- FOREIGN KEY ([user_id]) REFERENCES cs_user ([id])
+
+-- SQLite does not support foreign keys; this is just for reference
+-- FOREIGN KEY ([offer_id]) REFERENCES cs_offer ([id])
+
+-----------------------------------------------------------------------
+-- cs_review
+-----------------------------------------------------------------------
+
+DROP TABLE IF EXISTS [cs_review];
+
+CREATE TABLE [cs_review]
 (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `user_id` INTEGER NOT NULL,
-    `product_id` INTEGER NOT NULL,
-    `text` VARCHAR(500) NOT NULL,
-    `rating` INTEGER DEFAULT 0 NOT NULL,
-    `active` TINYINT(1) DEFAULT 1 NOT NULL,
-    `created_at` DATETIME,
-    `updated_at` DATETIME,
-    PRIMARY KEY (`id`),
-    INDEX `review_user` (`user_id`),
-    INDEX `review_product` (`product_id`),
-    CONSTRAINT `review_user`
-        FOREIGN KEY (`user_id`)
-        REFERENCES `user` (`id`),
-    CONSTRAINT `review_product`
-        FOREIGN KEY (`product_id`)
-        REFERENCES `product` (`id`)
-) ENGINE=InnoDB;
+    [id] INTEGER NOT NULL PRIMARY KEY,
+    [user_id] INTEGER NOT NULL,
+    [product_id] INTEGER NOT NULL,
+    [text] VARCHAR(500) NOT NULL,
+    [rating] INTEGER DEFAULT 0 NOT NULL,
+    [active] INTEGER(1) DEFAULT 1 NOT NULL,
+    [created_at] TIMESTAMP,
+    [updated_at] TIMESTAMP
+);
 
--- ---------------------------------------------------------------------
--- offer
--- ---------------------------------------------------------------------
+CREATE INDEX [review_user] ON [cs_review] ([user_id]);
 
-DROP TABLE IF EXISTS `offer`;
+CREATE INDEX [review_product] ON [cs_review] ([product_id]);
 
-CREATE TABLE `offer`
+-- SQLite does not support foreign keys; this is just for reference
+-- FOREIGN KEY ([user_id]) REFERENCES cs_user ([id])
+
+-- SQLite does not support foreign keys; this is just for reference
+-- FOREIGN KEY ([product_id]) REFERENCES cs_product ([id])
+
+-----------------------------------------------------------------------
+-- cs_offer
+-----------------------------------------------------------------------
+
+DROP TABLE IF EXISTS [cs_offer];
+
+CREATE TABLE [cs_offer]
 (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `product_id` INTEGER NOT NULL,
-    `price` INTEGER DEFAULT 0 NOT NULL,
-    `active` TINYINT(1) DEFAULT 1 NOT NULL,
-    `created_at` DATETIME,
-    `updated_at` DATETIME,
-    PRIMARY KEY (`id`),
-    INDEX `offer_product` (`product_id`),
-    CONSTRAINT `offer_product`
-        FOREIGN KEY (`product_id`)
-        REFERENCES `product` (`id`)
-) ENGINE=InnoDB;
+    [id] INTEGER NOT NULL PRIMARY KEY,
+    [product_id] INTEGER NOT NULL,
+    [price] INTEGER DEFAULT 0 NOT NULL,
+    [active] INTEGER(1) DEFAULT 1 NOT NULL,
+    [created_at] TIMESTAMP,
+    [updated_at] TIMESTAMP
+);
 
--- ---------------------------------------------------------------------
--- offer_tag
--- ---------------------------------------------------------------------
+CREATE INDEX [offer_product] ON [cs_offer] ([product_id]);
 
-DROP TABLE IF EXISTS `offer_tag`;
+-- SQLite does not support foreign keys; this is just for reference
+-- FOREIGN KEY ([product_id]) REFERENCES cs_product ([id])
 
-CREATE TABLE `offer_tag`
+-----------------------------------------------------------------------
+-- cs_offer_tag
+-----------------------------------------------------------------------
+
+DROP TABLE IF EXISTS [cs_offer_tag];
+
+CREATE TABLE [cs_offer_tag]
 (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `offer_id` INTEGER NOT NULL,
-    `tag_id` INTEGER NOT NULL,
-    PRIMARY KEY (`id`),
-    INDEX `offer_tag_offer` (`offer_id`),
-    INDEX `offer_tag_tag` (`tag_id`),
-    CONSTRAINT `offer_tag_offer`
-        FOREIGN KEY (`offer_id`)
-        REFERENCES `offer` (`id`),
-    CONSTRAINT `offer_tag_tag`
-        FOREIGN KEY (`tag_id`)
-        REFERENCES `tag` (`id`)
-) ENGINE=InnoDB;
+    [id] INTEGER NOT NULL PRIMARY KEY,
+    [offer_id] INTEGER NOT NULL,
+    [tag_id] INTEGER NOT NULL
+);
 
--- ---------------------------------------------------------------------
--- order
--- ---------------------------------------------------------------------
+CREATE INDEX [offer_tag_offer] ON [cs_offer_tag] ([offer_id]);
 
-DROP TABLE IF EXISTS `order`;
+CREATE INDEX [offer_tag_tag] ON [cs_offer_tag] ([tag_id]);
 
-CREATE TABLE `order`
+-- SQLite does not support foreign keys; this is just for reference
+-- FOREIGN KEY ([offer_id]) REFERENCES cs_offer ([id])
+
+-- SQLite does not support foreign keys; this is just for reference
+-- FOREIGN KEY ([tag_id]) REFERENCES cs_tag ([id])
+
+-----------------------------------------------------------------------
+-- cs_order
+-----------------------------------------------------------------------
+
+DROP TABLE IF EXISTS [cs_order];
+
+CREATE TABLE [cs_order]
 (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `user_id` INTEGER NOT NULL,
-    `offer_id` INTEGER NOT NULL,
-    `paid_price` INTEGER DEFAULT 0 NOT NULL,
-    `active` TINYINT(1) DEFAULT 1 NOT NULL,
-    `created_at` DATETIME,
-    `updated_at` DATETIME,
-    PRIMARY KEY (`id`),
-    INDEX `order_user` (`user_id`),
-    INDEX `order_offer` (`offer_id`),
-    CONSTRAINT `order_user`
-        FOREIGN KEY (`user_id`)
-        REFERENCES `user` (`id`),
-    CONSTRAINT `order_offer`
-        FOREIGN KEY (`offer_id`)
-        REFERENCES `offer` (`id`)
-) ENGINE=InnoDB;
+    [id] INTEGER NOT NULL PRIMARY KEY,
+    [user_id] INTEGER NOT NULL,
+    [offer_id] INTEGER NOT NULL,
+    [paid_price] INTEGER DEFAULT 0 NOT NULL,
+    [active] INTEGER(1) DEFAULT 1 NOT NULL,
+    [created_at] TIMESTAMP,
+    [updated_at] TIMESTAMP
+);
 
--- ---------------------------------------------------------------------
--- product
--- ---------------------------------------------------------------------
+CREATE INDEX [order_user] ON [cs_order] ([user_id]);
 
-DROP TABLE IF EXISTS `product`;
+CREATE INDEX [order_offer] ON [cs_order] ([offer_id]);
 
-CREATE TABLE `product`
+-- SQLite does not support foreign keys; this is just for reference
+-- FOREIGN KEY ([user_id]) REFERENCES cs_user ([id])
+
+-- SQLite does not support foreign keys; this is just for reference
+-- FOREIGN KEY ([offer_id]) REFERENCES cs_offer ([id])
+
+-----------------------------------------------------------------------
+-- cs_product
+-----------------------------------------------------------------------
+
+DROP TABLE IF EXISTS [cs_product];
+
+CREATE TABLE [cs_product]
 (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `active` TINYINT(1) DEFAULT 1 NOT NULL,
-    `created_at` DATETIME,
-    `updated_at` DATETIME,
-    `avg_rating` INTEGER,
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+    [id] INTEGER NOT NULL PRIMARY KEY,
+    [active] INTEGER(1) DEFAULT 1 NOT NULL,
+    [created_at] TIMESTAMP,
+    [updated_at] TIMESTAMP,
+    [avg_rating] INTEGER
+);
 
--- ---------------------------------------------------------------------
--- product_tag
--- ---------------------------------------------------------------------
+-----------------------------------------------------------------------
+-- cs_product_tag
+-----------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `product_tag`;
+DROP TABLE IF EXISTS [cs_product_tag];
 
-CREATE TABLE `product_tag`
+CREATE TABLE [cs_product_tag]
 (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `product_id` INTEGER NOT NULL,
-    `tag_id` INTEGER NOT NULL,
-    PRIMARY KEY (`id`),
-    INDEX `product_tag_product` (`product_id`),
-    INDEX `product_tag_tag` (`tag_id`),
-    CONSTRAINT `product_tag_product`
-        FOREIGN KEY (`product_id`)
-        REFERENCES `product` (`id`),
-    CONSTRAINT `product_tag_tag`
-        FOREIGN KEY (`tag_id`)
-        REFERENCES `tag` (`id`)
-) ENGINE=InnoDB;
+    [id] INTEGER NOT NULL PRIMARY KEY,
+    [product_id] INTEGER NOT NULL,
+    [tag_id] INTEGER NOT NULL
+);
 
--- ---------------------------------------------------------------------
--- tag
--- ---------------------------------------------------------------------
+CREATE INDEX [product_tag_product] ON [cs_product_tag] ([product_id]);
 
-DROP TABLE IF EXISTS `tag`;
+CREATE INDEX [product_tag_tag] ON [cs_product_tag] ([tag_id]);
 
-CREATE TABLE `tag`
+-- SQLite does not support foreign keys; this is just for reference
+-- FOREIGN KEY ([product_id]) REFERENCES cs_product ([id])
+
+-- SQLite does not support foreign keys; this is just for reference
+-- FOREIGN KEY ([tag_id]) REFERENCES cs_tag ([id])
+
+-----------------------------------------------------------------------
+-- cs_tag
+-----------------------------------------------------------------------
+
+DROP TABLE IF EXISTS [cs_tag];
+
+CREATE TABLE [cs_tag]
 (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `type_id` INTEGER NOT NULL,
-    `parent_id` INTEGER,
-    `active` TINYINT(1) DEFAULT 1 NOT NULL,
-    `created_at` DATETIME,
-    `updated_at` DATETIME,
-    PRIMARY KEY (`id`),
-    INDEX `tag_tag` (`parent_id`),
-    INDEX `tag_tag_type` (`type_id`),
-    CONSTRAINT `tag_tag`
-        FOREIGN KEY (`parent_id`)
-        REFERENCES `tag` (`id`),
-    CONSTRAINT `tag_tag_type`
-        FOREIGN KEY (`type_id`)
-        REFERENCES `tag_type` (`id`)
-) ENGINE=InnoDB;
+    [id] INTEGER NOT NULL PRIMARY KEY,
+    [type_id] INTEGER NOT NULL,
+    [parent_id] INTEGER,
+    [active] INTEGER(1) DEFAULT 1 NOT NULL,
+    [created_at] TIMESTAMP,
+    [updated_at] TIMESTAMP
+);
 
--- ---------------------------------------------------------------------
--- tag_type
--- ---------------------------------------------------------------------
+CREATE INDEX [tag_tag] ON [cs_tag] ([parent_id]);
 
-DROP TABLE IF EXISTS `tag_type`;
+CREATE INDEX [tag_tag_type] ON [cs_tag] ([type_id]);
 
-CREATE TABLE `tag_type`
+-- SQLite does not support foreign keys; this is just for reference
+-- FOREIGN KEY ([parent_id]) REFERENCES cs_tag ([id])
+
+-- SQLite does not support foreign keys; this is just for reference
+-- FOREIGN KEY ([type_id]) REFERENCES cs_tag_type ([id])
+
+-----------------------------------------------------------------------
+-- cs_tag_type
+-----------------------------------------------------------------------
+
+DROP TABLE IF EXISTS [cs_tag_type];
+
+CREATE TABLE [cs_tag_type]
 (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `active` TINYINT(1) DEFAULT 1 NOT NULL,
-    `created_at` DATETIME,
-    `updated_at` DATETIME,
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+    [id] INTEGER NOT NULL PRIMARY KEY,
+    [active] INTEGER(1) DEFAULT 1 NOT NULL,
+    [created_at] TIMESTAMP,
+    [updated_at] TIMESTAMP
+);
 
--- ---------------------------------------------------------------------
--- user
--- ---------------------------------------------------------------------
+-----------------------------------------------------------------------
+-- cs_user
+-----------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS [cs_user];
 
-CREATE TABLE `user`
+CREATE TABLE [cs_user]
 (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `email` VARCHAR(100) NOT NULL,
-    `token` VARCHAR(100) NOT NULL,
-    `credits` INTEGER DEFAULT 0 NOT NULL,
-    `active` TINYINT(1) DEFAULT 1 NOT NULL,
-    `created_at` DATETIME,
-    `updated_at` DATETIME,
-    PRIMARY KEY (`id`),
-    UNIQUE INDEX `email` (`email`)
-) ENGINE=InnoDB;
+    [id] INTEGER NOT NULL PRIMARY KEY,
+    [email] VARCHAR(100) NOT NULL,
+    [token] VARCHAR(100) NOT NULL,
+    [credits] INTEGER DEFAULT 0 NOT NULL,
+    [active] INTEGER(1) DEFAULT 1 NOT NULL,
+    [created_at] TIMESTAMP,
+    [updated_at] TIMESTAMP,
+    UNIQUE ([email])
+);
 
--- ---------------------------------------------------------------------
--- product_i18n
--- ---------------------------------------------------------------------
+-----------------------------------------------------------------------
+-- cs_product_i18n
+-----------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `product_i18n`;
+DROP TABLE IF EXISTS [cs_product_i18n];
 
-CREATE TABLE `product_i18n`
+CREATE TABLE [cs_product_i18n]
 (
-    `id` INTEGER NOT NULL,
-    `locale` VARCHAR(5) DEFAULT 'en_US' NOT NULL,
-    `name` VARCHAR(200) NOT NULL,
-    `description` VARCHAR(1000) NOT NULL,
-    PRIMARY KEY (`id`,`locale`),
-    CONSTRAINT `product_i18n_FK_1`
-        FOREIGN KEY (`id`)
-        REFERENCES `product` (`id`)
-        ON DELETE CASCADE
-) ENGINE=InnoDB;
+    [id] INTEGER NOT NULL,
+    [locale] VARCHAR(5) DEFAULT 'en_US' NOT NULL,
+    [name] VARCHAR(200) NOT NULL,
+    [description] VARCHAR(1000) NOT NULL,
+    PRIMARY KEY ([id],[locale])
+);
 
--- ---------------------------------------------------------------------
--- tag_i18n
--- ---------------------------------------------------------------------
+-- SQLite does not support foreign keys; this is just for reference
+-- FOREIGN KEY ([id]) REFERENCES cs_product ([id])
 
-DROP TABLE IF EXISTS `tag_i18n`;
+-----------------------------------------------------------------------
+-- cs_tag_i18n
+-----------------------------------------------------------------------
 
-CREATE TABLE `tag_i18n`
+DROP TABLE IF EXISTS [cs_tag_i18n];
+
+CREATE TABLE [cs_tag_i18n]
 (
-    `id` INTEGER NOT NULL,
-    `locale` VARCHAR(5) DEFAULT 'en_US' NOT NULL,
-    `name` VARCHAR(200) NOT NULL,
-    PRIMARY KEY (`id`,`locale`),
-    CONSTRAINT `tag_i18n_FK_1`
-        FOREIGN KEY (`id`)
-        REFERENCES `tag` (`id`)
-        ON DELETE CASCADE
-) ENGINE=InnoDB;
+    [id] INTEGER NOT NULL,
+    [locale] VARCHAR(5) DEFAULT 'en_US' NOT NULL,
+    [name] VARCHAR(200) NOT NULL,
+    PRIMARY KEY ([id],[locale])
+);
 
--- ---------------------------------------------------------------------
--- tag_type_i18n
--- ---------------------------------------------------------------------
+-- SQLite does not support foreign keys; this is just for reference
+-- FOREIGN KEY ([id]) REFERENCES cs_tag ([id])
 
-DROP TABLE IF EXISTS `tag_type_i18n`;
+-----------------------------------------------------------------------
+-- cs_tag_type_i18n
+-----------------------------------------------------------------------
 
-CREATE TABLE `tag_type_i18n`
+DROP TABLE IF EXISTS [cs_tag_type_i18n];
+
+CREATE TABLE [cs_tag_type_i18n]
 (
-    `id` INTEGER NOT NULL,
-    `locale` VARCHAR(5) DEFAULT 'en_US' NOT NULL,
-    `name` VARCHAR(200) NOT NULL,
-    PRIMARY KEY (`id`,`locale`),
-    CONSTRAINT `tag_type_i18n_FK_1`
-        FOREIGN KEY (`id`)
-        REFERENCES `tag_type` (`id`)
-        ON DELETE CASCADE
-) ENGINE=InnoDB;
+    [id] INTEGER NOT NULL,
+    [locale] VARCHAR(5) DEFAULT 'en_US' NOT NULL,
+    [name] VARCHAR(200) NOT NULL,
+    PRIMARY KEY ([id],[locale])
+);
 
-# This restores the fkey checks, after having unset them earlier
-SET FOREIGN_KEY_CHECKS = 1;
+-- SQLite does not support foreign keys; this is just for reference
+-- FOREIGN KEY ([id]) REFERENCES cs_tag_type ([id])

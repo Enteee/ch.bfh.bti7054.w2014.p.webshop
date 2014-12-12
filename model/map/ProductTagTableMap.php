@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'product_tag' table.
+ * This class defines the structure of the 'cs_product_tag' table.
  *
  *
  *
@@ -32,7 +32,7 @@ class ProductTagTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('product_tag');
+        $this->setName('cs_product_tag');
         $this->setPhpName('ProductTag');
         $this->setClassname('ProductTag');
         $this->setPackage('model');
@@ -40,8 +40,8 @@ class ProductTagTableMap extends TableMap
         $this->setIsCrossRef(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('product_id', 'ProductId', 'INTEGER', 'product', 'id', true, null, null);
-        $this->addForeignKey('tag_id', 'TagId', 'INTEGER', 'tag', 'id', true, null, null);
+        $this->addForeignKey('product_id', 'ProductId', 'INTEGER', 'cs_product', 'id', true, null, null);
+        $this->addForeignKey('tag_id', 'TagId', 'INTEGER', 'cs_tag', 'id', true, null, null);
         // validators
     } // initialize()
 
@@ -50,8 +50,8 @@ class ProductTagTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Product', 'Product', RelationMap::MANY_TO_ONE, array('product_id' => 'id', ), null, null);
-        $this->addRelation('Tag', 'Tag', RelationMap::MANY_TO_ONE, array('tag_id' => 'id', ), null, null);
+        $this->addRelation('Product', 'Product', RelationMap::MANY_TO_ONE, array('product_id' => 'id', ), 'RESTRICT', 'RESTRICT');
+        $this->addRelation('Tag', 'Tag', RelationMap::MANY_TO_ONE, array('tag_id' => 'id', ), 'RESTRICT', 'RESTRICT');
     } // buildRelations()
 
 } // ProductTagTableMap

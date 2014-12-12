@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'offer' table.
+ * This class defines the structure of the 'cs_offer' table.
  *
  *
  *
@@ -32,14 +32,14 @@ class OfferTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('offer');
+        $this->setName('cs_offer');
         $this->setPhpName('Offer');
         $this->setClassname('Offer');
         $this->setPackage('model');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('product_id', 'ProductId', 'INTEGER', 'product', 'id', true, null, null);
+        $this->addForeignKey('product_id', 'ProductId', 'INTEGER', 'cs_product', 'id', true, null, null);
         $this->addColumn('price', 'Price', 'INTEGER', true, null, 0);
         $this->addColumn('active', 'Active', 'BOOLEAN', true, 1, true);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
@@ -52,11 +52,11 @@ class OfferTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Product', 'Product', RelationMap::MANY_TO_ONE, array('product_id' => 'id', ), null, null);
-        $this->addRelation('Code', 'Code', RelationMap::ONE_TO_MANY, array('id' => 'offer_id', ), null, null, 'Codes');
-        $this->addRelation('OfferTag', 'OfferTag', RelationMap::ONE_TO_MANY, array('id' => 'offer_id', ), null, null, 'OfferTags');
-        $this->addRelation('Order', 'Order', RelationMap::ONE_TO_MANY, array('id' => 'offer_id', ), null, null, 'Orders');
-        $this->addRelation('Tag', 'Tag', RelationMap::MANY_TO_MANY, array(), null, null, 'Tags');
+        $this->addRelation('Product', 'Product', RelationMap::MANY_TO_ONE, array('product_id' => 'id', ), 'RESTRICT', 'RESTRICT');
+        $this->addRelation('Code', 'Code', RelationMap::ONE_TO_MANY, array('id' => 'offer_id', ), 'RESTRICT', 'RESTRICT', 'Codes');
+        $this->addRelation('OfferTag', 'OfferTag', RelationMap::ONE_TO_MANY, array('id' => 'offer_id', ), 'RESTRICT', 'RESTRICT', 'OfferTags');
+        $this->addRelation('Order', 'Order', RelationMap::ONE_TO_MANY, array('id' => 'offer_id', ), 'RESTRICT', 'RESTRICT', 'Orders');
+        $this->addRelation('Tag', 'Tag', RelationMap::MANY_TO_MANY, array(), 'RESTRICT', 'RESTRICT', 'Tags');
     } // buildRelations()
 
     /**

@@ -2,7 +2,7 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'product_tag' table.
+ * Base static class for performing query and update operations on the 'cs_product_tag' table.
  *
  *
  *
@@ -15,7 +15,7 @@ abstract class BaseProductTagPeer
     const DATABASE_NAME = 'codeshop';
 
     /** the table name for this class */
-    const TABLE_NAME = 'product_tag';
+    const TABLE_NAME = 'cs_product_tag';
 
     /** the related Propel class for this table */
     const OM_CLASS = 'ProductTag';
@@ -33,13 +33,13 @@ abstract class BaseProductTagPeer
     const NUM_HYDRATE_COLUMNS = 3;
 
     /** the column name for the id field */
-    const ID = 'product_tag.id';
+    const ID = 'cs_product_tag.id';
 
     /** the column name for the product_id field */
-    const PRODUCT_ID = 'product_tag.product_id';
+    const PRODUCT_ID = 'cs_product_tag.product_id';
 
     /** the column name for the tag_id field */
-    const TAG_ID = 'product_tag.tag_id';
+    const TAG_ID = 'cs_product_tag.tag_id';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -360,7 +360,7 @@ abstract class BaseProductTagPeer
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to product_tag
+     * Method to invalidate the instance pool of all tables related to cs_product_tag
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -1209,7 +1209,7 @@ abstract class BaseProductTagPeer
     }
 
     /**
-     * Deletes all rows from the product_tag table.
+     * Deletes all rows from the cs_product_tag table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).

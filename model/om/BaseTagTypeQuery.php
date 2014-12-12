@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a query for the 'tag_type' table.
+ * Base class that represents a query for the 'cs_tag_type' table.
  *
  *
  *
@@ -146,7 +146,7 @@ abstract class BaseTagTypeQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `active`, `created_at`, `updated_at` FROM `tag_type` WHERE `id` = :p0';
+        $sql = 'SELECT [id], [active], [created_at], [updated_at] FROM [cs_tag_type] WHERE [id] = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

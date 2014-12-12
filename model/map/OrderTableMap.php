@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'order' table.
+ * This class defines the structure of the 'cs_order' table.
  *
  *
  *
@@ -32,15 +32,15 @@ class OrderTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('order');
+        $this->setName('cs_order');
         $this->setPhpName('Order');
         $this->setClassname('Order');
         $this->setPackage('model');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'user', 'id', true, null, null);
-        $this->addForeignKey('offer_id', 'OfferId', 'INTEGER', 'offer', 'id', true, null, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'cs_user', 'id', true, null, null);
+        $this->addForeignKey('offer_id', 'OfferId', 'INTEGER', 'cs_offer', 'id', true, null, null);
         $this->addColumn('paid_price', 'PaidPrice', 'INTEGER', true, null, 0);
         $this->addColumn('active', 'Active', 'BOOLEAN', true, 1, true);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
@@ -53,8 +53,8 @@ class OrderTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('User', 'User', RelationMap::MANY_TO_ONE, array('user_id' => 'id', ), null, null);
-        $this->addRelation('Offer', 'Offer', RelationMap::MANY_TO_ONE, array('offer_id' => 'id', ), null, null);
+        $this->addRelation('User', 'User', RelationMap::MANY_TO_ONE, array('user_id' => 'id', ), 'RESTRICT', 'RESTRICT');
+        $this->addRelation('Offer', 'Offer', RelationMap::MANY_TO_ONE, array('offer_id' => 'id', ), 'RESTRICT', 'RESTRICT');
     } // buildRelations()
 
     /**

@@ -2,7 +2,7 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'order' table.
+ * Base static class for performing query and update operations on the 'cs_order' table.
  *
  *
  *
@@ -15,7 +15,7 @@ abstract class BaseOrderPeer
     const DATABASE_NAME = 'codeshop';
 
     /** the table name for this class */
-    const TABLE_NAME = 'order';
+    const TABLE_NAME = 'cs_order';
 
     /** the related Propel class for this table */
     const OM_CLASS = 'Order';
@@ -33,25 +33,25 @@ abstract class BaseOrderPeer
     const NUM_HYDRATE_COLUMNS = 7;
 
     /** the column name for the id field */
-    const ID = 'order.id';
+    const ID = 'cs_order.id';
 
     /** the column name for the user_id field */
-    const USER_ID = 'order.user_id';
+    const USER_ID = 'cs_order.user_id';
 
     /** the column name for the offer_id field */
-    const OFFER_ID = 'order.offer_id';
+    const OFFER_ID = 'cs_order.offer_id';
 
     /** the column name for the paid_price field */
-    const PAID_PRICE = 'order.paid_price';
+    const PAID_PRICE = 'cs_order.paid_price';
 
     /** the column name for the active field */
-    const ACTIVE = 'order.active';
+    const ACTIVE = 'cs_order.active';
 
     /** the column name for the created_at field */
-    const CREATED_AT = 'order.created_at';
+    const CREATED_AT = 'cs_order.created_at';
 
     /** the column name for the updated_at field */
-    const UPDATED_AT = 'order.updated_at';
+    const UPDATED_AT = 'cs_order.updated_at';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -380,7 +380,7 @@ abstract class BaseOrderPeer
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to order
+     * Method to invalidate the instance pool of all tables related to cs_order
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -1229,7 +1229,7 @@ abstract class BaseOrderPeer
     }
 
     /**
-     * Deletes all rows from the order table.
+     * Deletes all rows from the cs_order table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).

@@ -7,18 +7,16 @@ class JsonController extends Controller {
 
 	public function __construct() {
 		parent::__construct();
-		$this->vars->saveGlobal('REQUEST_METHOD',SaveVars::T_STRING,SaveVars::G_SERVER, function(){
-			return 'none';
-		});
+		$this->vars->saveGlobal('REQUEST_METHOD',SaveVars::T_STRING,SaveVars::G_SERVER);
 		$this->vars->saveGlobal('type',SaveVars::T_STRING,SaveVars::G_GET, function(){
-			return '';
-		});
-		$this->vars->saveGlobal('id',SaveVars::T_INT,SaveVars::G_GET, function(){
-			return -1;
-		});
+			return NULL;
+		}, true);
+		$this->vars->saveGlobal('id',SaveVars::T_NUMERIC,SaveVars::G_GET, function(){
+			return NULL;
+		}, true);
 		$this->vars->saveGlobal('search', SaveVars::T_STRING, SaveVars::G_GET, function(){
-			return '';
-		});
+			return NULL;
+		}, true);
 		$this->vars->saveGlobal('object', SaveVars::T_STRING_JSON, SaveVars::G_POST, function(){
 			return NULL;
 		}, true);
@@ -50,19 +48,13 @@ class JsonController extends Controller {
 						$object = $this->vars->object;
 						if( isset($object)
 							&& isset($object->productId)){
-							$this->vars->saveVar('reviewProductId', $object->productId, SaveVars::T_NUMERIC, function(){
-								return NULL;
-							});
+							$this->vars->saveVar('reviewProductId', SaveVars::T_NUMERIC, $object->productId);
 							$product = $this->repo->getProductById($this->vars->reviewProductId);
 							if(isset($product)
 								&& isset($object->text)
 								&& isset($object->rating)){
-									$this->vars->saveVar('reviewText', $object->text, SaveVars::T_STRING_HTML, function(){
-										return NULL;
-									});
-									$this->vars->saveVar('reviewRating', $object->rating, SaveVars::T_NUMERIC, function(){
-										return NULL;
-									});
+									$this->vars->saveVar('reviewText', SaveVars::T_STRING_HTML, $object->text);
+									$this->vars->saveVar('reviewRating', SaveVars::T_NUMERIC, $object->rating);
 									$review = (new Review())
 										->setProduct($product)
 										->setText($this->vars->reviewText)

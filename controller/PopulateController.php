@@ -135,6 +135,7 @@ class PopulateController extends Controller {
 		/* Users */
 		$userTest = (new User())
 			->setEmail('testuser@gmail.com')
+			->setToken('testtesttesttesttesttes')
 			->setCredits('1000');
 		$userTest->save();
 

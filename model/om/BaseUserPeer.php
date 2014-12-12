@@ -2,7 +2,7 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'user' table.
+ * Base static class for performing query and update operations on the 'cs_user' table.
  *
  *
  *
@@ -15,7 +15,7 @@ abstract class BaseUserPeer
     const DATABASE_NAME = 'codeshop';
 
     /** the table name for this class */
-    const TABLE_NAME = 'user';
+    const TABLE_NAME = 'cs_user';
 
     /** the related Propel class for this table */
     const OM_CLASS = 'User';
@@ -33,25 +33,25 @@ abstract class BaseUserPeer
     const NUM_HYDRATE_COLUMNS = 7;
 
     /** the column name for the id field */
-    const ID = 'user.id';
+    const ID = 'cs_user.id';
 
     /** the column name for the email field */
-    const EMAIL = 'user.email';
+    const EMAIL = 'cs_user.email';
 
     /** the column name for the token field */
-    const TOKEN = 'user.token';
+    const TOKEN = 'cs_user.token';
 
     /** the column name for the credits field */
-    const CREDITS = 'user.credits';
+    const CREDITS = 'cs_user.credits';
 
     /** the column name for the active field */
-    const ACTIVE = 'user.active';
+    const ACTIVE = 'cs_user.active';
 
     /** the column name for the created_at field */
-    const CREATED_AT = 'user.created_at';
+    const CREATED_AT = 'cs_user.created_at';
 
     /** the column name for the updated_at field */
-    const UPDATED_AT = 'user.updated_at';
+    const UPDATED_AT = 'cs_user.updated_at';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -380,7 +380,7 @@ abstract class BaseUserPeer
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to user
+     * Method to invalidate the instance pool of all tables related to cs_user
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -598,7 +598,7 @@ abstract class BaseUserPeer
     }
 
     /**
-     * Deletes all rows from the user table.
+     * Deletes all rows from the cs_user table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).

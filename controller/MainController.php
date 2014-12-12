@@ -18,7 +18,7 @@ class MainController extends Controller {
 		});
 	}
 
-	protected function index(){
+	protected function main($searchAction = 'product/show'){
 		// set global data for view
 		$data['title'] = $this->lang->title;
 		$data['subtitle'] = $this->lang->subtitle;
@@ -29,6 +29,9 @@ class MainController extends Controller {
 		);
 		$data['locale'] = $this->lang->getLocale();
 		$data['isLoggedIn'] = $this->isLoggedIn();
+		
+		// search 
+		$data['searchAction'] = $searchAction;
 		
 		// navigation
 		$navItems = array();

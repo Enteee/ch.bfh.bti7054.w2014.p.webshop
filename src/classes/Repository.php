@@ -129,6 +129,7 @@ class Repository {
 			$query
 				->useProductI18nQuery()
 					->filterByName('%' . $searchstring . '%')
+					->filterByLocale(Mvc::$lang->getLocale())
 				->endUse();
 		}		
 		if (isset($user)) {
@@ -138,7 +139,7 @@ class Repository {
 						->filterByUser($user)
 					->endUse()
 				->endUse();
-		}		
+		}
 		return $query->find();
 	}
 	

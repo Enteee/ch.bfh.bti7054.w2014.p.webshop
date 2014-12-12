@@ -84,7 +84,10 @@
 <?php endforeach; ?>
 					</ul>
 					<!-- search form -->
-					<form class="navbar-form navbar-right" role="form" action="product/search" method="get">
+					<form class="navbar-form navbar-right" role="form" action="<?php echo $searchAction; ?>" method="get">
+	<?php if ($activeCategoryId > 0): ?>
+						<input type="hidden" name="categoryId" value="<?php echo $activeCategoryId; ?>" />
+	<?php endif; ?>
 						<div class="form-group">
 							<div class="input-group">
 								<input type="text" class="form-control" name="search" placeholder="<?php echo label('search'); ?>">

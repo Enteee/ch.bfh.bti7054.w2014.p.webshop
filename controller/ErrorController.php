@@ -10,12 +10,12 @@ class ErrorController extends MainController {
 	}
 	
 	public function index() {
-		parent::index();
+		parent::main();
 		$this->error404();
 	}
 
 	public function error404() {
-		parent::index();
+		parent::main();
 		
 		$errorNr = '404';
 		
@@ -28,7 +28,7 @@ class ErrorController extends MainController {
 	}
 	
 	public function error403() {
-		parent::index();
+		parent::main();
 		
 		$errorNr = '403';
 		
@@ -41,7 +41,7 @@ class ErrorController extends MainController {
 	}
 	
 	public function error500($exception) {
-		parent::index();
+		parent::main();
 		
 		$errorNr = '500';
 		$errorDesc = $this->lang->error500;
@@ -59,7 +59,7 @@ class ErrorController extends MainController {
 		
 		// render template
 		$this->view('error', $data);
-	}	
+	}
 }
 
 ?>

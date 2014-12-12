@@ -244,6 +244,12 @@ We're selling source code on our webshop. People can upload source code and othe
 
 ## Open issues
 
+* Install script
+ * zip extract (with password)
+ * composer vendor libraries installation
+ ( * propel database setup (username / password) )
+ * populate database
+ * document installation
 
 
 

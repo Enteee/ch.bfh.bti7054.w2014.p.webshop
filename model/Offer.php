@@ -13,8 +13,15 @@
  *
  * @package    propel.generator.model
  */
-class Offer extends BaseOffer
+class Offer extends BaseOffer implements JsonSerializable
 {
+	public function jsonSerialize() {
+		return [
+			'name' => $this->getProduct()->getName(),
+			'price' => $this->getPrice(),
+		];
+	}
+
 	public function getProviderUser() {
 		if ($this->countCodes() > 0) {
 			// user of first uploaded code of this offer

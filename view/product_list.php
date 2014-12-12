@@ -19,9 +19,7 @@
 								<select class="cs-product-list-item-options-programming-language">
 								</select>
 								<span><?php echo label('offer'); ?>:</span>
-								<select class="cs-product-list-item-options-offer">
-								<span><?php echo label('version'); ?>:</span>
-								<select class="cs-product-list-item-options-version">
+								<select class="cs-product-list-item-options-offers">
 								</select>
 								<span><?php echo label('withComments'); ?>:</span>
 								<input class="" type="checkbox" checked="checked"></input>

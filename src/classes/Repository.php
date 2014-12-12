@@ -16,7 +16,7 @@ class Repository {
 				->filterByTagType($tagType)
 				->useTagI18nQuery()
 					->filterByName('%' . $searchstring . '%')
-					->filterByLocale(Mvc::$lang->getLocale())
+					->filterByLocale(Language::getInstance()->getLocale())
 				->endUse()
 				->find();
 		} else {
@@ -38,7 +38,7 @@ class Repository {
 				->filterByTagType($tagType)
 				->useTagI18nQuery()
 					->filterByName('%' . $searchstring . '%')
-					->filterByLocale(Mvc::$lang->getLocale())
+					->filterByLocale(Language::getInstance()->getLocale())
 				->endUse()
 				->find();
 		} else {
@@ -129,6 +129,7 @@ class Repository {
 			$query
 				->useProductI18nQuery()
 					->filterByName('%' . $searchstring . '%')
+					->filterByLocale(Language::getInstance()->getLocale())
 				->endUse();
 		}		
 		if (isset($user)) {
@@ -138,7 +139,7 @@ class Repository {
 						->filterByUser($user)
 					->endUse()
 				->endUse();
-		}		
+		}
 		return $query->find();
 	}
 	
@@ -159,10 +160,12 @@ class Repository {
 	public function getProgrammingLanguagesByProduct($product) {
 		$tagType = TagTypeQuery::create()->findPk(Tag::PROGRAMMING_LANGUAGE);
 		return TagQuery::create()
-			->useProductTagQuery()
-				->filterByProduct($product)
-			->endUse()
 			->filterByTagType($tagType)
+			->useOfferTagQuery()
+				->useOfferQuery()
+					->filterByProduct($product)
+				->endUse()
+			->endUse()
 			->find();
 	}
 	
@@ -173,7 +176,13 @@ class Repository {
 			->endUse()
 			->find();
 	}
-
+	
+	public function getOffersByProduct($product) {
+		return OfferQuery::create()
+			->filterByProduct($product)
+			->find();
+	}
+	
 	public function getReviewById($review_id) {
 		return ReviewQuery::create()
 			->findPk($review_id);

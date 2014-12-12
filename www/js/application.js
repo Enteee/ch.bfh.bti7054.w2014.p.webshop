@@ -78,7 +78,7 @@ $(document).ready(function() {
 				var description = $(this).find('.cs-product-list-item-description');
 				var options = $(this).find('.cs-product-list-item-options'); 
 				var programmingLanguage = $(this).find('.cs-product-list-item-options-programming-language');
-				var versions = $(this).find('.cs-product-list-item-options-version');
+				var offers = $(this).find('.cs-product-list-item-options-offers');
 				var reviews = $(this).find('.cs-product-list-item-reviews');
 				var rating = $(this).find('.cs-product-list-item-rating');
 				var reviewsCount = $(this).find('.cs-product-list-item-reviews-count');
@@ -86,10 +86,10 @@ $(document).ready(function() {
 					tags.append('<span class="label label-default">'+ product.tags[tag].name +'</span>&nbsp;');
 				};
 				for(var language in product.programmingLanguage){
-					programmingLanguage.append('<option>'+ product.programmingLanguage[language].name +'</option>');
+					programmingLanguage.append('<option value="' + language + '">'+ product.programmingLanguage[language].name +'</option>');
 				};
-				for(var version in product.versions){
-					versions.append('<option>'+ product.versions[version].name +'</option>');
+				for(var offer in product.offers){
+					offers.append('<option value="' + offer + '">'+ product.offers[offer].price +'&cent;</option>');
 				};
 				for(var i = 0; i < 5; i++){
 					if(product.avgRating > 0){
@@ -161,7 +161,7 @@ $(document).ready(function() {
 	autocomplete('#product_programminglanguages', '/de/json/programminglanguages_select2', true, false, 1);
 	
 	/* select product */
-	$('#product_id').on('select2-selecting', function (e) {		
+	$('#product_id').on('select2-selecting', function (e) {
 		$('#product_name').val(e.choice.text);
 		if (e.choice.id == -1) {
 			// freetext for product
@@ -169,7 +169,7 @@ $(document).ready(function() {
 			$('#product_categories').select2('enable', true);
 			
 			$('#product_description').val('');
-			$('#product_categories').select2('val', '');			
+			$('#product_categories').select2('val', '');
 		} else {
 			// already existing product
 			$('#product_description').prop('disabled', true);

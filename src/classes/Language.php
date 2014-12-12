@@ -1,5 +1,18 @@
 <?php
 
+// global functions
+function lang() {
+	return Language::getInstance()->getLanguage();
+}
+
+function locale() {
+	return Language::getInstance()->getLocale();
+}
+
+function label($key) {
+	return Language::getInstance()->$key;;
+}
+
 /*  
  * language.php
  * Winku
@@ -58,7 +71,20 @@ class Language {
 	 * Label data.
 	 */
 	private $data;
-
+	
+	/*
+	 * Singleton.
+	 */
+	private static $instance = null;
+	public static function getInstance() {
+		if (null === self::$instance) {
+			self::$instance = new self;
+		}
+		return self::$instance;
+	}
+	private function __construct(){}
+	private function __clone(){}
+	
 	/*
 	 * Initialize language object, load label data.
 	 */

@@ -35,12 +35,12 @@ class ProductController extends MainController {
 	}
 
 	public function index() {
-		parent::index();
+		parent::main();
 		$this->show();
 	}
 	
 	public function show() {
-		parent::index();
+		parent::main();
 		// get variables
 		$searchstring = $this->vars->search;
 		$categoryId = $this->vars->categoryId;
@@ -58,13 +58,14 @@ class ProductController extends MainController {
 		// set data for view
 		$data['pageTitle'] = label('products');
 		$data['products'] = $products;
+		$data['canOrder'] = TRUE;
 		
 		// render template
 		$this->view('product_list', $data);
 	}
 	
 	public function orders() {
-		parent::index();
+		parent::main('product/orders');
 		$this->assertUserIsLoggedIn();
 		
 		// get variables
@@ -82,16 +83,17 @@ class ProductController extends MainController {
 		// set data for view
 		$data['pageTitle'] = label('navMyOrders');
 		$data['products'] = $products;
+		$data['canOrder'] = FALSE;
 		
 		// render template
 		$this->view('product_list', $data);
 	}
 	
 	public function offers() {
-		parent::index();
+		parent::main('product/offers');
 		$this->assertUserIsLoggedIn();
 				
-		// get variables		
+		// get variables
 		$searchstring = $this->vars->search;
 		$categoryId = $this->vars->categoryId;
 		$user = $this->getUser();
@@ -106,20 +108,21 @@ class ProductController extends MainController {
 		// set data for view
 		$data['pageTitle'] = label('navMyOffers');
 		$data['products'] = $products;
+		$data['canOrder'] = FALSE;
 		
 		// render template
 		$this->view('product_list', $data);
 	}
 	
 	public function add() {
-		parent::index();
+		parent::main();
 		$this->assertUserIsLoggedIn();
 		
 		$this->view('product_add');
 	}
 	
 	public function save() {
-		parent::index();
+		parent::main();
 		$this->assertUserIsLoggedIn();
 
 		$user = $this->getUser();
@@ -224,7 +227,7 @@ class ProductController extends MainController {
 	}
 	
 	public function toShoppingCart($offerId) {
-		parent::index();
+		parent::main();
 		$this->assertUserIsLoggedIn();
 		
 		$offerId = intval($offerId);
@@ -253,7 +256,7 @@ class ProductController extends MainController {
 	}
 	
 	public function buy() {
-		parent::index();
+		parent::main();
 		$this->assertUserIsLoggedIn();
 		
 		$user = $this->getUser();
@@ -268,32 +271,6 @@ class ProductController extends MainController {
 		
 		// redirect
 		$this->redirect('product/orders');
-	}
-	
-
-	public function search() {
-		parent::index();
-		
-		// get variables
-		$searchstring = $this->vars->search;
-		
-		// load data
-		$products = array();
-		if (isset($categoryId)){
-			$products = $this->repo->getProductsByTagId($categoryId, $searchstring);
-		} else {
-			$products = $this->repo->getProductsBySearch($searchstring);
-		}
-		$product = ProductQuery::create()->findPk(1);
-		$reviews = $this->repo->getReviewsByProduct($product);
-		
-		// set data for view
-		$data['pageTitle'] = label('products');
-		$data['products'] = $products;
-		$data['reviews'] = $reviews;
-		
-		// render template
-		$this->view('product_list', $data);
 	}
 }
 

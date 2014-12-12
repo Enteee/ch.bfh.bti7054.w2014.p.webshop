@@ -11,7 +11,7 @@ class FileController extends Controller {
 	}
 
 	public function index() {
-		parent::index();
+		parent::main();
 		$this->get();
 	}
 	
@@ -45,7 +45,7 @@ class FileController extends Controller {
 		header('Content-type: ' . $code->getMimetype());
 		header('Content-Disposition: attachment; filename=' . $code->getFilename());
 		echo stream_get_contents($code->getContent());
-	}	
+	}
 }
 
 ?>

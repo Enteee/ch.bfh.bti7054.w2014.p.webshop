@@ -30,9 +30,9 @@ abstract class Controller {
 					$gitkitUser['email'] = $requestUser->getEmail();
 					$gitkitUser['token'] = $requestUser->getUserId();
 				}
-			}, TRUE /* allow NULL */);
+			});
 			return $gitkitUser;
-		});
+		}, true);
 	}
 	
 	private function getDefaultViewName() {
@@ -69,7 +69,8 @@ abstract class Controller {
 	protected function getUser() {
 		$user = NULL;
 		$gitkitUser = $this->vars->gitkitUser;
-		if(	array_key_exists('email',$gitkitUser)
+		if(	isset($gitkitUser)
+			&& array_key_exists('email',$gitkitUser)
 			&& array_key_exists('token',$gitkitUser)){
 			$user = $this->repo->getUserByToken($gitkitUser['token']);
 			if (!isset($user)) {

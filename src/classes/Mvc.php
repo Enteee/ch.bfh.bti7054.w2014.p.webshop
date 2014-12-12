@@ -7,7 +7,7 @@ class Mvc {
 
 	const CONTROLLER_SUFFIX = 'Controller';
 
-	public static $lang;
+	protected $lang;
 
 	protected $segments;
 		
@@ -20,7 +20,7 @@ class Mvc {
 	protected $methodNameFallback = 'index';
 
 	public function __construct() {
-		self::$lang = new Language();
+		$this->lang = Language::getInstance();
 		$this->segments  = array();
 		$this->controllerNameDefault = 'ProductController';
 		$this->controllerNameError = 'ErrorController';
@@ -34,13 +34,13 @@ class Mvc {
 		$this->setControllerByUri();
 		$this->setMethodByUri();
 		
-		self::$lang->init();
+		$this->lang->init();
 		
 		$this->initController();
 	}
 
 	private function redirect() {
-		header('Location: ' . '/' . self::$lang->getLanguage() . $_SERVER['REQUEST_URI'], true, 307);
+		header('Location: ' . '/' . $this->lang->getLanguage() . $_SERVER['REQUEST_URI'], true, 307);
 		exit();
 	}
 	
@@ -63,7 +63,7 @@ class Mvc {
 		if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])){
 			$clientLanguage = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
 		}
-		self::$lang->parseClientLanguage($clientLanguage);
+		$this->lang->parseClientLanguage($clientLanguage);
 	}	
 	
 	private function setLanguageByUri() {
@@ -74,7 +74,7 @@ class Mvc {
 				// remove segment
 				array_shift($this->segments);
 				// set language
-				self::$lang->setLocale($language, NULL);
+				$this->lang->setLocale($language, NULL);
 				return;
 			}
 		}

@@ -16,7 +16,7 @@ class Repository {
 				->filterByTagType($tagType)
 				->useTagI18nQuery()
 					->filterByName('%' . $searchstring . '%')
-					->filterByLocale(Mvc::$lang->getLocale())
+					->filterByLocale(Language::getInstance()->getLocale())
 				->endUse()
 				->find();
 		} else {
@@ -38,7 +38,7 @@ class Repository {
 				->filterByTagType($tagType)
 				->useTagI18nQuery()
 					->filterByName('%' . $searchstring . '%')
-					->filterByLocale(Mvc::$lang->getLocale())
+					->filterByLocale(Language::getInstance()->getLocale())
 				->endUse()
 				->find();
 		} else {
@@ -129,7 +129,7 @@ class Repository {
 			$query
 				->useProductI18nQuery()
 					->filterByName('%' . $searchstring . '%')
-					->filterByLocale(Mvc::$lang->getLocale())
+					->filterByLocale(Language::getInstance()->getLocale())
 				->endUse();
 		}		
 		if (isset($user)) {

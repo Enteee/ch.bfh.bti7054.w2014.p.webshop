@@ -37,9 +37,9 @@ class MainController extends Controller {
 		// navigation
 		$navItems = array();
 		if ($this->isLoggedIn()) {
-			$navItems[] = array('url' => lang() . '/product/orders', 'text' => label('navMyOrders'), 'icon' => 'glyphicon-user');
-			$navItems[] = array('url' => lang() . '/product/offers', 'text' => label('navMyOffers'), 'icon' => 'glyphicon-folder-open');
-			$navItems[] = array('url' => lang() . '/product/add', 'text' => label('navAddOffer'), 'icon' => 'glyphicon-plus');
+			$navItems[] = array('url' => lang() . '/products/orders', 'text' => label('navMyOrders'), 'icon' => 'glyphicon-user');
+			$navItems[] = array('url' => lang() . '/products/offers', 'text' => label('navMyOffers'), 'icon' => 'glyphicon-folder-open');
+			$navItems[] = array('url' => lang() . '/products/add', 'text' => label('navAddOffer'), 'icon' => 'glyphicon-plus');
 		}
 		$data['navItems'] = $navItems;
 		

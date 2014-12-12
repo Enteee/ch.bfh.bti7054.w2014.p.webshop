@@ -3,7 +3,7 @@
 /*
  * Get information to a product
  */
-class ProductController extends MainController {
+class ProductsController extends MainController {
 
 	public function __construct() {
 		parent::__construct();
@@ -36,32 +36,82 @@ class ProductController extends MainController {
 
 	public function index() {
 		parent::main();
-		$this->view();
+		$this->show();
 	}
 	
-	public function show($productId) {
+	public function show() {
 		parent::main();
 		// get variables
 		$searchstring = $this->vars->search;
-		$productId = intval($productId);
-		if ($productId <= 0) {
-			throw new NotFoundException();
-		}
+		$categoryId = $this->vars->categoryId;
 		
-		$product = ProductQuery::create()->findPk($productId);
-		if (!isset($product)) {
-			throw new NotFoundException();
+		// load data
+		$products = array();
+		if ($categoryId >= 0){
+			$products = $this->repo->getProductsByTagId($categoryId, $searchstring);
+		} else {
+			$products = $this->repo->getProductsBySearch($searchstring);
 		}
-		
-		$product->setLocale($this->lang->getLocale());
-
+		foreach($products as $product){
+			$product->setLocale($this->lang->getLocale());
+		}
 		// set data for view
 		$data['pageTitle'] = label('products');
-		$data['product'] = $product;
+		$data['products'] = $products;
 		$data['canOrder'] = TRUE;
 		
 		// render template
-		$this->view('product_details', $data);
+		$this->view('product_list', $data);
+	}
+	
+	public function orders() {
+		parent::main('products/orders');
+		$this->assertUserIsLoggedIn();
+		
+		// get variables
+		$searchstring = $this->vars->search;
+		$categoryId = $this->vars->categoryId;
+		$user = $this->getUser();
+		
+		// load data
+		$products = $this->repo->getUsersOrders($categoryId, $searchstring, $user);
+
+		foreach ($products as $product){
+			$product->setLocale($this->lang->getLocale());
+		}
+		
+		// set data for view
+		$data['pageTitle'] = label('navMyOrders');
+		$data['products'] = $products;
+		$data['canOrder'] = FALSE;
+		
+		// render template
+		$this->view('product_list', $data);
+	}
+	
+	public function offers() {
+		parent::main('products/offers');
+		$this->assertUserIsLoggedIn();
+				
+		// get variables
+		$searchstring = $this->vars->search;
+		$categoryId = $this->vars->categoryId;
+		$user = $this->getUser();
+		
+		// load data
+		$products = $this->repo->getUsersOffers($categoryId, $searchstring, $user);
+		
+		foreach ($products as $product){
+			$product->setLocale($this->lang->getLocale());
+		}
+		
+		// set data for view
+		$data['pageTitle'] = label('navMyOffers');
+		$data['products'] = $products;
+		$data['canOrder'] = FALSE;
+		
+		// render template
+		$this->view('product_list', $data);
 	}
 	
 	public function add() {

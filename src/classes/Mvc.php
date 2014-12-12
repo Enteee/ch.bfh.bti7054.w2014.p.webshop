@@ -22,7 +22,7 @@ class Mvc {
 	public function __construct() {
 		$this->lang = Language::getInstance();
 		$this->segments  = array();
-		$this->controllerNameDefault = 'ProductController';
+		$this->controllerNameDefault = 'ProductsController';
 		$this->controllerNameError = 'ErrorController';
 	}
 	
@@ -108,10 +108,8 @@ class Mvc {
 	private function initController() {
 		try {
 			// create controller
-			if (!$this->controllerExists($this->controllerName)) {		
-				// use fallback
-				$this->controllerName = $this->controllerNameError;
-				$this->methodName = 'error404';
+			if (!$this->controllerExists($this->controllerName)) {
+				throw new NotFoundException();
 			}
 			$this->controller = new $this->controllerName();
 
@@ -128,6 +126,8 @@ class Mvc {
 			}
 		} catch (SecurityException $ex) {
 			$this->forbidden($ex);
+		} catch (NotFoundException $ex) {
+			$this->notFound($ex);
 		} catch (Exception $ex) {
 			$this->error($ex);
 		}
@@ -154,7 +154,13 @@ class Mvc {
 		$this->controllerName = $this->controllerNameError;
 		$this->controller = new $this->controllerName();
 		$this->controller->error403($exception);
-	}	
+	}
+	
+	private function notFound($exception) {
+		$this->controllerName = $this->controllerNameError;
+		$this->controller = new $this->controllerName();
+		$this->controller->error404();
+	}
 	
 	private function error($exception) {
 		$this->controllerName = $this->controllerNameError;

@@ -33,9 +33,30 @@ class Product extends BaseProduct implements JsonSerializable
 		return $repo->getProgrammingLanguagesByProduct($this);
 	}
 	
+	public function getCategories() {
+		return TagQuery::create()
+			->filterByProduct($this)
+			->filterByActive(TRUE)
+			->useTagTypeQuery()
+				->filterById(Tag::CATEGORY)
+			->endUse()
+			->find();
+	}
+	
 	public function getOffersByProduct() {
 		$repo = new Repository();
 		return $repo->getOffersByProduct($this);
 	}
-
+	
+	public function getStartingFromPrice() {
+		$cheapest = OfferQuery::create()
+			->filterByProduct($this)
+			->filterByActive(TRUE)
+			->orderByPrice()
+			->findOne();
+		if (isset($cheapest)) {
+			return $cheapest->getPrice();
+		}
+		return 0;
+	}
 }

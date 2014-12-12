@@ -22,6 +22,11 @@ textarea {
 	overflow: scroll;
 }
 
+h4,
+.list-group .list-group-item h4 {
+	color: #ff3500;
+}
+
 /* ---------- changes on bootstrap style ---------- */
 
 /* badge in list-group */
@@ -58,9 +63,6 @@ a.list-group-item.active > .badge,
 #signin .gitkit-account-chip {
 	border: none;
 	background: none;
-}
-.cs-product-list-item-clickable{
-	cursor: pointer;
 }
 .list-group-item.no-padding {
 	padding: 0;

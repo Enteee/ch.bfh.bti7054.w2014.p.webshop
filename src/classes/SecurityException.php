@@ -6,10 +6,9 @@
 class SecurityException extends Exception {
 
 	public function __construct() {
-		$message = 'user is unauthorized.';
-		$code = 0;
-		parent::__construct($message, $code);
+		parent::__construct('User is not authorized to access this content');
 	}
+
 }
 
 ?>

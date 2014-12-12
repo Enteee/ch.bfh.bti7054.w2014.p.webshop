@@ -40,13 +40,25 @@
 		"en" : "Reviews",
 		"de" : "Kommentare"
 	},
+	"review": {
+		"en" : "Review",
+		"de" : "Kommentar"
+	},
+	"offers": {
+		"en" : "Offers",
+		"de" : "Angebote"
+	},
+	"product": {
+		"en" : "Product",
+		"de" : "Produkt"
+	},
 	"addReview": {
 		"en" : "Add review",
 		"de" : "Kommentar schreiben"
 	},
 	"writeReview": {
 		"en" : "write review...",
-		"de" : "kommentar schreiben..."
+		"de" : "Kommentar schreiben..."
 	},
 	"offer": {
 		"en" : "offer",
@@ -88,6 +100,10 @@
 		"en" : "Shopping cart",
 		"de" : "Warenkorb"
 	},
+	"addToShoppingCart": {
+		"en" : "add to shopping cart",
+		"de" : "dem Warenkorb hinzufügen"
+	},
 	"search": {
 		"en" : "search...",
 		"de" : "suchen..."
@@ -107,6 +123,10 @@
 	"price": {
 		"en" : "Price",
 		"de" : "Preis"
+	},
+	"startingFrom": {
+		"en" : "starting from",
+		"de" : "ab"
 	},
 	"credits": {
 		"en" : "Credits",

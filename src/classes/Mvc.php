@@ -27,6 +27,9 @@ class Mvc {
 	}
 	
 	public function init() {
+		if (!isset($_SERVER['REQUEST_URI'])) {
+			throw Exception('request uri not found.');
+		}
 		$this->parseUri($_SERVER['REQUEST_URI']);
 		
 		$this->setLanguageByClient();
@@ -60,11 +63,11 @@ class Mvc {
 	public function setLanguageByClient() {
 		// parse locale
 		$clientLanguage = '';
-		if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])){
+		if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
 			$clientLanguage = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
 		}
 		$this->lang->parseClientLanguage($clientLanguage);
-	}	
+	}
 	
 	private function setLanguageByUri() {
 		// language over uri?

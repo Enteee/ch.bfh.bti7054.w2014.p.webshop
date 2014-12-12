@@ -20,11 +20,29 @@ abstract class Controller {
 		$this->lang = Mvc::$lang;
 		$this->template = new Template();
 		$this->repo = new Repository();
-		$this->vars = new SaveVars();
-		$this->gitkit = Gitkit_Client::createFromFile($config['gitkit']['server-config']);
+		
+		$this->vars = SaveVars::getInstance();
+		$this->vars->saveGlobal('gitkitUser', SaveVars::T_ARRAY, SaveVars::G_SESSION, function(){
+			$this->vars->callEnabledSuperglobals(function() use (&$gitkitUser){
+				$gitkit = Gitkit_Client::createFromFile($this->config['gitkit']['server-config']);
+				$requestUser = $gitkit->getUserInRequest();
+				if (isset($requestUser)) {
+					$gitkitUser['email'] = $requestUser->getEmail();
+					$gitkitUser['token'] = $requestUser->getUserId();
+				}
+			}, TRUE /* allow NULL */);
+			return $gitkitUser;
+		});
+	}
+	
+	private function getDefaultViewName() {
+		return strtolower(preg_replace('~Controller$~i', '', get_class($this)));
 	}
 	
 	protected function view($name = NULL, $data = NULL) {
+		if (!isset($name)) {
+			$name = $this->getDefaultViewName();
+		}
 		$this->template->view($name, $data);
 	}
 	
@@ -33,42 +51,47 @@ abstract class Controller {
 	}
 	
 	/**
-	 * Get current user. NULL if user is not logged in.
+	 * Redirect a user.
 	 */
+	protected function redirect($location, $appendLanguage = TRUE) {
+		// remove trailing slash
+		$location = preg_replace('~^/~', '', $location);
+		// append language?
+		if ($appendLanguage) {
+			$location = $this->lang->getLanguage() . '/' . $location;
+		}
+		header('Location: ' . '/' . $location);
+	}
+	
+	/*
+	* Gets the logged in user
+	*/
 	protected function getUser() {
-		$gitkitUser = $this->gitkit->getUserInRequest();
-		if (isset($gitkitUser)) {
-			// user logged in			
-			$token = $gitkitUser->getUserId();			
-			$user = $this->repo->getUserByToken($token);
+		$user = NULL;
+		$gitkitUser = $this->vars->gitkitUser;
+		if(	array_key_exists('email',$gitkitUser)
+			&& array_key_exists('token',$gitkitUser)){
+			$user = $this->repo->getUserByToken($gitkitUser['token']);
 			if (!isset($user)) {
 				// first time login -> create user in db
 				$user = new User();
 				$user
-					->setEmail($gitkitUser->getEmail())
-					->setToken($gitkitUser->getUserId())
-					->setCreadits(0)
+					->setEmail($gitkitUser['email'])
+					->setToken($gitkitUser['token'])
+					->setCredits(0)
 					->setActive(TRUE)
 					->save();
 			}
-			return $user;
-		}		
-		// not logged in
-		return NULL;
-	}
-	
-	/**
-	 * Redirect a user.
-	 */
-	protected function redirect($location) {
-		header('Location: ' . $location);
+		}
+		return $user;
 	}
 	
 	/**
 	 * Is a user logged in.
 	 */
 	protected function isLoggedIn() {
-		return $this->getUser() != NULL;
+		$user = $this->getUser();
+		return isset($user) && $user->getActive();
 	}
 	
 	/**
@@ -84,7 +107,7 @@ abstract class Controller {
 	 * Is the debug mode on.
 	 */
 	protected function isDebug() {
-		return error_reporting() & E_ERROR;
+		return $this->config['debug'] == true;
 	}
 }
 

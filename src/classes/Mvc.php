@@ -22,7 +22,7 @@ class Mvc {
 	public function __construct() {
 		self::$lang = new Language();
 		$this->segments  = array();
-		$this->controllerNameDefault = 'StartController';
+		$this->controllerNameDefault = 'ProductController';
 		$this->controllerNameError = 'ErrorController';
 	}
 	
@@ -30,11 +30,9 @@ class Mvc {
 		$this->parseUri($_SERVER['REQUEST_URI']);
 		
 		$this->setLanguageByClient();
-		
 		$this->setLanguageByUri();
 		$this->setControllerByUri();
 		$this->setMethodByUri();
-		
 		
 		self::$lang->init();
 		
@@ -42,8 +40,8 @@ class Mvc {
 	}
 
 	private function redirect() {
-		header('Location: ' . '/' . self::$lang->getLanguage() . $_SERVER['REQUEST_URI']);
-		exit;
+		header('Location: ' . '/' . self::$lang->getLanguage() . $_SERVER['REQUEST_URI'], true, 307);
+		exit();
 	}
 	
 	private function parseUri($uri) {
@@ -60,8 +58,11 @@ class Mvc {
 	}
 		
 	public function setLanguageByClient() {
-		// parse locale			
-		$clientLanguage = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+		// parse locale
+		$clientLanguage = '';
+		if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])){
+			$clientLanguage = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+		}
 		self::$lang->parseClientLanguage($clientLanguage);
 	}	
 	
@@ -72,12 +73,11 @@ class Mvc {
 			if (Language::isLanguageValid($language)) {
 				// remove segment
 				array_shift($this->segments);
-				// set language				
+				// set language
 				self::$lang->setLocale($language, NULL);
 				return;
-			}	
+			}
 		}
-		
 		$this->redirect();
 	}
 	
@@ -114,22 +114,37 @@ class Mvc {
 
 			// call method
 			if (method_exists($this->controller, $this->methodName)) {
-				$method = $this->methodName;
-				$this->controller->$method();
+				$this->callMethod();
 			} else {
 				$this->methodName = $this->methodNameFallback;
 				if (!method_exists($this->controller, $this->methodName)) {
 					throw new Exception('Controller has no index method.');
 				}
 				// call fallback method
-				$method = $this->methodName;
-				$this->controller->$method();
+				$this->callMethod();
 			}
 		} catch (SecurityException $ex) {
 			$this->forbidden($ex);
 		} catch (Exception $ex) {
 			$this->error($ex);
 		}
+	}
+	
+	private function callMethod() {
+		$rflClass = new ReflectionClass($this->controller);
+		$rflMethod = $rflClass->getMethod($this->methodName);
+		$rflParameters = $rflMethod->getParameters();
+		$args = array();
+		if (count($rflParameters) > 0) {		
+			for ($i = 0; $i < count($rflParameters); $i++) {
+				if (count($this->segments) > $i) {
+					$args[] = $this->segments[$i];
+				} else {
+					$args[] = NULL;
+				}
+			}
+		}
+		call_user_func_array(array($this->controller, $this->methodName), $args);
 	}
 
 	private function forbidden($exception) {

@@ -18,6 +18,10 @@ textarea {
 	 resize:none;
 }
 
+.scroll {
+	overflow: scroll;
+}
+
 /* ---------- changes on bootstrap style ---------- */
 
 /* badge in list-group */
@@ -50,4 +54,14 @@ a.list-group-item.active > .badge,
 .gitkit-sign-in-button,
 .gitkit-button {
 	width: 100%;
+}
+#signin .gitkit-account-chip {
+	border: none;
+	background: none;
+}
+.cs-product-list-item-clickable{
+	cursor: pointer;
+}
+.list-group-item.no-padding {
+	padding: 0;
 }

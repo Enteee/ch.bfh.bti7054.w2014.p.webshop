@@ -1,5 +1,5 @@
 <?php $this->view('header'); ?>
-					<p class="lead"><?php echo label('navAddProduct'); ?></p>
+					<p class="lead"><?php echo label('navAddOffer'); ?></p>
 					
 				<div class="well">
 					<form class="form-horizontal" enctype="multipart/form-data" method="post" action="<?php echo lang(); ?>/product/save" role="form">

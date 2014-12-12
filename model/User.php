@@ -15,4 +15,15 @@
  */
 class User extends BaseUser
 {
+	public function hasOffer(Offer $offer) {
+		if (!isset($offer)) {
+			throw new InvalidArgumentException('offer is null.');
+		}
+		$count = OrderQuery::create()
+			->filterByUser($this)
+			->filterByOffer($offer)
+			->filterByActive(TRUE)
+			->count();
+		return $count > 0;
+	}
 }

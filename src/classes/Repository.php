@@ -9,13 +9,14 @@ class Repository {
 			->find();
 	}
 	
-	public function getCategoriesBySearch($searchstring = NULL) {		
+	public function getCategoriesBySearch($searchstring = NULL) {
 		if (isset($searchstring)) {
 			$tagType = TagTypeQuery::create()->findPk(Tag::CATEGORY);
 			return TagQuery::create()
 				->filterByTagType($tagType)
 				->useTagI18nQuery()
 					->filterByName('%' . $searchstring . '%')
+					->filterByLocale(Mvc::$lang->getLocale())
 				->endUse()
 				->find();
 		} else {
@@ -30,13 +31,14 @@ class Repository {
 			->find();
 	}
 	
-	public function getProgrammingLanguagesBySearch($searchstring = NULL) {		
+	public function getProgrammingLanguagesBySearch($searchstring = NULL) {
 		if (isset($searchstring)) {
 			$tagType = TagTypeQuery::create()->findPk(Tag::PROGRAMMING_LANGUAGE);
 			return TagQuery::create()
 				->filterByTagType($tagType)
 				->useTagI18nQuery()
 					->filterByName('%' . $searchstring . '%')
+					->filterByLocale(Mvc::$lang->getLocale())
 				->endUse()
 				->find();
 		} else {
@@ -48,8 +50,6 @@ class Repository {
 		return ProductQuery::create()
 			->find();
 	}
-	
-	
 
 	public function getProductById($product_id) {
 		return ProductQuery::create()
@@ -62,6 +62,7 @@ class Repository {
 				->useProductI18nQuery()
 					->filterByName('%' . $searchstring . '%')
 				->endUse()
+				->groupBy('id')
 				->find();
 		} else {
 			return $this->getAllProducts();
@@ -71,16 +72,20 @@ class Repository {
 	public function getProductsByTagId($tag_id, $searchstring = NULL) {
 		if (isset($searchstring)) {
 			return ProductQuery::create()
-				->filterByName($searchstring)
+				->useProductI18nQuery()
+					->filterByName('%'. $searchstring. '%')
+				->endUse()
 				->useProductTagQuery()
 					->filterByTagId($tag_id)
 				->endUse()
+				->groupBy('id')
 				->find();
 		} else {
 			return ProductQuery::create()
 				->useProductTagQuery()
 					->filterByTagId($tag_id)
 				->endUse()
+				->groupBy('id')
 				->find();
 		}
 	}
@@ -88,13 +93,13 @@ class Repository {
 	public function getUsersOrders($tag_id = NULL, $searchstring = NULL, $user = NULL) {
 		$query = ProductQuery::create();
 		
-		if (isset($tag_id)) {
+		if (isset($tag_id) && $tag_id > 0) {
 			$query
 				->useProductTagQuery()
 					->filterByTagId($tag_id)
 				->endUse();
 		}
-		if (isset($searchstring)) {
+		if (isset($searchstring) && strlen($searchstring) > 0) {
 			$query
 				->useProductI18nQuery()
 					->filterByName('%' . $searchstring . '%')
@@ -104,7 +109,7 @@ class Repository {
 			$query
 				->useOfferQuery()
 					->useOrderQuery()
-						->filterByUser($user)					
+						->filterByUser($user)
 					->endUse()
 				->endUse();
 		}		
@@ -114,13 +119,13 @@ class Repository {
 	public function getUsersOffers($tag_id = NULL, $searchstring = NULL, $user = NULL) {
 		$query = ProductQuery::create();
 		
-		if (isset($tag_id)) {
+		if (isset($tag_id) && $tag_id > 0) {
 			$query
 				->useProductTagQuery()
 					->filterByTagId($tag_id)
 				->endUse();
 		}
-		if (isset($searchstring)) {
+		if (isset($searchstring) && strlen($searchstring) > 0) {
 			$query
 				->useProductI18nQuery()
 					->filterByName('%' . $searchstring . '%')
@@ -130,7 +135,7 @@ class Repository {
 			$query
 				->useOfferQuery()
 					->useCodeQuery()
-						->filterByUser($user)					
+						->filterByUser($user)
 					->endUse()
 				->endUse();
 		}		
@@ -195,6 +200,74 @@ class Repository {
 			return $users[0];
 		}
 		return NULL;
+	}
+	
+	public function saveOrder($offers, $orderUser) {
+		if (!isset($offers)) {
+			throw new InvalidArgumentException('offers is null.');
+		}
+		if (!isset($orderUser)) {
+			throw new Exception('no user.');
+		}
+		if (count($offers) == 0) {
+			return;
+		}
+		$con = Propel::getConnection();
+		$con->beginTransaction();
+		try {
+			$credits = $orderUser->getCredits();
+			
+			// make an order for every offer
+			foreach ($offers as $offer) {
+			
+				if (!isset($offer)) {
+					throw new Exception('offer is null.');
+				}
+				
+				// user doen't have ordered this offer yet?
+				if ($orderUser->hasOffer($offer)) {
+					throw new Exception('user already bought this.');
+				}
+				
+				$providerUser = $offer->getProviderUser();
+				if ($providerUser == $orderUser) {
+					throw new Exception('provider and buyer are the same user.');
+				}
+				
+				$price = $offer->getPrice();
+				if ($price > $credits) {
+					throw new Exception('user has not enought credits to make this order.');
+				}
+				
+				// save order
+				$order = new Order();
+				$order
+					->setUser($orderUser)
+					->setOffer($offer)
+					->setPaidPrice($price)
+					->setActive(1)
+					->save();
+				
+				// transfer credits from buyer...
+				$credits -= $price;
+				$orderUser
+					->setCredits($credits)
+					->save();
+				// ... to provider
+				if (isset($providerUser)) {
+					$providerCredits = $providerUser->getCredits();
+					$providerUser
+						->setCredits($providerCredits + $price)
+						->save();
+				}
+			}
+			
+			$con->commit();
+			
+		} catch (Exception $e) {
+			$con->rollback();
+			throw $e;
+		}
 	}
 }
 ?>

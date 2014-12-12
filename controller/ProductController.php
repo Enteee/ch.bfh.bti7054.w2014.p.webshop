@@ -8,53 +8,95 @@ class ProductController extends MainController {
 	public function __construct() {
 		parent::__construct();
 		
-		$this->vars->save_global('category', SaveVars::T_INT, SaveVars::G_GET);
-		$this->vars->save_global('search', SaveVars::T_STRING, SaveVars::G_GET);
-		
-		$this->vars->save_global('product_id', SaveVars::T_INT, SaveVars::G_POST);
-		$this->vars->save_global('product_name', SaveVars::T_STRING, SaveVars::G_POST);
-		$this->vars->save_global('product_description', SaveVars::T_STRING, SaveVars::G_POST);
-		$this->vars->save_global('product_categories', SaveVars::T_STRING, SaveVars::G_POST);
-		$this->vars->save_global('product_programminglanguages', SaveVars::T_STRING, SaveVars::G_POST);
-		$this->vars->save_global('product_price', SaveVars::T_INT, SaveVars::G_POST);
-		$this->vars->save_global('product_file', SaveVars::T_ARRAY, SaveVars::G_FILES);
+		$this->vars->saveGlobal('product_id', SaveVars::T_INT, SaveVars::G_POST, function(){
+			return -1;
+		});
+		$this->vars->saveGlobal('product_name', SaveVars::T_STRING, SaveVars::G_POST, function(){
+			return '';
+		});
+		$this->vars->saveGlobal('product_description', SaveVars::T_STRING, SaveVars::G_POST, function(){
+			return '';
+		});
+		$this->vars->saveGlobal('product_categories', SaveVars::T_STRING, SaveVars::G_POST, function(){
+			return '';
+		});
+		$this->vars->saveGlobal('product_programminglanguages', SaveVars::T_STRING, SaveVars::G_POST, function(){
+			return '';
+		});
+		$this->vars->saveGlobal('product_price', SaveVars::T_INT, SaveVars::G_POST, function(){
+			return -1;
+		});
+		$this->vars->saveGlobal('product_file', SaveVars::T_ARRAY, SaveVars::G_FILES, function(){
+			return array();
+		});
+		$this->vars->saveGlobal('offer_id', SaveVars::T_INT, SaveVars::G_GET, function(){
+			return -1;
+		});
 	}
 
 	public function index() {
+		parent::index();
+		$this->show();
+	}
+	
+	public function show() {
+		parent::index();
+		// get variables
+		$searchstring = $this->vars->search;
+		$categoryId = $this->vars->categoryId;
+		
+		// load data
+		$products = array();
+		if ($categoryId >= 0){
+			$products = $this->repo->getProductsByTagId($categoryId, $searchstring);
+		} else {
+			$products = $this->repo->getProductsBySearch($searchstring);
+		}
+		foreach($products as $product){
+			$product->setLocale($this->lang->getLocale());
+		}
+		// set data for view
+		$data['pageTitle'] = label('products');
+		$data['products'] = $products;
+		
+		// render template
+		$this->view('product_list', $data);
 	}
 	
 	public function orders() {
+		parent::index();
 		$this->assertUserIsLoggedIn();
-				
-		// get variables		
+		
+		// get variables
 		$searchstring = $this->vars->search;
-		$categoryId = $this->categoryId;
+		$categoryId = $this->vars->categoryId;
+		$user = $this->getUser();
 		
 		// load data
-		$user = $this->getUser();
 		$products = $this->repo->getUsersOrders($categoryId, $searchstring, $user);
-		
+
 		foreach ($products as $product){
 			$product->setLocale($this->lang->getLocale());
 		}
 		
 		// set data for view
-		$data['pageTitle'] = label('navMyItems');
+		$data['pageTitle'] = label('navMyOrders');
 		$data['products'] = $products;
 		
 		// render template
-		$this->view('start', $data);
+		$this->view('product_list', $data);
 	}
 	
 	public function offers() {
+		parent::index();
 		$this->assertUserIsLoggedIn();
 				
 		// get variables		
 		$searchstring = $this->vars->search;
-		$categoryId = $this->categoryId;
+		$categoryId = $this->vars->categoryId;
+		$user = $this->getUser();
 		
 		// load data
-		$user = $this->getUser();
 		$products = $this->repo->getUsersOffers($categoryId, $searchstring, $user);
 		
 		foreach ($products as $product){
@@ -62,24 +104,28 @@ class ProductController extends MainController {
 		}
 		
 		// set data for view
-		$data['pageTitle'] = label('navMyProducts');
+		$data['pageTitle'] = label('navMyOffers');
 		$data['products'] = $products;
 		
 		// render template
-		$this->view('start', $data);
+		$this->view('product_list', $data);
 	}
 	
 	public function add() {
+		parent::index();
 		$this->assertUserIsLoggedIn();
 		
-		$this->view('add_product');
+		$this->view('product_add');
 	}
 	
 	public function save() {
+		parent::index();
 		$this->assertUserIsLoggedIn();
 
+		$user = $this->getUser();
+
 		// validate...
-		$file = $this->vars->product_file;		
+		$file = $this->vars->product_file;
 		if (!isset($file)) {
 			throw new Exception('no file uploaded');
 		}		
@@ -103,8 +149,6 @@ class ProductController extends MainController {
 		
 		// TODO: validate all!
 	
-		$user = $this->getUser();
-		
 		$con = Propel::getConnection();
 		$con->beginTransaction();
 		try {
@@ -122,9 +166,9 @@ class ProductController extends MainController {
 				$product->setActive(true);
 				
 				$product->save();
-								
+				
 				// categories
-				$categoryIds = $this->splitInts($this->vars->product_categories);
+				$categoryIds = split_to_ints($this->vars->product_categories);
 				if (count($categoryIds) > 0) {
 					foreach ($categoryIds as $categoryId) {
 						$category = TagQuery::create()->getCategory($categoryId);
@@ -137,7 +181,7 @@ class ProductController extends MainController {
 			}
 			
 			// offer
-			$offer = new Offer();						
+			$offer = new Offer();
 			$offer
 				->setProduct($product)
 				->setPrice($this->vars->product_price)
@@ -145,7 +189,7 @@ class ProductController extends MainController {
 				->save();
 			
 			// programming languages
-			$plIds = $this->splitInts($this->vars->product_programminglanguages);
+			$plIds = split_to_ints($this->vars->product_programminglanguages);
 			if (count($plIds) > 0) {
 				foreach ($plIds as $plId) {
 					$pl = TagQuery::create()->getProgrammingLanguage($plId);
@@ -165,13 +209,13 @@ class ProductController extends MainController {
 				->setFilesize($file['size'])
 				->setMimetype($file['type'])
 				->setContent(file_get_contents($file['tmp_name']))
-				->setActive(true)		
+				->setActive(true)
 				->save();
 
 			$con->commit();
 			
 			// redirect
-			$this->redirect('/start');
+			$this->redirect('product/show');
 			
 		} catch (Exception $e) {
 			$con->rollback();
@@ -179,14 +223,77 @@ class ProductController extends MainController {
 		}
 	}
 	
-	private function splitInts($input) {
-		$ids = array();
-		$parts = preg_split('`,`', $input);
-		foreach ($parts as $part) {
-			$id = filter_var($part, FILTER_VALIDATE_INT);
-			if ($id) { $ids[] = $id; }
+	public function toShoppingCart($offerId) {
+		parent::index();
+		$this->assertUserIsLoggedIn();
+		
+		$offerId = intval($offerId);
+		if ($offerId > 0) {
+		
+			$offer = OfferQuery::create()
+				->filterById($offerId)
+				->filterByActive(TRUE)
+				->findOne();
+			if (!isset($offer)) {
+				throw new Exception('no active offer with this id.');
+			}
+			
+			$user = $this->getUser();
+			if ($user->hasOffer($offer)) {
+				throw new Exception('user already bought this.');
+			}
+			
+			// add to shopping cart
+			$cart = ShoppingCart::getInstance();
+			$cart->addOffer($offer);
 		}
-		return $ids;
+		
+		// redirect
+		$this->redirect('product/orders');
+	}
+	
+	public function buy() {
+		parent::index();
+		$this->assertUserIsLoggedIn();
+		
+		$user = $this->getUser();
+		$cart = ShoppingCart::getInstance();
+		
+		// make order
+		$offers = $cart->getOffers();
+		$this->repo->saveOrder($offers, $user);
+		
+		// clear shopping cart
+		$cart->clear();
+		
+		// redirect
+		$this->redirect('product/orders');
+	}
+	
+
+	public function search() {
+		parent::index();
+		
+		// get variables
+		$searchstring = $this->vars->search;
+		
+		// load data
+		$products = array();
+		if (isset($categoryId)){
+			$products = $this->repo->getProductsByTagId($categoryId, $searchstring);
+		} else {
+			$products = $this->repo->getProductsBySearch($searchstring);
+		}
+		$product = ProductQuery::create()->findPk(1);
+		$reviews = $this->repo->getReviewsByProduct($product);
+		
+		// set data for view
+		$data['pageTitle'] = label('products');
+		$data['products'] = $products;
+		$data['reviews'] = $reviews;
+		
+		// render template
+		$this->view('product_list', $data);
 	}
 }
 

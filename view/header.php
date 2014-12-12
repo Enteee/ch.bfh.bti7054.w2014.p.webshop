@@ -83,8 +83,8 @@
 						</li>
 <?php endforeach; ?>
 					</ul>
-					<!-- search form -->					
-					<form class="navbar-form navbar-right" role="form" action="search" method="get">
+					<!-- search form -->
+					<form class="navbar-form navbar-right" role="form" action="product/search" method="get">
 						<div class="form-group">
 							<div class="input-group">
 								<input type="text" class="form-control" name="search" placeholder="<?php echo label('search'); ?>">
@@ -105,15 +105,30 @@
 				<div class="col-md-3">
 					<!-- login form -->
 					<div class="form-group">
-						<label><?php echo label('userPanel'); ?></label>
-						<div id="signin"></div>
+						<p class="lead"><?php echo label('userPanel'); ?></p>
+						
+						<ul class="list-group">
+							<li class="list-group-item no-padding">
+								<div id="signin"></div>
+							</li>
+							<li class="list-group-item">
+								<div class="row">
+									<div class="col-xs-8">
+										<?php echo label('credits') ?>
+									</div>
+									<div class="col-xs-4 text-right">
+										<b><?php echo $userCredits; ?></b>&cent;
+									</div>
+								</div>
+							</li>
+						</ul>
 					</div>
 					<!-- category navigation -->
 					<p class="lead"><?php echo label('categories'); ?></p>
 					<nav>
 						<div class="list-group">
 <?php foreach($categories as $category):?>
-							<a href="<?php echo lang(); ?>/start/show?category=<?php echo $category->getId(); ?>" class="list-group-item<?php echo ($category->getId() == $activeCategoryId) ? ' active' : ''; ?>">
+							<a href="<?php echo lang(); ?>/product/show?categoryId=<?php echo $category->getId(); ?>" class="list-group-item<?php echo ($category->getId() == $activeCategoryId) ? ' active' : ''; ?>">
 								<span class="badge"><?php echo $category->getProductsCount(); ?></span>
 								<?php $category->setLocale($locale); echo $category->getName(); ?>
 							</a>
@@ -127,26 +142,37 @@
 	<?php foreach($shoppingCartItems as $shoppingCartItem):?>
 						<li class="list-group-item">
 							<div class="row">
-								<div class="col-xs-7">
+								<div class="col-xs-2 text-right">
+									<button type="button" class="btn btn-xs btn-default">
+										<span class="glyphicon glyphicon-remove"></span>
+									</button>
+								</div>
+								<div class="col-xs-6">
 									<?php echo $shoppingCartItem->getProduct()->getName(); ?>
 								</div>
-								<div class="col-xs-5 text-right">
-									<?php echo $shoppingCartItem->getPrice(); ?>&cent;
+								<div class="col-xs-4 text-right">
+									<b><?php echo $shoppingCartItem->getPrice(); ?></b>&cent;
 								</div>
 							</div>
 						</li>
 	<?php endforeach; ?>
 						<li class="list-group-item list-group-item-info">
 							<div class="row">
-								<div class="col-xs-7">
+								<div class="col-xs-6 col-xs-offset-2">
 									Total
 								</div>
-								<div class="col-xs-5 text-right">
-									<?php echo $shoppingCartTotalPrice; ?>&cent;
+								<div class="col-xs-4 text-right">
+									<b><?php echo $shoppingCartTotalPrice; ?></b>&cent;
 								</div>
 							</div>
-						</li>						
+						</li>
 					</ul>
+					<div>
+						<form action="product/buy" method="post">
+							<button type="submit" class="btn btn-default btn-block"><?php echo label('buy'); ?></button>
+						</form>
+						<br />
+					</div>
 <?php endif; ?>
 				</div>
 				<!-- right content -->

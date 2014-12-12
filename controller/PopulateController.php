@@ -168,16 +168,21 @@ class PopulateController extends Controller {
 		/*Offers*/
 		$offer1 = (new Offer())
 			->setProduct($helloWorld)
+			->addTag($programmingLanguages['C++'])
+			->addTag($programmingLanguages['C#'])
 			->setPrice(100);
 		$offer1->save();
 		
 		$offer2 = (new Offer())
 			->setProduct($bubbleSort)
+			->addTag($programmingLanguages['C'])
+			->addTag($programmingLanguages['Alice'])
 			->setPrice(1000);
 		$offer2->save();
 
 		$offer3 = (new Offer())
 			->setProduct($quickSort)
+			->addTag($programmingLanguages['Dart'])
 			->setPrice(250);
 		$offer3->save();
 	}

@@ -53,7 +53,7 @@ class MainController extends Controller {
 				'url' => lang() . '/product/add',
 				'text' => label('navAddOffer'),
 				'icon' => 'glyphicon-plus',
-				'active' => (Mvc::getInstance()->getControllerName() == 'ProductController' ) ? 'active' : '',
+				'active' => (Mvc::getInstance()->getControllerName() == 'ProductController' && Mvc::getInstance()->getMethod() == 'add' ) ? 'active' : '',
 			);
 		}
 		$data['navItems'] = $navItems;

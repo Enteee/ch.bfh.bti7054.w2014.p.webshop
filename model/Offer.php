@@ -17,7 +17,7 @@ class Offer extends BaseOffer implements JsonSerializable
 {
 	public function jsonSerialize() {
 		return [
-			'name' => $this->getProduct()->getName(),
+			'productId' => $this->getProduct()->getId(),
 			'price' => $this->getPrice(),
 		];
 	}

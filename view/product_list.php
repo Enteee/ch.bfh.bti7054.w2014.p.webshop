@@ -14,6 +14,7 @@
 									<p class="list-group-item-text"><?php echo $product->getDescription(); ?></p>
 								</div>
 							</div>
+	<?php if ($canOrder): ?>
 							<div class="hidden cs-product-list-item-options cs-product-list-hideable">
 								<span><?php echo label('programmingLanguage'); ?>:</span>
 								<select class="cs-product-list-item-options-programming-language">
@@ -26,6 +27,7 @@
 								<span><?php echo label('withSupport'); ?>:</span>
 								<input class="" type="checkbox"></input>  
 							</div>
+	<?php endif; ?>
 							<div class="hidden cs-product-list-item-rating cs-product-list-hideable">
 								&nbsp;<p class="pull-right"><?php echo label('reviews')?>&nbsp;<span class="badge cs-product-list-item-reviews-count"></span></p>
 							</div>

@@ -58,6 +58,7 @@ class ProductController extends MainController {
 		// set data for view
 		$data['pageTitle'] = label('products');
 		$data['products'] = $products;
+		$data['canOrder'] = TRUE;
 		
 		// render template
 		$this->view('product_list', $data);
@@ -82,6 +83,7 @@ class ProductController extends MainController {
 		// set data for view
 		$data['pageTitle'] = label('navMyOrders');
 		$data['products'] = $products;
+		$data['canOrder'] = FALSE;
 		
 		// render template
 		$this->view('product_list', $data);
@@ -91,10 +93,11 @@ class ProductController extends MainController {
 		parent::index();
 		$this->assertUserIsLoggedIn();
 				
-		// get variables		
+		// get variables
 		$searchstring = $this->vars->search;
 		$categoryId = $this->vars->categoryId;
 		$user = $this->getUser();
+		$data['canOrder'] = FALSE;
 		
 		// load data
 		$products = $this->repo->getUsersOffers($categoryId, $searchstring, $user);

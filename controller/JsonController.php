@@ -17,7 +17,7 @@ class JsonController extends Controller {
 		$this->vars->saveGlobal('search', SaveVars::T_STRING, SaveVars::G_GET, function(){
 			return NULL;
 		}, true);
-		$this->vars->saveGlobal('productId', SaveVars::T_INT, SaveVars::G_GET, function(){
+		$this->vars->saveGlobal('productId', SaveVars::T_NUMERIC, SaveVars::G_GET, function(){
 			return 0;
 		});
 		$this->vars->saveGlobal('object', SaveVars::T_STRING_JSON, SaveVars::G_POST, function(){
@@ -55,7 +55,7 @@ class JsonController extends Controller {
 							$product = $this->repo->getProductById($this->vars->reviewProductId);
 							if(isset($product)
 								&& isset($object->text)
-								&& strlen($object->text) > 1
+								&& strlen($object->text) > 0
 								&& isset($object->rating)){
 									$this->vars->saveVar('reviewText', SaveVars::T_STRING_HTML, $object->text);
 									$this->vars->saveVar('reviewRating', SaveVars::T_NUMERIC, $object->rating);

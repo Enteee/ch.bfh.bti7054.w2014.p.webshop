@@ -114,6 +114,7 @@
 							<li class="list-group-item no-padding">
 								<div id="signin"></div>
 							</li>
+	<?php if ($isLoggedIn): ?>
 							<li class="list-group-item">
 								<div class="row">
 									<div class="col-xs-8">
@@ -124,6 +125,7 @@
 									</div>
 								</div>
 							</li>
+	<?php endif; ?>
 						</ul>
 					</div>
 					<!-- category navigation -->

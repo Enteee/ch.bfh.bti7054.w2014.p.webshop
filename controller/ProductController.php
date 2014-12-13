@@ -33,6 +33,7 @@ class ProductController extends MainController {
 		$data['pageTitle'] = label('products');
 		$data['product'] = $product;
 		$data['canOrder'] = TRUE;
+		$data['hasReviews'] = count($product->getReviews()) > 0;
 		
 		// render template
 		$this->view('product_details', $data);

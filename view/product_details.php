@@ -44,7 +44,7 @@
 		</ul>
 	</div>
 	<!-- reviews -->
-<?php if ($isLoggedIn): ?>
+<?php if ($hasReviews || $isLoggedIn): ?>
 	<div class="well">
 		<div class="cs-product-list-item-reviews">
 			<!-- placeholder -->
@@ -60,6 +60,7 @@
 				</div>
 			</div>
 		</div>
+	<?php if ($isLoggedIn): ?>
 		<textarea class="form-control cs-product-list-item-review-new-text" rows="5" placeholder="<?php echo label('writeReview') ?>" required></textarea>
 		<div class="text-right">
 			<p>
@@ -73,6 +74,7 @@
 			</p>
 			<button type="button" class="btn btn-default btn-sm cs-product-list-item-review-new-add"><?php echo label('addReview'); ?></a>
 		</div>
+	<?php endif; ?>
 	</div>
 <?php endif; ?>
 <?php $this->view('footer'); ?> 

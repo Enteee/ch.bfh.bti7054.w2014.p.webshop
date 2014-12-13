@@ -69,6 +69,24 @@ $(document).ready(function() {
 		var rating = $('.cs-product-list-item-rating').first();
 		var reviewsCount = $('.cs-product-list-item-reviews-count').first();
 	}
+	
+	function addReview(addNewReview) {
+		if (addNewReview && addNewReview.text) {
+			$.ajax({
+				type: 'POST',
+				url: '/json?type=review',
+				data: { 'object' : JSON.stringify(addNewReview) },
+				//context: productListItemDom,
+				dataType: 'json',
+			}).done(function(review){
+				appendReview(review);
+				$('.cs-product-list-item-review-new-text').first().val(''),
+				$('.cs-product-list-item-review-new-rating-val').first().val('4').trigger('change');
+			}).error(function (xhr) {
+				console.error(xhr.responseText);
+			});
+		}
+	}
 
 	function appendReview(reviewData) {
 		var reviews = $('.cs-product-list-item-reviews').first();
@@ -107,19 +125,7 @@ $(document).ready(function() {
 			'text' : $('.cs-product-list-item-review-new-text').first().val(),
 			'rating' : $('.cs-product-list-item-review-new-rating-val').first().val(),
 		};
-		if (addNewReview.text != '') {
-			$.ajax({
-				type: 'POST',
-				url: '/json?type=review',
-				data: { 'object' : JSON.stringify(addNewReview) },
-				context: productListItemDom,
-				dataType: 'json',
-			}).done(function(review){
-				appendReview(review);
-				$('.cs-product-list-item-review-new-text').first().val(''),
-				$('.cs-product-list-item-review-new-rating-val').first().val('4').trigger('change');
-			});
-		}
+		addReview(addNewReview);
 	});
 	
 	/* rating */

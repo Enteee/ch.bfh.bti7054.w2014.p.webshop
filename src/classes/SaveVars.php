@@ -417,8 +417,8 @@ class SaveVars{
 	}
 
 	private function saveJson($data){
-		$returnJson = json_decode($string);
-		if( json_last_error() == JSON_ERROR_NONE){
+		$returnJson = json_decode($data);
+		if( json_last_error() != JSON_ERROR_NONE){
 			throw new InvalidArgumentException('data');
 		}
 		return $returnJson; 

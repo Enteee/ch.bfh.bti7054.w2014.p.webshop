@@ -33,6 +33,11 @@ class Offer extends BaseOffer implements JsonSerializable
 		return NULL;
 	}
 	
+	public function canBeOrdered() {
+		// TODO: check if this offer isn't already ordered or in shopping cart of the current user
+		return TRUE;
+	}
+	
 	public function getProgrammingLanguages() {
 		$repo = new Repository();
 		return $repo->getProgrammingLanguagesByOffer($this);

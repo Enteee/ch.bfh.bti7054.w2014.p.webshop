@@ -435,7 +435,28 @@ class SaveVars{
 		}
 		return $data;
 	}
-
+	
+	/* Functions for easy access to super globals */
+	
+	public function post($key) {
+		$value = NULL;
+		$this->enableSuperglobals();
+		if (isset($_POST[$key])) {
+			$value = $_POST[$key];
+		}
+		$this->disableSuperglobals();
+		return $value;
+	}
+	
+	public function get($key) {
+		$value = NULL;
+		$this->enableSuperglobals();
+		if (isset($_GET[$key])) {
+			$value = $_GET[$key];
+		}
+		$this->disableSuperglobals();
+		return $value;
+	}
 }
 
 ?>

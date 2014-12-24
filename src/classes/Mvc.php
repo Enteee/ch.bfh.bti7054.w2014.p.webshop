@@ -1,5 +1,9 @@
 <?php
 
+function uri() {
+	return Mvc::getInstance()->getUri();
+}
+
 /*
  * Class that handles the MVC stuff.
  */
@@ -20,8 +24,9 @@ class Mvc {
 
 	protected $lang;
 
+	protected $uri;
 	protected $segments;
-		
+	
 	protected $controllerName;
 	protected $controllerNameDefault;
 	protected $controllerNameError;
@@ -58,6 +63,10 @@ class Mvc {
 		exit();
 	}
 	
+	public function getUri() {
+		return $this->uri;
+	}
+	
 	private function parseUri($uri) {
 		// remove filename if not removed with url rewrite
 		$uri = preg_replace('~(index\.php)~i', '', $uri);
@@ -69,6 +78,8 @@ class Mvc {
 			// segments found
 			$this->segments = $matches[0];
 		}
+		
+		$this->uri = $uri;
 	}
 		
 	public function setLanguageByClient() {

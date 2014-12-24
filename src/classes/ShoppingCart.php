@@ -7,7 +7,7 @@ class ShoppingCart {
 
 	private function __construct(){
 		$this->vars = SaveVars::getInstance();
-		$this->vars->saveGlobal('offerIds', SaveVars::T_ARRAY, SaveVars::G_SESSION, function() { return array(); });
+		$this->vars->saveGlobal('shoppingCartOfferIds', SaveVars::T_ARRAY, SaveVars::G_SESSION, function() { return array(); }, FALSE);
 	}
 
 	public static function getInstance() {
@@ -22,29 +22,63 @@ class ShoppingCart {
 			throw new InvalidArgumentException('offer is null.');
 		}
 		$offerId = $offer->getId();
-		if (!in_array($offerId, $this->vars->offerIds)) {
-			$ids = $this->vars->offerIds;
-			$ids[] = $offerId;
-			$this->vars->offerIds = $ids;
+		
+		$offerIds = $this->vars->shoppingCartOfferIds;
+		if (!isset($offerIds)) {
+			$offerIds = array();
+		}
+		if (!in_array($offerId, $offerIds)) {
+			$offerIds[] = $offerId;
+			$this->vars->shoppingCartOfferIds = $offerIds;
 		}
 	}
 	
+	public function containsOffer(Offer $offer) {
+		if (!isset($offer)) {
+			throw new InvalidArgumentException('offer is null.');
+		}
+		$offerId = $offer->getId();
+		
+		$offerIds = $this->vars->shoppingCartOfferIds;
+		if (!isset($offerIds)) {
+			$offerIds = array();
+		}
+		return in_array($offerId, $offerIds);
+	}
+	
 	public function removeOffer(Offer $offer) {
+		if (!isset($offer)) {
+			throw new InvalidArgumentException('offer is null.');
+		}
 		$id = $offer->getId();
-		if (in_array($id, $this->vars->offerIds)) {
-			unset($this->offerIds[$id]);
+		
+		$offerIds = $this->vars->shoppingCartOfferIds;
+		if (!isset($offerIds)) {
+			$offerIds = array();
+		}
+		if (in_array($id, $offerIds)) {
+			unset($offerIds[$id]);
+			$this->vars->shoppingCartOfferIds = $offerIds;
 		}
 	}
 	
 	public function getOffers() {
+		$offerIds = $this->vars->shoppingCartOfferIds;
+		if (!isset($offerIds)) {
+			$offerIds = array();
+		}
 		return OfferQuery::create()
-			->filterById($this->vars->offerIds)
+			->filterById($offerIds)
 			->find();
 	}
 	
 	public function getTotalPrice() {
+		$offerIds = $this->vars->shoppingCartOfferIds;
+		if (!isset($offerIds)) {
+			$offerIds = array();
+		}
 		$offer = OfferQuery::create()
-			->filterById($this->vars->offerIds)
+			->filterById($offerIds)
 			->withColumn('SUM(price)', 'Sum')
 			->findOne();
 		if (isset($offer)) {
@@ -54,7 +88,7 @@ class ShoppingCart {
 	}
 	
 	public function clear() {
-		$this->vars->offerIds = array();
+		$this->vars->shoppingCartOfferIds = array();
 	}
 }
 

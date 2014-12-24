@@ -34,11 +34,13 @@
 						<b><?php echo $offer->getPrice(); ?></b>&cent;
 					</div>
 					<div class="col-xs-2 text-right">
-						<form action="product/toshoppingcart/<?php echo $offer->getId(); ?>" method="get">
-							<button type="submit" class="btn btn-xs btn-default" title="<?php echo label('addToShoppingCart'); ?>">
+	<?php if ($offer->canBeOrdered()): ?>
+						<form action="<?php echo uri(); ?>" method="post">
+							<button type="submit" class="btn btn-xs btn-default" title="<?php echo label('addToShoppingCart'); ?>" name="add_offer_id" value="<?php echo $offer->getId(); ?>">
 								<span class="glyphicon glyphicon-shopping-cart"></span>
 							</button>
 						</form>
+	<?php endif; ?>
 					</div>
 				</div>
 			</li>

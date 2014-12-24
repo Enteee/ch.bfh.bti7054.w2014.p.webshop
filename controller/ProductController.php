@@ -14,8 +14,41 @@ class ProductController extends MainController {
 		$this->redirect('products/');
 	}
 	
+	private function addOffer() {
+		$this->assertUserIsLoggedIn();
+		$offerId = $this->vars->post('add_offer_id');
+		if (isset($offerId)) {
+			$offerId = intval($offerId);
+			if ($offerId > 0) {
+				$offer = OfferQuery::create()
+					->filterById($offerId)
+					->filterByActive(TRUE)
+					->findOne();
+				if (!isset($offer)) {
+					throw new Exception('no active offer with this id.');
+				}
+				$user = $this->getUser();
+				if ($user->hasOffer($offer)) {
+					throw new Exception('user already bought this.');
+				}
+				
+				$cart = ShoppingCart::getInstance();
+				if ($cart->containsOffer($offer)) {
+					throw new Exception('user already has this in his shopping cart.');
+				}
+				
+				// add to shopping cart
+				$cart->addOffer($offer);
+			}
+		}
+	}
+	
 	public function show($productId) {
 		parent::main();
+		
+		// offer added?
+		$this->addOffer();
+		
 		// get variables
 		$searchstring = $this->vars->search;
 		$productId = intval($productId);
@@ -143,32 +176,6 @@ class ProductController extends MainController {
 		} catch (Exception $e) {
 			$con->rollback();
 			throw $e;
-		}
-	}
-	
-	public function toShoppingCart($offerId) {
-		parent::main();
-		$this->assertUserIsLoggedIn();
-		
-		$offerId = intval($offerId);
-		if ($offerId > 0) {
-		
-			$offer = OfferQuery::create()
-				->filterById($offerId)
-				->filterByActive(TRUE)
-				->findOne();
-			if (!isset($offer)) {
-				throw new Exception('no active offer with this id.');
-			}
-			
-			$user = $this->getUser();
-			if ($user->hasOffer($offer)) {
-				throw new Exception('user already bought this.');
-			}
-			
-			// add to shopping cart
-			$cart = ShoppingCart::getInstance();
-			$cart->addOffer($offer);
 		}
 	}
 }

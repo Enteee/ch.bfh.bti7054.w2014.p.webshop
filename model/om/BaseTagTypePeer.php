@@ -2,7 +2,7 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'tag_type' table.
+ * Base static class for performing query and update operations on the 'cs_tag_type' table.
  *
  *
  *
@@ -15,7 +15,7 @@ abstract class BaseTagTypePeer
     const DATABASE_NAME = 'codeshop';
 
     /** the table name for this class */
-    const TABLE_NAME = 'tag_type';
+    const TABLE_NAME = 'cs_tag_type';
 
     /** the related Propel class for this table */
     const OM_CLASS = 'TagType';
@@ -33,16 +33,16 @@ abstract class BaseTagTypePeer
     const NUM_HYDRATE_COLUMNS = 4;
 
     /** the column name for the id field */
-    const ID = 'tag_type.id';
+    const ID = 'cs_tag_type.id';
 
     /** the column name for the active field */
-    const ACTIVE = 'tag_type.active';
+    const ACTIVE = 'cs_tag_type.active';
 
     /** the column name for the created_at field */
-    const CREATED_AT = 'tag_type.created_at';
+    const CREATED_AT = 'cs_tag_type.created_at';
 
     /** the column name for the updated_at field */
-    const UPDATED_AT = 'tag_type.updated_at';
+    const UPDATED_AT = 'cs_tag_type.updated_at';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -372,7 +372,7 @@ abstract class BaseTagTypePeer
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to tag_type
+     * Method to invalidate the instance pool of all tables related to cs_tag_type
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -593,7 +593,7 @@ abstract class BaseTagTypePeer
     }
 
     /**
-     * Deletes all rows from the tag_type table.
+     * Deletes all rows from the cs_tag_type table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).
@@ -609,6 +609,7 @@ abstract class BaseTagTypePeer
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
+            $affectedRows += TagTypePeer::doOnDeleteCascade(new Criteria(TagTypePeer::DATABASE_NAME), $con);
             $affectedRows += BasePeer::doDeleteAll(TagTypePeer::TABLE_NAME, $con, TagTypePeer::DATABASE_NAME);
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
@@ -642,24 +643,14 @@ abstract class BaseTagTypePeer
         }
 
         if ($values instanceof Criteria) {
-            // invalidate the cache for all objects of this type, since we have no
-            // way of knowing (without running a query) what objects should be invalidated
-            // from the cache based on this Criteria.
-            TagTypePeer::clearInstancePool();
             // rename for clarity
             $criteria = clone $values;
         } elseif ($values instanceof TagType) { // it's a model object
-            // invalidate the cache for this single object
-            TagTypePeer::removeInstanceFromPool($values);
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(TagTypePeer::DATABASE_NAME);
             $criteria->add(TagTypePeer::ID, (array) $values, Criteria::IN);
-            // invalidate the cache for this object(s)
-            foreach ((array) $values as $singleval) {
-                TagTypePeer::removeInstanceFromPool($singleval);
-            }
         }
 
         // Set the correct dbName
@@ -672,6 +663,23 @@ abstract class BaseTagTypePeer
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
 
+            // cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+            $c = clone $criteria;
+            $affectedRows += TagTypePeer::doOnDeleteCascade($c, $con);
+
+            // Because this db requires some delete cascade/set null emulation, we have to
+            // clear the cached instance *after* the emulation has happened (since
+            // instances get re-added by the select statement contained therein).
+            if ($values instanceof Criteria) {
+                TagTypePeer::clearInstancePool();
+            } elseif ($values instanceof TagType) { // it's a model object
+                TagTypePeer::removeInstanceFromPool($values);
+            } else { // it's a primary key, or an array of pks
+                foreach ((array) $values as $singleval) {
+                    TagTypePeer::removeInstanceFromPool($singleval);
+                }
+            }
+
             $affectedRows += BasePeer::doDelete($criteria, $con);
             TagTypePeer::clearRelatedInstancePool();
             $con->commit();
@@ -681,6 +689,39 @@ abstract class BaseTagTypePeer
             $con->rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
+     * feature (like MySQL or SQLite).
+     *
+     * This method is not very speedy because it must perform a query first to get
+     * the implicated records and then perform the deletes by calling those Peer classes.
+     *
+     * This method should be used within a transaction if possible.
+     *
+     * @param      Criteria $criteria
+     * @param      PropelPDO $con
+     * @return int The number of affected rows (if supported by underlying database driver).
+     */
+    protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
+    {
+        // initialize var to track total num of affected rows
+        $affectedRows = 0;
+
+        // first find the objects that are implicated by the $criteria
+        $objects = TagTypePeer::doSelect($criteria, $con);
+        foreach ($objects as $obj) {
+
+
+            // delete related TagTypeI18n objects
+            $criteria = new Criteria(TagTypeI18nPeer::DATABASE_NAME);
+
+            $criteria->add(TagTypeI18nPeer::ID, $obj->getId());
+            $affectedRows += TagTypeI18nPeer::doDelete($criteria, $con);
+        }
+
+        return $affectedRows;
     }
 
     /**

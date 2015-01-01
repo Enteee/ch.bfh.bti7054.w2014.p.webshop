@@ -1,5 +1,9 @@
 <?php
 
+function uri() {
+	return Mvc::getInstance()->getUri();
+}
+
 /*
  * Class that handles the MVC stuff.
  */
@@ -7,10 +11,22 @@ class Mvc {
 
 	const CONTROLLER_SUFFIX = 'Controller';
 
+	/* Singleton */
+	private static $INSTANCE;
+
+	public static function getInstance() {
+		if(!isset(self::$INSTANCE)){
+			self::$INSTANCE = new self;
+		}
+		return self::$INSTANCE;
+	}
+	
+
 	protected $lang;
 
+	protected $uri;
 	protected $segments;
-		
+	
 	protected $controllerName;
 	protected $controllerNameDefault;
 	protected $controllerNameError;
@@ -19,13 +35,13 @@ class Mvc {
 	protected $methodName;
 	protected $methodNameFallback = 'index';
 
-	public function __construct() {
+	private function __construct() {
 		$this->lang = Language::getInstance();
 		$this->segments  = array();
-		$this->controllerNameDefault = 'ProductController';
+		$this->controllerNameDefault = 'ProductsController';
 		$this->controllerNameError = 'ErrorController';
 	}
-	
+
 	public function init() {
 		if (!isset($_SERVER['REQUEST_URI'])) {
 			throw Exception('request uri not found.');
@@ -47,6 +63,10 @@ class Mvc {
 		exit();
 	}
 	
+	public function getUri() {
+		return $this->uri;
+	}
+	
 	private function parseUri($uri) {
 		// remove filename if not removed with url rewrite
 		$uri = preg_replace('~(index\.php)~i', '', $uri);
@@ -58,6 +78,8 @@ class Mvc {
 			// segments found
 			$this->segments = $matches[0];
 		}
+		
+		$this->uri = $uri;
 	}
 		
 	public function setLanguageByClient() {
@@ -94,11 +116,19 @@ class Mvc {
 		}
 	}
 	
+	public function getControllerName(){
+		return $this->controllerName;
+	}
+	
 	private function setMethodByUri() {
 		// method over uri?
 		if (count($this->segments) > 0) {
 			$this->methodName = strtolower(array_shift($this->segments));
 		}
+	}
+
+	public function getMethod(){
+		return $this->methodName;
 	}
 	
 	private function controllerExists($name) {
@@ -108,10 +138,8 @@ class Mvc {
 	private function initController() {
 		try {
 			// create controller
-			if (!$this->controllerExists($this->controllerName)) {		
-				// use fallback
-				$this->controllerName = $this->controllerNameError;
-				$this->methodName = 'error404';
+			if (!$this->controllerExists($this->controllerName)) {
+				throw new NotFoundException();
 			}
 			$this->controller = new $this->controllerName();
 
@@ -128,6 +156,8 @@ class Mvc {
 			}
 		} catch (SecurityException $ex) {
 			$this->forbidden($ex);
+		} catch (NotFoundException $ex) {
+			$this->notFound($ex);
 		} catch (Exception $ex) {
 			$this->error($ex);
 		}
@@ -154,7 +184,13 @@ class Mvc {
 		$this->controllerName = $this->controllerNameError;
 		$this->controller = new $this->controllerName();
 		$this->controller->error403($exception);
-	}	
+	}
+	
+	private function notFound($exception) {
+		$this->controllerName = $this->controllerNameError;
+		$this->controller = new $this->controllerName();
+		$this->controller->error404();
+	}
 	
 	private function error($exception) {
 		$this->controllerName = $this->controllerNameError;

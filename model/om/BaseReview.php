@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a row from the 'review' table.
+ * Base class that represents a row from the 'cs_review' table.
  *
  *
  *
@@ -206,7 +206,7 @@ abstract class BaseReview extends BaseObject implements Persistent
      *
      * @param string $format The date/time format string (either date()-style or strftime()-style).
      *				 If format is null, then the raw DateTime object will be returned.
-     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
     public function getCreatedAt($format = 'Y-m-d H:i:s')
@@ -215,11 +215,6 @@ abstract class BaseReview extends BaseObject implements Persistent
             return null;
         }
 
-        if ($this->created_at === '0000-00-00 00:00:00') {
-            // while technically this is not a default value of null,
-            // this seems to be closest in meaning.
-            return null;
-        }
 
         try {
             $dt = new DateTime($this->created_at);
@@ -246,7 +241,7 @@ abstract class BaseReview extends BaseObject implements Persistent
      *
      * @param string $format The date/time format string (either date()-style or strftime()-style).
      *				 If format is null, then the raw DateTime object will be returned.
-     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
     public function getUpdatedAt($format = 'Y-m-d H:i:s')
@@ -255,11 +250,6 @@ abstract class BaseReview extends BaseObject implements Persistent
             return null;
         }
 
-        if ($this->updated_at === '0000-00-00 00:00:00') {
-            // while technically this is not a default value of null,
-            // this seems to be closest in meaning.
-            return null;
-        }
 
         try {
             $dt = new DateTime($this->updated_at);
@@ -778,32 +768,32 @@ abstract class BaseReview extends BaseObject implements Persistent
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(ReviewPeer::ID)) {
-            $modifiedColumns[':p' . $index++]  = '`id`';
+            $modifiedColumns[':p' . $index++]  = '[id]';
         }
         if ($this->isColumnModified(ReviewPeer::USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = '`user_id`';
+            $modifiedColumns[':p' . $index++]  = '[user_id]';
         }
         if ($this->isColumnModified(ReviewPeer::PRODUCT_ID)) {
-            $modifiedColumns[':p' . $index++]  = '`product_id`';
+            $modifiedColumns[':p' . $index++]  = '[product_id]';
         }
         if ($this->isColumnModified(ReviewPeer::TEXT)) {
-            $modifiedColumns[':p' . $index++]  = '`text`';
+            $modifiedColumns[':p' . $index++]  = '[text]';
         }
         if ($this->isColumnModified(ReviewPeer::RATING)) {
-            $modifiedColumns[':p' . $index++]  = '`rating`';
+            $modifiedColumns[':p' . $index++]  = '[rating]';
         }
         if ($this->isColumnModified(ReviewPeer::ACTIVE)) {
-            $modifiedColumns[':p' . $index++]  = '`active`';
+            $modifiedColumns[':p' . $index++]  = '[active]';
         }
         if ($this->isColumnModified(ReviewPeer::CREATED_AT)) {
-            $modifiedColumns[':p' . $index++]  = '`created_at`';
+            $modifiedColumns[':p' . $index++]  = '[created_at]';
         }
         if ($this->isColumnModified(ReviewPeer::UPDATED_AT)) {
-            $modifiedColumns[':p' . $index++]  = '`updated_at`';
+            $modifiedColumns[':p' . $index++]  = '[updated_at]';
         }
 
         $sql = sprintf(
-            'INSERT INTO `review` (%s) VALUES (%s)',
+            'INSERT INTO [cs_review] (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -812,28 +802,28 @@ abstract class BaseReview extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`id`':
+                    case '[id]':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case '`user_id`':
+                    case '[user_id]':
                         $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
                         break;
-                    case '`product_id`':
+                    case '[product_id]':
                         $stmt->bindValue($identifier, $this->product_id, PDO::PARAM_INT);
                         break;
-                    case '`text`':
+                    case '[text]':
                         $stmt->bindValue($identifier, $this->text, PDO::PARAM_STR);
                         break;
-                    case '`rating`':
+                    case '[rating]':
                         $stmt->bindValue($identifier, $this->rating, PDO::PARAM_INT);
                         break;
-                    case '`active`':
-                        $stmt->bindValue($identifier, (int) $this->active, PDO::PARAM_INT);
+                    case '[active]':
+                        $stmt->bindValue($identifier, $this->active, PDO::PARAM_BOOL);
                         break;
-                    case '`created_at`':
+                    case '[created_at]':
                         $stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
                         break;
-                    case '`updated_at`':
+                    case '[updated_at]':
                         $stmt->bindValue($identifier, $this->updated_at, PDO::PARAM_STR);
                         break;
                 }

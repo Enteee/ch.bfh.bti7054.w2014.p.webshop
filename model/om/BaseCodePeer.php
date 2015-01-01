@@ -2,7 +2,7 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'code' table.
+ * Base static class for performing query and update operations on the 'cs_code' table.
  *
  *
  *
@@ -15,7 +15,7 @@ abstract class BaseCodePeer
     const DATABASE_NAME = 'codeshop';
 
     /** the table name for this class */
-    const TABLE_NAME = 'code';
+    const TABLE_NAME = 'cs_code';
 
     /** the related Propel class for this table */
     const OM_CLASS = 'Code';
@@ -33,34 +33,34 @@ abstract class BaseCodePeer
     const NUM_HYDRATE_COLUMNS = 10;
 
     /** the column name for the id field */
-    const ID = 'code.id';
+    const ID = 'cs_code.id';
 
     /** the column name for the user_id field */
-    const USER_ID = 'code.user_id';
+    const USER_ID = 'cs_code.user_id';
 
     /** the column name for the offer_id field */
-    const OFFER_ID = 'code.offer_id';
+    const OFFER_ID = 'cs_code.offer_id';
 
     /** the column name for the filename field */
-    const FILENAME = 'code.filename';
+    const FILENAME = 'cs_code.filename';
 
     /** the column name for the filesize field */
-    const FILESIZE = 'code.filesize';
+    const FILESIZE = 'cs_code.filesize';
 
     /** the column name for the mimetype field */
-    const MIMETYPE = 'code.mimetype';
+    const MIMETYPE = 'cs_code.mimetype';
 
     /** the column name for the content field */
-    const CONTENT = 'code.content';
+    const CONTENT = 'cs_code.content';
 
     /** the column name for the active field */
-    const ACTIVE = 'code.active';
+    const ACTIVE = 'cs_code.active';
 
     /** the column name for the created_at field */
-    const CREATED_AT = 'code.created_at';
+    const CREATED_AT = 'cs_code.created_at';
 
     /** the column name for the updated_at field */
-    const UPDATED_AT = 'code.updated_at';
+    const UPDATED_AT = 'cs_code.updated_at';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -395,7 +395,7 @@ abstract class BaseCodePeer
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to code
+     * Method to invalidate the instance pool of all tables related to cs_code
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -1244,7 +1244,7 @@ abstract class BaseCodePeer
     }
 
     /**
-     * Deletes all rows from the code table.
+     * Deletes all rows from the cs_code table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).

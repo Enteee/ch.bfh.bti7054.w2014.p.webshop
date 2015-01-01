@@ -2,7 +2,7 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'tag_i18n' table.
+ * Base static class for performing query and update operations on the 'cs_tag_i18n' table.
  *
  *
  *
@@ -15,7 +15,7 @@ abstract class BaseTagI18nPeer
     const DATABASE_NAME = 'codeshop';
 
     /** the table name for this class */
-    const TABLE_NAME = 'tag_i18n';
+    const TABLE_NAME = 'cs_tag_i18n';
 
     /** the related Propel class for this table */
     const OM_CLASS = 'TagI18n';
@@ -33,13 +33,13 @@ abstract class BaseTagI18nPeer
     const NUM_HYDRATE_COLUMNS = 3;
 
     /** the column name for the id field */
-    const ID = 'tag_i18n.id';
+    const ID = 'cs_tag_i18n.id';
 
     /** the column name for the locale field */
-    const LOCALE = 'tag_i18n.locale';
+    const LOCALE = 'cs_tag_i18n.locale';
 
     /** the column name for the name field */
-    const NAME = 'tag_i18n.name';
+    const NAME = 'cs_tag_i18n.name';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -360,7 +360,7 @@ abstract class BaseTagI18nPeer
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to tag_i18n
+     * Method to invalidate the instance pool of all tables related to cs_tag_i18n
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -820,7 +820,7 @@ abstract class BaseTagI18nPeer
     }
 
     /**
-     * Deletes all rows from the tag_i18n table.
+     * Deletes all rows from the cs_tag_i18n table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).

@@ -78,7 +78,7 @@
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 <?php foreach ($navItems as $navItem): ?>
-						<li>
+						<li class="<?php echo $navItem['active']; ?>">
 							<a href="<?php echo $navItem['url']; ?>"><span class="glyphicon <?php echo $navItem['icon']; ?>" title="<?php echo $navItem['text']; ?>"></span> <span class="cs-nav-text"><?php echo $navItem['text']; ?></span></a>
 						</li>
 <?php endforeach; ?>
@@ -114,6 +114,7 @@
 							<li class="list-group-item no-padding">
 								<div id="signin"></div>
 							</li>
+	<?php if ($isLoggedIn): ?>
 							<li class="list-group-item">
 								<div class="row">
 									<div class="col-xs-8">
@@ -124,6 +125,7 @@
 									</div>
 								</div>
 							</li>
+	<?php endif; ?>
 						</ul>
 					</div>
 					<!-- category navigation -->
@@ -131,7 +133,7 @@
 					<nav>
 						<div class="list-group">
 <?php foreach($categories as $category):?>
-							<a href="<?php echo lang(); ?>/product/show?categoryId=<?php echo $category->getId(); ?>" class="list-group-item<?php echo ($category->getId() == $activeCategoryId) ? ' active' : ''; ?>">
+							<a href="<?php echo lang(); ?>/products/show?categoryId=<?php echo $category->getId(); ?>" class="list-group-item<?php echo ($category->getId() == $activeCategoryId) ? ' active' : ''; ?>">
 								<span class="badge"><?php echo $category->getProductsCount(); ?></span>
 								<?php $category->setLocale($locale); echo $category->getName(); ?>
 							</a>
@@ -171,7 +173,7 @@
 						</li>
 					</ul>
 					<div>
-						<form action="product/buy" method="post">
+						<form action="products/buy" method="post">
 							<button type="submit" class="btn btn-default btn-block"><?php echo label('buy'); ?></button>
 						</form>
 						<br />

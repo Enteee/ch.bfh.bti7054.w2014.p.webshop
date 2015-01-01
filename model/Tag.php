@@ -1,7 +1,4 @@
 <?php
-
-
-
 /**
  * Skeleton subclass for representing a row from the 'tag' table.
  *
@@ -27,6 +24,6 @@ class Tag extends BaseTag implements JsonSerializable
 
 	public function getProductsCount() {
 		$repo = new Repository();
-		return $repo->getProductCountByTag($this);		
+		return $repo->getProductCountByTag($this);
 	}
 }

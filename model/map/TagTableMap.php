@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'tag' table.
+ * This class defines the structure of the 'cs_tag' table.
  *
  *
  *
@@ -32,15 +32,15 @@ class TagTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('tag');
+        $this->setName('cs_tag');
         $this->setPhpName('Tag');
         $this->setClassname('Tag');
         $this->setPackage('model');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('type_id', 'TypeId', 'INTEGER', 'tag_type', 'id', true, null, null);
-        $this->addForeignKey('parent_id', 'ParentId', 'INTEGER', 'tag', 'id', false, null, null);
+        $this->addForeignKey('type_id', 'TypeId', 'INTEGER', 'cs_tag_type', 'id', true, null, null);
+        $this->addForeignKey('parent_id', 'ParentId', 'INTEGER', 'cs_tag', 'id', false, null, null);
         $this->addColumn('active', 'Active', 'BOOLEAN', true, 1, true);
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('updated_at', 'UpdatedAt', 'TIMESTAMP', false, null, null);
@@ -52,14 +52,14 @@ class TagTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('TagRelatedByParentId', 'Tag', RelationMap::MANY_TO_ONE, array('parent_id' => 'id', ), null, null);
-        $this->addRelation('TagType', 'TagType', RelationMap::MANY_TO_ONE, array('type_id' => 'id', ), null, null);
-        $this->addRelation('OfferTag', 'OfferTag', RelationMap::ONE_TO_MANY, array('id' => 'tag_id', ), null, null, 'OfferTags');
-        $this->addRelation('ProductTag', 'ProductTag', RelationMap::ONE_TO_MANY, array('id' => 'tag_id', ), null, null, 'ProductTags');
-        $this->addRelation('TagRelatedById', 'Tag', RelationMap::ONE_TO_MANY, array('id' => 'parent_id', ), null, null, 'TagsRelatedById');
+        $this->addRelation('TagRelatedByParentId', 'Tag', RelationMap::MANY_TO_ONE, array('parent_id' => 'id', ), 'RESTRICT', 'RESTRICT');
+        $this->addRelation('TagType', 'TagType', RelationMap::MANY_TO_ONE, array('type_id' => 'id', ), 'RESTRICT', 'RESTRICT');
+        $this->addRelation('OfferTag', 'OfferTag', RelationMap::ONE_TO_MANY, array('id' => 'tag_id', ), 'RESTRICT', 'RESTRICT', 'OfferTags');
+        $this->addRelation('ProductTag', 'ProductTag', RelationMap::ONE_TO_MANY, array('id' => 'tag_id', ), 'RESTRICT', 'RESTRICT', 'ProductTags');
+        $this->addRelation('TagRelatedById', 'Tag', RelationMap::ONE_TO_MANY, array('id' => 'parent_id', ), 'RESTRICT', 'RESTRICT', 'TagsRelatedById');
         $this->addRelation('TagI18n', 'TagI18n', RelationMap::ONE_TO_MANY, array('id' => 'id', ), 'CASCADE', null, 'TagI18ns');
-        $this->addRelation('Offer', 'Offer', RelationMap::MANY_TO_MANY, array(), null, null, 'Offers');
-        $this->addRelation('Product', 'Product', RelationMap::MANY_TO_MANY, array(), null, null, 'Products');
+        $this->addRelation('Offer', 'Offer', RelationMap::MANY_TO_MANY, array(), 'RESTRICT', 'RESTRICT', 'Offers');
+        $this->addRelation('Product', 'Product', RelationMap::MANY_TO_MANY, array(), 'RESTRICT', 'RESTRICT', 'Products');
     } // buildRelations()
 
     /**

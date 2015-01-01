@@ -2,7 +2,7 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'offer_tag' table.
+ * Base static class for performing query and update operations on the 'cs_offer_tag' table.
  *
  *
  *
@@ -15,7 +15,7 @@ abstract class BaseOfferTagPeer
     const DATABASE_NAME = 'codeshop';
 
     /** the table name for this class */
-    const TABLE_NAME = 'offer_tag';
+    const TABLE_NAME = 'cs_offer_tag';
 
     /** the related Propel class for this table */
     const OM_CLASS = 'OfferTag';
@@ -33,13 +33,13 @@ abstract class BaseOfferTagPeer
     const NUM_HYDRATE_COLUMNS = 3;
 
     /** the column name for the id field */
-    const ID = 'offer_tag.id';
+    const ID = 'cs_offer_tag.id';
 
     /** the column name for the offer_id field */
-    const OFFER_ID = 'offer_tag.offer_id';
+    const OFFER_ID = 'cs_offer_tag.offer_id';
 
     /** the column name for the tag_id field */
-    const TAG_ID = 'offer_tag.tag_id';
+    const TAG_ID = 'cs_offer_tag.tag_id';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -360,7 +360,7 @@ abstract class BaseOfferTagPeer
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to offer_tag
+     * Method to invalidate the instance pool of all tables related to cs_offer_tag
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -1209,7 +1209,7 @@ abstract class BaseOfferTagPeer
     }
 
     /**
-     * Deletes all rows from the offer_tag table.
+     * Deletes all rows from the cs_offer_tag table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).

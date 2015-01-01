@@ -19,6 +19,7 @@ class Product extends BaseProduct implements JsonSerializable
 		return [
 			'name' => $this->getName(),
 			'tags' => $this->getTags(),
+			'categories' => $this->getCategories(),
 			'description' => $this->getDescription(),
 			'programmingLanguage' => $this->getProgrammingLanguages(),
 			'offers' => $this->getOffersByProduct(),
@@ -26,6 +27,14 @@ class Product extends BaseProduct implements JsonSerializable
 			'reviews' => $this->getReviews(),
 			'avgRating' => $this->getAvgRating(),
 		];
+	}
+
+	public function getCategories(){
+		return TagQuery::create()
+			->filterByProduct($this)
+			->filterByActive(TRUE)
+			->filterByTagType(TagType::getCategoryTagType())
+			->find();
 	}
 
 	public function getProgrammingLanguages() {
@@ -37,5 +46,16 @@ class Product extends BaseProduct implements JsonSerializable
 		$repo = new Repository();
 		return $repo->getOffersByProduct($this);
 	}
-
+	
+	public function getStartingFromPrice() {
+		$cheapest = OfferQuery::create()
+			->filterByProduct($this)
+			->filterByActive(TRUE)
+			->orderByPrice()
+			->findOne();
+		if (isset($cheapest)) {
+			return $cheapest->getPrice();
+		}
+		return 0;
+	}
 }

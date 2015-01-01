@@ -2,7 +2,7 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'order' table.
+ * Base static class for performing query and update operations on the 'cs_order' table.
  *
  *
  *
@@ -15,7 +15,7 @@ abstract class BaseOrderPeer
     const DATABASE_NAME = 'codeshop';
 
     /** the table name for this class */
-    const TABLE_NAME = 'order';
+    const TABLE_NAME = 'cs_order';
 
     /** the related Propel class for this table */
     const OM_CLASS = 'Order';
@@ -24,34 +24,37 @@ abstract class BaseOrderPeer
     const TM_CLASS = 'OrderTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 8;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /** the column name for the id field */
-    const ID = 'order.id';
+    const ID = 'cs_order.id';
 
     /** the column name for the user_id field */
-    const USER_ID = 'order.user_id';
+    const USER_ID = 'cs_order.user_id';
 
     /** the column name for the offer_id field */
-    const OFFER_ID = 'order.offer_id';
+    const OFFER_ID = 'cs_order.offer_id';
 
     /** the column name for the paid_price field */
-    const PAID_PRICE = 'order.paid_price';
+    const PAID_PRICE = 'cs_order.paid_price';
+
+    /** the column name for the with_comments field */
+    const WITH_COMMENTS = 'cs_order.with_comments';
 
     /** the column name for the active field */
-    const ACTIVE = 'order.active';
+    const ACTIVE = 'cs_order.active';
 
     /** the column name for the created_at field */
-    const CREATED_AT = 'order.created_at';
+    const CREATED_AT = 'cs_order.created_at';
 
     /** the column name for the updated_at field */
-    const UPDATED_AT = 'order.updated_at';
+    const UPDATED_AT = 'cs_order.updated_at';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -72,12 +75,12 @@ abstract class BaseOrderPeer
      * e.g. OrderPeer::$fieldNames[OrderPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'UserId', 'OfferId', 'PaidPrice', 'Active', 'CreatedAt', 'UpdatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'userId', 'offerId', 'paidPrice', 'active', 'createdAt', 'updatedAt', ),
-        BasePeer::TYPE_COLNAME => array (OrderPeer::ID, OrderPeer::USER_ID, OrderPeer::OFFER_ID, OrderPeer::PAID_PRICE, OrderPeer::ACTIVE, OrderPeer::CREATED_AT, OrderPeer::UPDATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'USER_ID', 'OFFER_ID', 'PAID_PRICE', 'ACTIVE', 'CREATED_AT', 'UPDATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'user_id', 'offer_id', 'paid_price', 'active', 'created_at', 'updated_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'UserId', 'OfferId', 'PaidPrice', 'WithComments', 'Active', 'CreatedAt', 'UpdatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'userId', 'offerId', 'paidPrice', 'withComments', 'active', 'createdAt', 'updatedAt', ),
+        BasePeer::TYPE_COLNAME => array (OrderPeer::ID, OrderPeer::USER_ID, OrderPeer::OFFER_ID, OrderPeer::PAID_PRICE, OrderPeer::WITH_COMMENTS, OrderPeer::ACTIVE, OrderPeer::CREATED_AT, OrderPeer::UPDATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'USER_ID', 'OFFER_ID', 'PAID_PRICE', 'WITH_COMMENTS', 'ACTIVE', 'CREATED_AT', 'UPDATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'user_id', 'offer_id', 'paid_price', 'with_comments', 'active', 'created_at', 'updated_at', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -87,12 +90,12 @@ abstract class BaseOrderPeer
      * e.g. OrderPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'UserId' => 1, 'OfferId' => 2, 'PaidPrice' => 3, 'Active' => 4, 'CreatedAt' => 5, 'UpdatedAt' => 6, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'userId' => 1, 'offerId' => 2, 'paidPrice' => 3, 'active' => 4, 'createdAt' => 5, 'updatedAt' => 6, ),
-        BasePeer::TYPE_COLNAME => array (OrderPeer::ID => 0, OrderPeer::USER_ID => 1, OrderPeer::OFFER_ID => 2, OrderPeer::PAID_PRICE => 3, OrderPeer::ACTIVE => 4, OrderPeer::CREATED_AT => 5, OrderPeer::UPDATED_AT => 6, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'USER_ID' => 1, 'OFFER_ID' => 2, 'PAID_PRICE' => 3, 'ACTIVE' => 4, 'CREATED_AT' => 5, 'UPDATED_AT' => 6, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'user_id' => 1, 'offer_id' => 2, 'paid_price' => 3, 'active' => 4, 'created_at' => 5, 'updated_at' => 6, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'UserId' => 1, 'OfferId' => 2, 'PaidPrice' => 3, 'WithComments' => 4, 'Active' => 5, 'CreatedAt' => 6, 'UpdatedAt' => 7, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'userId' => 1, 'offerId' => 2, 'paidPrice' => 3, 'withComments' => 4, 'active' => 5, 'createdAt' => 6, 'updatedAt' => 7, ),
+        BasePeer::TYPE_COLNAME => array (OrderPeer::ID => 0, OrderPeer::USER_ID => 1, OrderPeer::OFFER_ID => 2, OrderPeer::PAID_PRICE => 3, OrderPeer::WITH_COMMENTS => 4, OrderPeer::ACTIVE => 5, OrderPeer::CREATED_AT => 6, OrderPeer::UPDATED_AT => 7, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'USER_ID' => 1, 'OFFER_ID' => 2, 'PAID_PRICE' => 3, 'WITH_COMMENTS' => 4, 'ACTIVE' => 5, 'CREATED_AT' => 6, 'UPDATED_AT' => 7, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'user_id' => 1, 'offer_id' => 2, 'paid_price' => 3, 'with_comments' => 4, 'active' => 5, 'created_at' => 6, 'updated_at' => 7, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -170,6 +173,7 @@ abstract class BaseOrderPeer
             $criteria->addSelectColumn(OrderPeer::USER_ID);
             $criteria->addSelectColumn(OrderPeer::OFFER_ID);
             $criteria->addSelectColumn(OrderPeer::PAID_PRICE);
+            $criteria->addSelectColumn(OrderPeer::WITH_COMMENTS);
             $criteria->addSelectColumn(OrderPeer::ACTIVE);
             $criteria->addSelectColumn(OrderPeer::CREATED_AT);
             $criteria->addSelectColumn(OrderPeer::UPDATED_AT);
@@ -178,6 +182,7 @@ abstract class BaseOrderPeer
             $criteria->addSelectColumn($alias . '.user_id');
             $criteria->addSelectColumn($alias . '.offer_id');
             $criteria->addSelectColumn($alias . '.paid_price');
+            $criteria->addSelectColumn($alias . '.with_comments');
             $criteria->addSelectColumn($alias . '.active');
             $criteria->addSelectColumn($alias . '.created_at');
             $criteria->addSelectColumn($alias . '.updated_at');
@@ -380,7 +385,7 @@ abstract class BaseOrderPeer
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to order
+     * Method to invalidate the instance pool of all tables related to cs_order
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -1229,7 +1234,7 @@ abstract class BaseOrderPeer
     }
 
     /**
-     * Deletes all rows from the order table.
+     * Deletes all rows from the cs_order table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).

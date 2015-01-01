@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a query for the 'product_i18n' table.
+ * Base class that represents a query for the 'cs_product_i18n' table.
  *
  *
  *
@@ -130,7 +130,7 @@ abstract class BaseProductI18nQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `locale`, `name`, `description` FROM `product_i18n` WHERE `id` = :p0 AND `locale` = :p1';
+        $sql = 'SELECT [id], [locale], [name], [description] FROM [cs_product_i18n] WHERE [id] = :p0 AND [locale] = :p1';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);

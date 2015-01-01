@@ -2,7 +2,7 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'product' table.
+ * Base static class for performing query and update operations on the 'cs_product' table.
  *
  *
  *
@@ -15,7 +15,7 @@ abstract class BaseProductPeer
     const DATABASE_NAME = 'codeshop';
 
     /** the table name for this class */
-    const TABLE_NAME = 'product';
+    const TABLE_NAME = 'cs_product';
 
     /** the related Propel class for this table */
     const OM_CLASS = 'Product';
@@ -33,19 +33,19 @@ abstract class BaseProductPeer
     const NUM_HYDRATE_COLUMNS = 5;
 
     /** the column name for the id field */
-    const ID = 'product.id';
+    const ID = 'cs_product.id';
 
     /** the column name for the active field */
-    const ACTIVE = 'product.active';
+    const ACTIVE = 'cs_product.active';
 
     /** the column name for the created_at field */
-    const CREATED_AT = 'product.created_at';
+    const CREATED_AT = 'cs_product.created_at';
 
     /** the column name for the updated_at field */
-    const UPDATED_AT = 'product.updated_at';
+    const UPDATED_AT = 'cs_product.updated_at';
 
     /** the column name for the avg_rating field */
-    const AVG_RATING = 'product.avg_rating';
+    const AVG_RATING = 'cs_product.avg_rating';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -377,7 +377,7 @@ abstract class BaseProductPeer
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to product
+     * Method to invalidate the instance pool of all tables related to cs_product
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -598,7 +598,7 @@ abstract class BaseProductPeer
     }
 
     /**
-     * Deletes all rows from the product table.
+     * Deletes all rows from the cs_product table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).
@@ -614,6 +614,7 @@ abstract class BaseProductPeer
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
+            $affectedRows += ProductPeer::doOnDeleteCascade(new Criteria(ProductPeer::DATABASE_NAME), $con);
             $affectedRows += BasePeer::doDeleteAll(ProductPeer::TABLE_NAME, $con, ProductPeer::DATABASE_NAME);
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
@@ -647,24 +648,14 @@ abstract class BaseProductPeer
         }
 
         if ($values instanceof Criteria) {
-            // invalidate the cache for all objects of this type, since we have no
-            // way of knowing (without running a query) what objects should be invalidated
-            // from the cache based on this Criteria.
-            ProductPeer::clearInstancePool();
             // rename for clarity
             $criteria = clone $values;
         } elseif ($values instanceof Product) { // it's a model object
-            // invalidate the cache for this single object
-            ProductPeer::removeInstanceFromPool($values);
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(ProductPeer::DATABASE_NAME);
             $criteria->add(ProductPeer::ID, (array) $values, Criteria::IN);
-            // invalidate the cache for this object(s)
-            foreach ((array) $values as $singleval) {
-                ProductPeer::removeInstanceFromPool($singleval);
-            }
         }
 
         // Set the correct dbName
@@ -677,6 +668,23 @@ abstract class BaseProductPeer
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
 
+            // cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+            $c = clone $criteria;
+            $affectedRows += ProductPeer::doOnDeleteCascade($c, $con);
+
+            // Because this db requires some delete cascade/set null emulation, we have to
+            // clear the cached instance *after* the emulation has happened (since
+            // instances get re-added by the select statement contained therein).
+            if ($values instanceof Criteria) {
+                ProductPeer::clearInstancePool();
+            } elseif ($values instanceof Product) { // it's a model object
+                ProductPeer::removeInstanceFromPool($values);
+            } else { // it's a primary key, or an array of pks
+                foreach ((array) $values as $singleval) {
+                    ProductPeer::removeInstanceFromPool($singleval);
+                }
+            }
+
             $affectedRows += BasePeer::doDelete($criteria, $con);
             ProductPeer::clearRelatedInstancePool();
             $con->commit();
@@ -686,6 +694,39 @@ abstract class BaseProductPeer
             $con->rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
+     * feature (like MySQL or SQLite).
+     *
+     * This method is not very speedy because it must perform a query first to get
+     * the implicated records and then perform the deletes by calling those Peer classes.
+     *
+     * This method should be used within a transaction if possible.
+     *
+     * @param      Criteria $criteria
+     * @param      PropelPDO $con
+     * @return int The number of affected rows (if supported by underlying database driver).
+     */
+    protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
+    {
+        // initialize var to track total num of affected rows
+        $affectedRows = 0;
+
+        // first find the objects that are implicated by the $criteria
+        $objects = ProductPeer::doSelect($criteria, $con);
+        foreach ($objects as $obj) {
+
+
+            // delete related ProductI18n objects
+            $criteria = new Criteria(ProductI18nPeer::DATABASE_NAME);
+
+            $criteria->add(ProductI18nPeer::ID, $obj->getId());
+            $affectedRows += ProductI18nPeer::doDelete($criteria, $con);
+        }
+
+        return $affectedRows;
     }
 
     /**

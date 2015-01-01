@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'product_i18n' table.
+ * This class defines the structure of the 'cs_product_i18n' table.
  *
  *
  *
@@ -32,13 +32,13 @@ class ProductI18nTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('product_i18n');
+        $this->setName('cs_product_i18n');
         $this->setPhpName('ProductI18n');
         $this->setClassname('ProductI18n');
         $this->setPackage('model');
         $this->setUseIdGenerator(false);
         // columns
-        $this->addForeignPrimaryKey('id', 'Id', 'INTEGER' , 'product', 'id', true, null, null);
+        $this->addForeignPrimaryKey('id', 'Id', 'INTEGER' , 'cs_product', 'id', true, null, null);
         $this->addPrimaryKey('locale', 'Locale', 'VARCHAR', true, 5, 'en_US');
         $this->addColumn('name', 'Name', 'VARCHAR', true, 200, null);
         $this->addColumn('description', 'Description', 'VARCHAR', true, 1000, null);

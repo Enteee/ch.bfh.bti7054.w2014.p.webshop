@@ -6,12 +6,10 @@ $conf = array (
   array (
     'codeshop' => 
     array (
-      'adapter' => 'mysql',
+      'adapter' => 'sqlite',
       'connection' => 
       array (
-        'dsn' => 'mysql:host=127.0.0.1;dbname=codeshop',
-        'user' => 'codeshop',
-        'password' => 'gggggg',
+        'dsn' => 'sqlite:../resource/db.sq3',
       ),
     ),
     'default' => 'codeshop',

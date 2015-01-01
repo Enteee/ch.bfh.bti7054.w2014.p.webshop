@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a row from the 'product_tag' table.
+ * Base class that represents a row from the 'cs_product_tag' table.
  *
  *
  *
@@ -465,17 +465,17 @@ abstract class BaseProductTag extends BaseObject implements Persistent
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(ProductTagPeer::ID)) {
-            $modifiedColumns[':p' . $index++]  = '`id`';
+            $modifiedColumns[':p' . $index++]  = '[id]';
         }
         if ($this->isColumnModified(ProductTagPeer::PRODUCT_ID)) {
-            $modifiedColumns[':p' . $index++]  = '`product_id`';
+            $modifiedColumns[':p' . $index++]  = '[product_id]';
         }
         if ($this->isColumnModified(ProductTagPeer::TAG_ID)) {
-            $modifiedColumns[':p' . $index++]  = '`tag_id`';
+            $modifiedColumns[':p' . $index++]  = '[tag_id]';
         }
 
         $sql = sprintf(
-            'INSERT INTO `product_tag` (%s) VALUES (%s)',
+            'INSERT INTO [cs_product_tag] (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -484,13 +484,13 @@ abstract class BaseProductTag extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`id`':
+                    case '[id]':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case '`product_id`':
+                    case '[product_id]':
                         $stmt->bindValue($identifier, $this->product_id, PDO::PARAM_INT);
                         break;
-                    case '`tag_id`':
+                    case '[tag_id]':
                         $stmt->bindValue($identifier, $this->tag_id, PDO::PARAM_INT);
                         break;
                 }

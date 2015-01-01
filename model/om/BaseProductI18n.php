@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a row from the 'product_i18n' table.
+ * Base class that represents a row from the 'cs_product_i18n' table.
  *
  *
  *
@@ -506,20 +506,20 @@ abstract class BaseProductI18n extends BaseObject implements Persistent
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(ProductI18nPeer::ID)) {
-            $modifiedColumns[':p' . $index++]  = '`id`';
+            $modifiedColumns[':p' . $index++]  = '[id]';
         }
         if ($this->isColumnModified(ProductI18nPeer::LOCALE)) {
-            $modifiedColumns[':p' . $index++]  = '`locale`';
+            $modifiedColumns[':p' . $index++]  = '[locale]';
         }
         if ($this->isColumnModified(ProductI18nPeer::NAME)) {
-            $modifiedColumns[':p' . $index++]  = '`name`';
+            $modifiedColumns[':p' . $index++]  = '[name]';
         }
         if ($this->isColumnModified(ProductI18nPeer::DESCRIPTION)) {
-            $modifiedColumns[':p' . $index++]  = '`description`';
+            $modifiedColumns[':p' . $index++]  = '[description]';
         }
 
         $sql = sprintf(
-            'INSERT INTO `product_i18n` (%s) VALUES (%s)',
+            'INSERT INTO [cs_product_i18n] (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -528,16 +528,16 @@ abstract class BaseProductI18n extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`id`':
+                    case '[id]':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case '`locale`':
+                    case '[locale]':
                         $stmt->bindValue($identifier, $this->locale, PDO::PARAM_STR);
                         break;
-                    case '`name`':
+                    case '[name]':
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case '`description`':
+                    case '[description]':
                         $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
                         break;
                 }

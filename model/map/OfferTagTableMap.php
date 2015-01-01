@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'offer_tag' table.
+ * This class defines the structure of the 'cs_offer_tag' table.
  *
  *
  *
@@ -32,7 +32,7 @@ class OfferTagTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('offer_tag');
+        $this->setName('cs_offer_tag');
         $this->setPhpName('OfferTag');
         $this->setClassname('OfferTag');
         $this->setPackage('model');
@@ -40,8 +40,8 @@ class OfferTagTableMap extends TableMap
         $this->setIsCrossRef(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('offer_id', 'OfferId', 'INTEGER', 'offer', 'id', true, null, null);
-        $this->addForeignKey('tag_id', 'TagId', 'INTEGER', 'tag', 'id', true, null, null);
+        $this->addForeignKey('offer_id', 'OfferId', 'INTEGER', 'cs_offer', 'id', true, null, null);
+        $this->addForeignKey('tag_id', 'TagId', 'INTEGER', 'cs_tag', 'id', true, null, null);
         // validators
     } // initialize()
 
@@ -50,8 +50,8 @@ class OfferTagTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Offer', 'Offer', RelationMap::MANY_TO_ONE, array('offer_id' => 'id', ), null, null);
-        $this->addRelation('Tag', 'Tag', RelationMap::MANY_TO_ONE, array('tag_id' => 'id', ), null, null);
+        $this->addRelation('Offer', 'Offer', RelationMap::MANY_TO_ONE, array('offer_id' => 'id', ), 'RESTRICT', 'RESTRICT');
+        $this->addRelation('Tag', 'Tag', RelationMap::MANY_TO_ONE, array('tag_id' => 'id', ), 'RESTRICT', 'RESTRICT');
     } // buildRelations()
 
 } // OfferTagTableMap

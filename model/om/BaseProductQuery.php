@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a query for the 'product' table.
+ * Base class that represents a query for the 'cs_product' table.
  *
  *
  *
@@ -158,7 +158,7 @@ abstract class BaseProductQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `active`, `created_at`, `updated_at`, `avg_rating` FROM `product` WHERE `id` = :p0';
+        $sql = 'SELECT [id], [active], [created_at], [updated_at], [avg_rating] FROM [cs_product] WHERE [id] = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -742,7 +742,7 @@ abstract class BaseProductQuery extends ModelCriteria
 
     /**
      * Filter the query by a related Tag object
-     * using the product_tag table as cross reference
+     * using the cs_product_tag table as cross reference
      *
      * @param   Tag $tag the related object to use as filter
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL

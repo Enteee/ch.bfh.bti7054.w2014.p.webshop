@@ -17,8 +17,10 @@ class Offer extends BaseOffer implements JsonSerializable
 {
 	public function jsonSerialize() {
 		return [
+			'id' => $this->getId(),
 			'productId' => $this->getProduct()->getId(),
 			'price' => $this->getPrice(),
+			'programmingLanguages' => $this->getProgrammingLanguages(),
 		];
 	}
 
@@ -29,5 +31,15 @@ class Offer extends BaseOffer implements JsonSerializable
 		}
 		// no uploaded code files yet
 		return NULL;
+	}
+	
+	public function canBeOrdered() {
+		// TODO: check if this offer isn't already ordered or in shopping cart of the current user
+		return TRUE;
+	}
+	
+	public function getProgrammingLanguages() {
+		$repo = new Repository();
+		return $repo->getProgrammingLanguagesByOffer($this);
 	}
 }

@@ -55,7 +55,6 @@ if (isset($config['modules'])){
 //SaveVars::get_instance();
 
 /* Initialize MVC */
-$mvc = new Mvc();
-$mvc->init();
+Mvc::getInstance()->init();
 
 ?>

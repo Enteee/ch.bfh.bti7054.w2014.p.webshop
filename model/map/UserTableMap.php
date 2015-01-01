@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'user' table.
+ * This class defines the structure of the 'cs_user' table.
  *
  *
  *
@@ -32,7 +32,7 @@ class UserTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('user');
+        $this->setName('cs_user');
         $this->setPhpName('User');
         $this->setClassname('User');
         $this->setPackage('model');
@@ -53,9 +53,9 @@ class UserTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Code', 'Code', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), null, null, 'Codes');
-        $this->addRelation('Review', 'Review', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), null, null, 'Reviews');
-        $this->addRelation('Order', 'Order', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), null, null, 'Orders');
+        $this->addRelation('Code', 'Code', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), 'RESTRICT', 'RESTRICT', 'Codes');
+        $this->addRelation('Review', 'Review', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), 'RESTRICT', 'RESTRICT', 'Reviews');
+        $this->addRelation('Order', 'Order', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), 'RESTRICT', 'RESTRICT', 'Orders');
     } // buildRelations()
 
     /**

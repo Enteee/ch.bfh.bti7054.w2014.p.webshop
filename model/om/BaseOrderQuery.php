@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a query for the 'order' table.
+ * Base class that represents a query for the 'cs_order' table.
  *
  *
  *
@@ -10,6 +10,7 @@
  * @method OrderQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
  * @method OrderQuery orderByOfferId($order = Criteria::ASC) Order by the offer_id column
  * @method OrderQuery orderByPaidPrice($order = Criteria::ASC) Order by the paid_price column
+ * @method OrderQuery orderByWithComments($order = Criteria::ASC) Order by the with_comments column
  * @method OrderQuery orderByActive($order = Criteria::ASC) Order by the active column
  * @method OrderQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method OrderQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
@@ -18,6 +19,7 @@
  * @method OrderQuery groupByUserId() Group by the user_id column
  * @method OrderQuery groupByOfferId() Group by the offer_id column
  * @method OrderQuery groupByPaidPrice() Group by the paid_price column
+ * @method OrderQuery groupByWithComments() Group by the with_comments column
  * @method OrderQuery groupByActive() Group by the active column
  * @method OrderQuery groupByCreatedAt() Group by the created_at column
  * @method OrderQuery groupByUpdatedAt() Group by the updated_at column
@@ -40,6 +42,7 @@
  * @method Order findOneByUserId(int $user_id) Return the first Order filtered by the user_id column
  * @method Order findOneByOfferId(int $offer_id) Return the first Order filtered by the offer_id column
  * @method Order findOneByPaidPrice(int $paid_price) Return the first Order filtered by the paid_price column
+ * @method Order findOneByWithComments(boolean $with_comments) Return the first Order filtered by the with_comments column
  * @method Order findOneByActive(boolean $active) Return the first Order filtered by the active column
  * @method Order findOneByCreatedAt(string $created_at) Return the first Order filtered by the created_at column
  * @method Order findOneByUpdatedAt(string $updated_at) Return the first Order filtered by the updated_at column
@@ -48,6 +51,7 @@
  * @method array findByUserId(int $user_id) Return Order objects filtered by the user_id column
  * @method array findByOfferId(int $offer_id) Return Order objects filtered by the offer_id column
  * @method array findByPaidPrice(int $paid_price) Return Order objects filtered by the paid_price column
+ * @method array findByWithComments(boolean $with_comments) Return Order objects filtered by the with_comments column
  * @method array findByActive(boolean $active) Return Order objects filtered by the active column
  * @method array findByCreatedAt(string $created_at) Return Order objects filtered by the created_at column
  * @method array findByUpdatedAt(string $updated_at) Return Order objects filtered by the updated_at column
@@ -158,7 +162,7 @@ abstract class BaseOrderQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `user_id`, `offer_id`, `paid_price`, `active`, `created_at`, `updated_at` FROM `order` WHERE `id` = :p0';
+        $sql = 'SELECT [id], [user_id], [offer_id], [paid_price], [with_comments], [active], [created_at], [updated_at] FROM [cs_order] WHERE [id] = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -417,6 +421,33 @@ abstract class BaseOrderQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(OrderPeer::PAID_PRICE, $paidPrice, $comparison);
+    }
+
+    /**
+     * Filter the query on the with_comments column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByWithComments(true); // WHERE with_comments = true
+     * $query->filterByWithComments('yes'); // WHERE with_comments = true
+     * </code>
+     *
+     * @param     boolean|string $withComments The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return OrderQuery The current query, for fluid interface
+     */
+    public function filterByWithComments($withComments = null, $comparison = null)
+    {
+        if (is_string($withComments)) {
+            $withComments = in_array(strtolower($withComments), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(OrderPeer::WITH_COMMENTS, $withComments, $comparison);
     }
 
     /**

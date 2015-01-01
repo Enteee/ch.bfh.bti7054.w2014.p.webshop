@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a query for the 'product_tag' table.
+ * Base class that represents a query for the 'cs_product_tag' table.
  *
  *
  *
@@ -142,7 +142,7 @@ abstract class BaseProductTagQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `product_id`, `tag_id` FROM `product_tag` WHERE `id` = :p0';
+        $sql = 'SELECT [id], [product_id], [tag_id] FROM [cs_product_tag] WHERE [id] = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

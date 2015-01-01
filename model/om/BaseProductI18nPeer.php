@@ -2,7 +2,7 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'product_i18n' table.
+ * Base static class for performing query and update operations on the 'cs_product_i18n' table.
  *
  *
  *
@@ -15,7 +15,7 @@ abstract class BaseProductI18nPeer
     const DATABASE_NAME = 'codeshop';
 
     /** the table name for this class */
-    const TABLE_NAME = 'product_i18n';
+    const TABLE_NAME = 'cs_product_i18n';
 
     /** the related Propel class for this table */
     const OM_CLASS = 'ProductI18n';
@@ -33,16 +33,16 @@ abstract class BaseProductI18nPeer
     const NUM_HYDRATE_COLUMNS = 4;
 
     /** the column name for the id field */
-    const ID = 'product_i18n.id';
+    const ID = 'cs_product_i18n.id';
 
     /** the column name for the locale field */
-    const LOCALE = 'product_i18n.locale';
+    const LOCALE = 'cs_product_i18n.locale';
 
     /** the column name for the name field */
-    const NAME = 'product_i18n.name';
+    const NAME = 'cs_product_i18n.name';
 
     /** the column name for the description field */
-    const DESCRIPTION = 'product_i18n.description';
+    const DESCRIPTION = 'cs_product_i18n.description';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -365,7 +365,7 @@ abstract class BaseProductI18nPeer
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to product_i18n
+     * Method to invalidate the instance pool of all tables related to cs_product_i18n
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -825,7 +825,7 @@ abstract class BaseProductI18nPeer
     }
 
     /**
-     * Deletes all rows from the product_i18n table.
+     * Deletes all rows from the cs_product_i18n table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).

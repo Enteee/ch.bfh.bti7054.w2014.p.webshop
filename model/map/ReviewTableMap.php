@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'review' table.
+ * This class defines the structure of the 'cs_review' table.
  *
  *
  *
@@ -32,15 +32,15 @@ class ReviewTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('review');
+        $this->setName('cs_review');
         $this->setPhpName('Review');
         $this->setClassname('Review');
         $this->setPackage('model');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'user', 'id', true, null, null);
-        $this->addForeignKey('product_id', 'ProductId', 'INTEGER', 'product', 'id', true, null, null);
+        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'cs_user', 'id', true, null, null);
+        $this->addForeignKey('product_id', 'ProductId', 'INTEGER', 'cs_product', 'id', true, null, null);
         $this->addColumn('text', 'Text', 'VARCHAR', true, 500, null);
         $this->addColumn('rating', 'Rating', 'INTEGER', true, null, 0);
         $this->addColumn('active', 'Active', 'BOOLEAN', true, 1, true);
@@ -54,8 +54,8 @@ class ReviewTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('User', 'User', RelationMap::MANY_TO_ONE, array('user_id' => 'id', ), null, null);
-        $this->addRelation('Product', 'Product', RelationMap::MANY_TO_ONE, array('product_id' => 'id', ), null, null);
+        $this->addRelation('User', 'User', RelationMap::MANY_TO_ONE, array('user_id' => 'id', ), 'RESTRICT', 'RESTRICT');
+        $this->addRelation('Product', 'Product', RelationMap::MANY_TO_ONE, array('product_id' => 'id', ), 'RESTRICT', 'RESTRICT');
     } // buildRelations()
 
     /**
@@ -73,7 +73,7 @@ class ReviewTableMap extends TableMap
   'disable_updated_at' => 'false',
 ),
             'aggregate_column_relation' =>  array (
-  'foreign_table' => 'product',
+  'foreign_table' => 'cs_product',
   'update_method' => 'updateAvgRating',
 ),
         );

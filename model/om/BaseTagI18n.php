@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a row from the 'tag_i18n' table.
+ * Base class that represents a row from the 'cs_tag_i18n' table.
  *
  *
  *
@@ -467,17 +467,17 @@ abstract class BaseTagI18n extends BaseObject implements Persistent
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(TagI18nPeer::ID)) {
-            $modifiedColumns[':p' . $index++]  = '`id`';
+            $modifiedColumns[':p' . $index++]  = '[id]';
         }
         if ($this->isColumnModified(TagI18nPeer::LOCALE)) {
-            $modifiedColumns[':p' . $index++]  = '`locale`';
+            $modifiedColumns[':p' . $index++]  = '[locale]';
         }
         if ($this->isColumnModified(TagI18nPeer::NAME)) {
-            $modifiedColumns[':p' . $index++]  = '`name`';
+            $modifiedColumns[':p' . $index++]  = '[name]';
         }
 
         $sql = sprintf(
-            'INSERT INTO `tag_i18n` (%s) VALUES (%s)',
+            'INSERT INTO [cs_tag_i18n] (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -486,13 +486,13 @@ abstract class BaseTagI18n extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`id`':
+                    case '[id]':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case '`locale`':
+                    case '[locale]':
                         $stmt->bindValue($identifier, $this->locale, PDO::PARAM_STR);
                         break;
-                    case '`name`':
+                    case '[name]':
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
                 }

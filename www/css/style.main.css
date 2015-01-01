@@ -22,6 +22,11 @@ textarea {
 	overflow: scroll;
 }
 
+h4,
+.list-group .list-group-item h4 {
+	color: #ff3500;
+}
+
 /* ---------- changes on bootstrap style ---------- */
 
 /* badge in list-group */
@@ -59,9 +64,18 @@ a.list-group-item.active > .badge,
 	border: none;
 	background: none;
 }
-.cs-product-list-item-clickable{
-	cursor: pointer;
-}
 .list-group-item.no-padding {
 	padding: 0;
+}
+#signin .gitkit-button {
+	border: none;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	-webkit-border-top-left-radius: 4px;
+	-webkit-border-top-right-radius: 4px;
+	-moz-border-radius-topleft: 4px;
+	-moz-border-radius-topright: 4px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
 }

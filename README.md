@@ -245,14 +245,7 @@ We're selling source code on our webshop. People can upload source code and othe
 ## Open issues
 
 * Install script
- * zip extract (with password)
+ * zip extract (with password from form)
  * composer vendor libraries installation
- ( * propel database setup (username / password) )
- * populate database
+ * populate database (populate controller)
  * document installation
-
-
-
-
-
-

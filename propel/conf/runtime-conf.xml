@@ -3,11 +3,18 @@
   <propel>
     <datasources default="codeshop">
       <datasource id="codeshop">
+<!-- Mysql 
         <adapter>mysql</adapter>
         <connection>
           <dsn>mysql:host=127.0.0.1;dbname=codeshop</dsn>
           <user>codeshop</user>
           <password>gggggg</password>
+        </connection>
+-->
+<!-- Sqlite -->
+        <adapter>sqlite</adapter>
+        <connection>
+          <dsn>sqlite:../resource/db.sq3</dsn>
         </connection>
       </datasource>
     </datasources>

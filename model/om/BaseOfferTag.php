@@ -2,7 +2,7 @@
 
 
 /**
- * Base class that represents a row from the 'offer_tag' table.
+ * Base class that represents a row from the 'cs_offer_tag' table.
  *
  *
  *
@@ -465,17 +465,17 @@ abstract class BaseOfferTag extends BaseObject implements Persistent
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(OfferTagPeer::ID)) {
-            $modifiedColumns[':p' . $index++]  = '`id`';
+            $modifiedColumns[':p' . $index++]  = '[id]';
         }
         if ($this->isColumnModified(OfferTagPeer::OFFER_ID)) {
-            $modifiedColumns[':p' . $index++]  = '`offer_id`';
+            $modifiedColumns[':p' . $index++]  = '[offer_id]';
         }
         if ($this->isColumnModified(OfferTagPeer::TAG_ID)) {
-            $modifiedColumns[':p' . $index++]  = '`tag_id`';
+            $modifiedColumns[':p' . $index++]  = '[tag_id]';
         }
 
         $sql = sprintf(
-            'INSERT INTO `offer_tag` (%s) VALUES (%s)',
+            'INSERT INTO [cs_offer_tag] (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -484,13 +484,13 @@ abstract class BaseOfferTag extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`id`':
+                    case '[id]':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case '`offer_id`':
+                    case '[offer_id]':
                         $stmt->bindValue($identifier, $this->offer_id, PDO::PARAM_INT);
                         break;
-                    case '`tag_id`':
+                    case '[tag_id]':
                         $stmt->bindValue($identifier, $this->tag_id, PDO::PARAM_INT);
                         break;
                 }

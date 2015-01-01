@@ -92,6 +92,7 @@
     <column name="user_id" phpName="UserId" type="INTEGER" required="true"/>
     <column name="offer_id" phpName="OfferId" type="INTEGER" required="true"/>
     <column name="paid_price" phpName="PaidPrice" type="INTEGER" required="true" defaultValue="0"/>
+    <column name="with_comments" phpName="WithComments" type="BOOLEAN" size="1" required="true" defaultValue="true"/>
     <column name="active" phpName="Active" type="BOOLEAN" size="1" required="true" defaultValue="true"/>
     <foreign-key foreignTable="user" name="order_user" onDelete="RESTRICT" onUpdate="RESTRICT">
       <reference local="user_id" foreign="id"/>

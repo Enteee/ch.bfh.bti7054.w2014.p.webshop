@@ -9,13 +9,13 @@ class MainController extends Controller {
 		parent::__construct();
 
 		// save variables
-		$this->vars->saveGlobal('categoryId',SaveVars::T_NUMERIC,SaveVars::G_GET,function(){
+		$this->vars->saveGlobal('categoryId', SaveVars::T_NUMERIC, SaveVars::G_GET, function(){
 			return NULL;
-		},true);
+		}, true);
 
-		$this->vars->saveGlobal('search',SaveVars::T_STRING,SaveVars::G_GET, function(){
+		$this->vars->saveGlobal('search', SaveVars::T_STRING, SaveVars::G_GET, function(){
 			return NULL;
-		},true);
+		}, true);
 	}
 
 	protected function main($searchAction = 'products/show'){

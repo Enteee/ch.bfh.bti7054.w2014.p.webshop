@@ -109,6 +109,31 @@ $(document).ready(function() {
 		reviews.append(newReview);
 		return newReview;
 	}
+
+	function removeShoppingCartItem(item) {
+		var itemId = item.find('.cs-shopping-cart-item-id').val();
+		var itemPrice = item.find('.cs-shopping-cart-item-price').text();
+		$.ajax({
+			type: 'DELETE',
+			url: '/json?type=shoppingCartOffer&id='+itemId,
+		}).done(function(){
+			var shoppingCart = item.parents('.cs-shopping-cart');
+			var totalPrice = shoppingCart.find('.cs-shopping-cart-total-price');
+			var newTotalPrice = totalPrice.text() - itemPrice;
+			if(newTotalPrice <= 0 ){
+				shoppingCart.slideToggle( function() {
+					shoppingCart.remove();
+				})
+			}else{
+				item.slideToggle( function() {
+					totalPrice.text(newTotalPrice);
+					item.remove();
+				})
+			}
+		}).error(function (xhr) {
+			console.error(xhr.responseText);
+		});
+	}
 	
 	/* ---------- events ---------- */
 
@@ -118,7 +143,7 @@ $(document).ready(function() {
 	var productId = $('.cs-product-list-item-id').first().val();
 	showReviews(productId);
 
-	$(this).find('.cs-product-list-item-review-new-add').click(function(e){
+	$('.cs-product-list-item-review-new-add').click(function(e){
 		var productListItemDom = $(this).parents('.cs-product-list-item');
 		var addNewReview = {
 			'productId' : $('.cs-product-list-item-id').first().val(),
@@ -179,5 +204,10 @@ $(document).ready(function() {
 			$('#product_description').val(product.description);
 			$('#product_categories').select2('data', tags);
 		}
+	});
+	
+	/* remove shopping cart item*/
+	$('.cs-shopping-cart-item-delete-btn').click( function(e){
+		removeShoppingCartItem($(this).parents('.cs-shopping-cart-item'));
 	});
 });

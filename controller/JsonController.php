@@ -7,11 +7,11 @@ class JsonController extends Controller {
 
 	public function __construct() {
 		parent::__construct();
-		$this->vars->saveGlobal('REQUEST_METHOD',SaveVars::T_STRING,SaveVars::G_SERVER);
-		$this->vars->saveGlobal('type',SaveVars::T_STRING,SaveVars::G_GET, function(){
+		$this->vars->saveGlobal('REQUEST_METHOD', SaveVars::T_STRING, SaveVars::G_SERVER);
+		$this->vars->saveGlobal('type', SaveVars::T_STRING, SaveVars::G_GET, function(){
 			return NULL;
 		}, true);
-		$this->vars->saveGlobal('id',SaveVars::T_NUMERIC,SaveVars::G_GET, function(){
+		$this->vars->saveGlobal('id', SaveVars::T_NUMERIC_INT, SaveVars::G_GET, function(){
 			return NULL;
 		}, true);
 		$this->vars->saveGlobal('search', SaveVars::T_STRING, SaveVars::G_GET, function(){
@@ -73,6 +73,16 @@ class JsonController extends Controller {
 						// do nothing
 				}
 			break;
+			case "DELETE":
+				switch($this->vars->type){
+					case "shoppingCartOffer":
+						$id = $this->vars->id;
+						if(isset($id)){
+							$offer = $this->repo->getOfferById($id);
+							ShoppingCart::getInstance()->removeOffer($offer);
+						}
+					break;
+				}
 			default:
 				// do nothing
 		}

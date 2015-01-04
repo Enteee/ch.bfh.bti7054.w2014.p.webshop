@@ -33,6 +33,8 @@ abstract class Controller {
 			});
 			return $gitkitUser;
 		}, true);
+
+		ShoppingCart::getInstance();
 	}
 	
 	private function getDefaultViewName() {

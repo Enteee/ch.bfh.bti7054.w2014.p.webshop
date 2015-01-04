@@ -142,41 +142,44 @@
 					</nav>
 <?php if (count($shoppingCartItems) > 0):?>
 					<!-- shopping cart -->
-					<p class="lead"><?php echo label('shoppingCart'); ?></p>
-					<ul class="list-group">
+					<div class="cs-shopping-cart">
+						<p class="lead"><?php echo label('shoppingCart'); ?></p>
+						<ul class="list-group">
 	<?php foreach($shoppingCartItems as $shoppingCartItem):?>
-						<li class="list-group-item">
-							<div class="row">
-								<div class="col-xs-2 text-right">
-									<button type="button" class="btn btn-xs btn-default">
-										<span class="glyphicon glyphicon-remove"></span>
-									</button>
+							<li class="list-group-item cs-shopping-cart-item">
+								<div class="row">
+									<div class="col-xs-2 text-right">
+										<button type="button" class="btn btn-xs btn-default cs-shopping-cart-item-delete-btn">
+											<span class="glyphicon glyphicon-remove"></span>
+										</button>
+										<input type="hidden" class="cs-shopping-cart-item-id" value="<?php echo $shoppingCartItem->getId(); ?>" />
+									</div>
+									<div class="col-xs-6">
+										<?php echo $shoppingCartItem->getProduct()->getName(); ?>
+									</div>
+									<div class="col-xs-4 text-right">
+										<b class="cs-shopping-cart-item-price"><?php echo $shoppingCartItem->getPrice(); ?></b>&cent;
+									</div>
 								</div>
-								<div class="col-xs-6">
-									<?php echo $shoppingCartItem->getProduct()->getName(); ?>
-								</div>
-								<div class="col-xs-4 text-right">
-									<b><?php echo $shoppingCartItem->getPrice(); ?></b>&cent;
-								</div>
-							</div>
-						</li>
+							</li>
 	<?php endforeach; ?>
-						<li class="list-group-item list-group-item-info">
-							<div class="row">
-								<div class="col-xs-6 col-xs-offset-2">
-									Total
+							<li class="list-group-item list-group-item-info">
+								<div class="row">
+									<div class="col-xs-6 col-xs-offset-2">
+										Total
+									</div>
+									<div class="col-xs-4 text-right">
+										<b class="cs-shopping-cart-total-price"><?php echo $shoppingCartTotalPrice; ?></b>&cent;
+									</div>
 								</div>
-								<div class="col-xs-4 text-right">
-									<b><?php echo $shoppingCartTotalPrice; ?></b>&cent;
-								</div>
-							</div>
-						</li>
-					</ul>
-					<div>
-						<form action="products/buy" method="post">
-							<button type="submit" class="btn btn-default btn-block"><?php echo label('buy'); ?></button>
-						</form>
-						<br />
+							</li>
+						</ul>
+						<div>
+							<form action="products/buy" method="post">
+								<button type="submit" class="btn btn-default btn-block"><?php echo label('buy'); ?></button>
+							</form>
+							<br />
+						</div>
 					</div>
 <?php endif; ?>
 				</div>

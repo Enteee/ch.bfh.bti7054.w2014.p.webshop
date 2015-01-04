@@ -64,6 +64,7 @@ class SaveVars{
 	const T_OBJECT = 1200;
 
 	/*EXTENDED_TYPES*/
+	const T_NUMERIC_INT = 301;
 	const T_STRING_SQL = 401;
 	const T_STRING_HTML = 402;
 	const T_STRING_JSON = 403;
@@ -304,6 +305,7 @@ class SaveVars{
 			case self::T_CALLABLE: $data = $this->saveCallable($data); break;
 			case self::T_OBJECT: $data = $this->saveObject($data); break;
 			// extended
+			case self::T_NUMERIC_INT: $data = $this->saveInteger(intval($this->saveNumeric($data))); break;
 			case self::T_STRING_SQL: $data = $this->saveSql($this->saveString($data)); break;
 			case self::T_STRING_HTML: $data = $this->saveHtml($this->saveString($data)); break;
 			case self::T_STRING_JSON: $data = $this->saveJson($this->saveString($data));  break;
@@ -434,28 +436,6 @@ class SaveVars{
 				throw new InvalidArgumentException('data');
 		}
 		return $data;
-	}
-	
-	/* Functions for easy access to super globals */
-	
-	public function post($key) {
-		$value = NULL;
-		$this->enableSuperglobals();
-		if (isset($_POST[$key])) {
-			$value = $_POST[$key];
-		}
-		$this->disableSuperglobals();
-		return $value;
-	}
-	
-	public function get($key) {
-		$value = NULL;
-		$this->enableSuperglobals();
-		if (isset($_GET[$key])) {
-			$value = $_GET[$key];
-		}
-		$this->disableSuperglobals();
-		return $value;
 	}
 }
 

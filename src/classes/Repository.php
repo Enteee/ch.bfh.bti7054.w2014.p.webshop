@@ -187,6 +187,13 @@ class Repository {
 			->find();
 	}
 	
+	public function getOfferById($offerId){
+		return OfferQuery::create()
+			->filterById($offerId)
+			->filterByActive(TRUE)
+			->findOne();
+	}
+	
 	public function getOffersByProduct($product) {
 		return OfferQuery::create()
 			->filterByProduct($product)

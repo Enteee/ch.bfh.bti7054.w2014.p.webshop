@@ -11,13 +11,11 @@ class FileController extends Controller {
 	}
 
 	public function index() {
-		parent::main();
 		$this->get();
 	}
 	
 	public function get() {
-
-		$user = $this->vars->user;
+		$user = Session::getInstance()->getUser();
 		if (!isset($user)) {
 			throw new Exception('user not allowed');
 		}
@@ -37,7 +35,7 @@ class FileController extends Controller {
 			->count();
 		if ($numOrders == 0) {
 			// user has not bought this file
-			throw new Exception('user not allowed');				
+			throw new Exception('user not allowed');
 		}
 		
 		// download...

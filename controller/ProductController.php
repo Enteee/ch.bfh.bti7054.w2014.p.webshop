@@ -171,7 +171,7 @@ class ProductController extends MainController {
 			$con->commit();
 			
 			// redirect
-			$this->show($product->getId());
+			$this->redirect('product/show/' . $product->getId());
 			
 		} catch (Exception $e) {
 			$con->rollback();

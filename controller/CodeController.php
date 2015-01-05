@@ -3,38 +3,38 @@
 /*
  * Get information to a product
  */
-class FileController extends Controller {
+class CodeController extends Controller {
 
 	public function __construct() {
 		parent::__construct();
-		$this->vars->saveGlobal('id', SaveVars::T_NUMERIC, SaveVars::G_GET);
 	}
 
 	public function index() {
-		$this->get();
+		$this->get(0);
 	}
 	
-	public function get() {
+	public function download($codeId) {
+		$codeId = intval($codeId);
+		if ($codeId <= 0) {
+			throw new NotFoundException('invalid id');
+		}
+		
 		$user = Session::getInstance()->getUser();
 		if (!isset($user)) {
 			throw new Exception('user not allowed');
 		}
 		
-		$code = CodeQuery::create()->findPk($this->vars->id);
+		$code = CodeQuery::create()->findPk($codeId);
 		if (!isset($code)) {
-			throw new Exception('file doesn\'t exist');
+			throw new NotFoundException('file doesn\'t exist');
 		}
 		$offer = $code->getOffer();
 		if (!isset($offer)) {
 			throw new Exception('no offer to code file');
 		}
 		
-		$numOrders = OrderQuery::create()
-			->filterByUser($user)
-			->filterByOffer($offer)
-			->count();
-		if ($numOrders == 0) {
-			// user has not bought this file
+		if (!$offer->userOwns()) {
+			// user has not bought this file or has not uploaded it
 			throw new Exception('user not allowed');
 		}
 		

@@ -120,7 +120,7 @@
 									<div class="col-xs-2">
 										<form action="<?php echo uri(); ?>" method="post">
 											<button type="submit" class="btn btn-xs btn-default cs-shopping-cart-item-delete-btn" title="<?php echo label('loadCredits'); ?>" name="loadCredits" value="1">
-												<span class="glyphicon glyphicon-plus"></span>
+												<span class="glyphicon glyphicon-usd"></span>
 											</button>
 										</form>
 									</div>

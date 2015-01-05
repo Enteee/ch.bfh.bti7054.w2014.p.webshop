@@ -1,5 +1,6 @@
 <?php $this->view('header'); ?>
 	<p class="lead"><?php echo "$pageTitle"; ?></p>
+	<!-- product -->
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<?php echo label('product'); ?>
@@ -22,19 +23,23 @@
 <?php foreach ($product->getOffers() as $offer):?>
 			<li class="list-group-item">
 				<div class="row">
-					<div class="col-xs-3">
+					<div class="col-xs-8">
 	<?php foreach ($offer->getProgrammingLanguages() as $programmingLanguage):?>
 						<span class="label label-default"><?php echo $programmingLanguage->getName(); ?></span>
 	<?php endforeach; ?>
 					</div>
-					<div class="col-xs-5 text-right">
+					<!--<div class="col-xs-5 text-right">
 						<span><?php echo label('withComments'); ?>:</span><input type="checkbox" checked="checked"></input>
-					</div>
+					</div>-->
 					<div class="col-xs-2 text-right">
 						<b><?php echo $offer->getPrice(); ?></b>&cent;
 					</div>
 					<div class="col-xs-2 text-right">
-	<?php if ($offer->canBeOrdered()): ?>
+	<?php if ($offer->userOwns()): ?>
+						<a class="btn btn-xs btn-default" title="<?php echo label('download'); ?>" href="<?php echo lang(); ?>/code/download/<?php echo $offer->getCodeId(); ?>">
+							<span class="glyphicon glyphicon-download-alt"></span>
+						</a>
+	<?php elseif ($offer->canBeOrdered()): ?>
 						<form action="<?php echo uri(); ?>" method="post">
 							<button type="submit" class="btn btn-xs btn-default" title="<?php echo label('addToShoppingCart'); ?>" name="add_offer_id" value="<?php echo $offer->getId(); ?>">
 								<span class="glyphicon glyphicon-shopping-cart"></span>

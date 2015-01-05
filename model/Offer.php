@@ -33,6 +33,31 @@ class Offer extends BaseOffer implements JsonSerializable
 		return NULL;
 	}
 	
+	public function getCodeId() {
+		if ($this->countCodes() > 0) {
+			// first code of this offer
+			return $this->getCodes()[0]->getId();
+		}
+		// this should never happen (every offer needs one code file minimum
+		return NULL;
+	}
+	
+	public function userOwns() {
+		if (Session::getInstance()->isLoggedIn()) {
+			$user = Session::getInstance()->getUser();
+			if ($user->hasOffer($this)) {
+				// user has already ordered this
+				return TRUE;
+			}
+			$provider = $this->getProviderUser();
+			if (isset($provider) && $provider == $user) {
+				// user has uploaded this
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
+	
 	public function canBeOrdered() {
 		if (Session::getInstance()->isLoggedIn()) {
 			$user = Session::getInstance()->getUser();
@@ -42,6 +67,7 @@ class Offer extends BaseOffer implements JsonSerializable
 			}
 			return TRUE;
 		}
+		// not logged in
 		return FALSE;
 	}
 	

@@ -120,6 +120,14 @@
 		"en" : "load credits",
 		"de" : "Credits aufladen"
 	},
+	"code": {
+		"en" : "Code",
+		"de" : "Code"
+	},
+	"download": {
+		"en" : "download",
+		"de" : "herunterladen"
+	},
 	"orderOverview": {
 		"en" : "Order overview",
 		"de" : "Bestellübersicht"

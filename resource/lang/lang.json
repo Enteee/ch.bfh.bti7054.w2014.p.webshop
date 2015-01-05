@@ -112,6 +112,22 @@
 		"en" : "buy",
 		"de" : "kaufen"
 	},
+	"order": {
+		"en" : "order...",
+		"de" : "bestellen..."
+	},
+	"loadCredits": {
+		"en" : "load credits",
+		"de" : "Credits aufladen"
+	},
+	"orderOverview": {
+		"en" : "Order overview",
+		"de" : "Bestellübersicht"
+	},
+	"notEnoughtCredits": {
+		"en" : "You don't have enought credits to complete your order. Fill up your credits.",
+		"de" : "Zu wenig Credits verfügbar, um die Bestellung auszuführen. Bitte laden Sie Ihre Credits auf."
+	},
 	"tags": {
 		"en" : "Tags",
 		"de" : "Tags"

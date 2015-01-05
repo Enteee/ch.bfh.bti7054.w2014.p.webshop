@@ -35,6 +35,11 @@ class Offer extends BaseOffer implements JsonSerializable
 	
 	public function canBeOrdered() {
 		if (Session::getInstance()->isLoggedIn()) {
+			$user = Session::getInstance()->getUser();
+			if ($user->hasOffer($this)) {
+				// already ordered
+				return FALSE;
+			}
 			return TRUE;
 		}
 		return FALSE;

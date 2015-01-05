@@ -117,7 +117,14 @@
 	<?php if ($isLoggedIn): ?>
 							<li class="list-group-item">
 								<div class="row">
-									<div class="col-xs-8">
+									<div class="col-xs-2">
+										<form action="<?php echo uri(); ?>" method="post">
+											<button type="submit" class="btn btn-xs btn-default cs-shopping-cart-item-delete-btn" title="<?php echo label('loadCredits'); ?>" name="loadCredits" value="1">
+												<span class="glyphicon glyphicon-plus"></span>
+											</button>
+										</form>
+									</div>
+									<div class="col-xs-6">
 										<?php echo label('credits') ?>
 									</div>
 									<div class="col-xs-4 text-right">
@@ -175,9 +182,7 @@
 							</li>
 						</ul>
 						<div>
-							<form action="products/buy" method="post">
-								<button type="submit" class="btn btn-default btn-block"><?php echo label('buy'); ?></button>
-							</form>
+							<a href="<?php echo lang(); ?>/order" type="submit" class="btn btn-default btn-block"><?php echo label('order'); ?></a>
 							<br />
 						</div>
 					</div>

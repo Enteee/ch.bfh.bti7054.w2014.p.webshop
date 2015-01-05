@@ -10,7 +10,6 @@ class ProductsController extends MainController {
 	}
 
 	public function index() {
-		parent::main();
 		$this->show();
 	}
 	
@@ -87,24 +86,6 @@ class ProductsController extends MainController {
 		
 		// render template
 		$this->view('product_list', $data);
-	}
-	
-	public function buy() {
-		parent::main();
-		$this->assertUserIsLoggedIn();
-		
-		$user = $this->getUser();
-		$cart = ShoppingCart::getInstance();
-		
-		// make order
-		$offers = $cart->getOffers();
-		$this->repo->saveOrder($offers, $user);
-		
-		// clear shopping cart
-		$cart->clear();
-		
-		// redirect
-		$this->redirect('products/orders');
 	}
 }
 

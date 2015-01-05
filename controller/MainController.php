@@ -12,10 +12,12 @@ class MainController extends Controller {
 		$this->vars->saveGlobal('categoryId', SaveVars::T_NUMERIC, SaveVars::G_GET, function(){
 			return NULL;
 		}, true);
-
 		$this->vars->saveGlobal('search', SaveVars::T_STRING, SaveVars::G_GET, function(){
 			return NULL;
 		}, true);
+		$this->vars->saveGlobal('loadCredits', SaveVars::T_NUMERIC, SaveVars::G_POST, function(){
+			return 0;
+		});
 	}
 
 	protected function main($searchAction = 'products/show'){
@@ -29,6 +31,15 @@ class MainController extends Controller {
 		);
 		$data['locale'] = $this->lang->getLocale();
 		$data['isLoggedIn'] = $this->isLoggedIn();
+		
+		// load credits?
+		$user = Session::getInstance()->getUser();
+		if (isset($user) && $this->vars->loadCredits) {
+			$credits = $user->getCredits();
+			$credits += 1000;
+			$user->setCredits($credits);
+			$user->save();
+		}
 		
 		// search 
 		$data['searchAction'] = $searchAction;

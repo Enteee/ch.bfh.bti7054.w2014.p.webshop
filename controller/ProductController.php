@@ -27,13 +27,13 @@ class ProductController extends MainController {
 			$this->assertUserIsLoggedIn();
 			$user = $this->getUser();
 			if ($user->hasOffer($offer)) {
-				//throw new Exception('user already bought this.');
+				// throw new Exception('user already bought this.');
 				// show no error
 				return;
 			}
 			$cart = ShoppingCart::getInstance();
 			if ($cart->containsOffer($offer)) {
-				//throw new Exception('user already has this in his shopping cart.');
+				// throw new Exception('user already has this in his shopping cart.');
 				// show no error
 				return;
 			}

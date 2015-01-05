@@ -10,6 +10,7 @@ abstract class Controller {
 	protected $template;
 	protected $repo;
 	protected $vars;
+	protected $session;
 	private $gitkit;
 
 	public function __construct() {
@@ -20,20 +21,8 @@ abstract class Controller {
 		$this->lang = Language::getInstance();
 		$this->template = new Template();
 		$this->repo = new Repository();
-		
+		$this->session = Session::getInstance();
 		$this->vars = SaveVars::getInstance();
-		$this->vars->saveGlobal('gitkitUser', SaveVars::T_ARRAY, SaveVars::G_SESSION, function(){
-			$this->vars->callEnabledSuperglobals(function() use (&$gitkitUser){
-				$gitkit = Gitkit_Client::createFromFile($this->config['gitkit']['server-config']);
-				$requestUser = $gitkit->getUserInRequest();
-				if (isset($requestUser)) {
-					$gitkitUser['email'] = $requestUser->getEmail();
-					$gitkitUser['token'] = $requestUser->getUserId();
-				}
-			});
-			return $gitkitUser;
-		}, true);
-
 		ShoppingCart::getInstance();
 	}
 	
@@ -69,41 +58,21 @@ abstract class Controller {
 	* Gets the logged in user
 	*/
 	protected function getUser() {
-		$user = NULL;
-		$gitkitUser = $this->vars->gitkitUser;
-		if(	isset($gitkitUser)
-			&& array_key_exists('email',$gitkitUser)
-			&& array_key_exists('token',$gitkitUser)){
-			$user = $this->repo->getUserByToken($gitkitUser['token']);
-			if (!isset($user)) {
-				// first time login -> create user in db
-				$user = new User();
-				$user
-					->setEmail($gitkitUser['email'])
-					->setToken($gitkitUser['token'])
-					->setCredits(0)
-					->setActive(TRUE)
-					->save();
-			}
-		}
-		return $user;
+		return $this->session->getUser();
 	}
 	
 	/**
 	 * Is a user logged in.
 	 */
 	protected function isLoggedIn() {
-		$user = $this->getUser();
-		return isset($user) && $user->getActive();
+		return $this->session->isLoggedIn();
 	}
 	
 	/**
 	 * Is a user logged in.
 	 */
 	protected function assertUserIsLoggedIn() {
-		if (!$this->isLoggedIn()) {
-			throw new SecurityException();
-		}
+		$this->session->assertUserIsLoggedIn();
 	}
 
 	/**

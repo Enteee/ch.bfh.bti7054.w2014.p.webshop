@@ -121,11 +121,11 @@ $(document).ready(function() {
 			var totalPrice = shoppingCart.find('.cs-shopping-cart-total-price');
 			var newTotalPrice = totalPrice.text() - itemPrice;
 			if(newTotalPrice <= 0 ){
-				shoppingCart.slideToggle( function() {
+				shoppingCart.slideToggle(200, function() {
 					shoppingCart.remove();
 				})
 			}else{
-				item.slideToggle( function() {
+				item.slideToggle(200, function() {
 					totalPrice.text(newTotalPrice);
 					item.remove();
 				})
@@ -154,19 +154,19 @@ $(document).ready(function() {
 	});
 	
 	/* rating */
-	$('.cs-product-list-item-review-new-rating-1').mouseenter(function(){
+	$('.cs-product-list-item-review-new-rating-1').click(function(){
 		$(this).siblings('.cs-product-list-item-review-new-rating-val').val('1').change();
 	});
-	$('.cs-product-list-item-review-new-rating-2').mouseenter(function(){
+	$('.cs-product-list-item-review-new-rating-2').click(function(){
 		$(this).siblings('.cs-product-list-item-review-new-rating-val').val('2').change();
 	});
-	$('.cs-product-list-item-review-new-rating-3').mouseenter(function(){
+	$('.cs-product-list-item-review-new-rating-3').click(function(){
 		$(this).siblings('.cs-product-list-item-review-new-rating-val').val('3').change();
 	});
-	$('.cs-product-list-item-review-new-rating-4').mouseenter(function(){
+	$('.cs-product-list-item-review-new-rating-4').click(function(){
 		$(this).siblings('.cs-product-list-item-review-new-rating-val').val('4').change();
 	});
-	$('.cs-product-list-item-review-new-rating-5').mouseenter(function(){
+	$('.cs-product-list-item-review-new-rating-5').click(function(){
 		$(this).siblings('.cs-product-list-item-review-new-rating-val').val('5').change();
 	});
 	$('.cs-product-list-item-review-new-rating-val').change(function(){

@@ -67,8 +67,8 @@
 	<?php if ($isLoggedIn): ?>
 		<textarea class="form-control cs-product-list-item-review-new-text" rows="5" placeholder="<?php echo label('writeReview') ?>" required></textarea>
 		<div class="text-right">
-			<p>
-				<?php echo label('rating'); ?>:
+			<?php echo label('rating'); ?>:
+			<p class="cs-rating">
 				<span class="glyphicon glyphicon-star cs-product-list-item-review-new-rating-1"></span>
 				<span class="glyphicon glyphicon-star cs-product-list-item-review-new-rating-2"></span>
 				<span class="glyphicon glyphicon-star cs-product-list-item-review-new-rating-3"></span>
@@ -76,6 +76,8 @@
 				<span class="glyphicon glyphicon-star-empty cs-product-list-item-review-new-rating-5"></span>
 				<input class="hidden cs-product-list-item-review-new-rating-val" type="hidden" name="id" value="4" />
 			</p>
+		</div>
+		<div class="text-right">
 			<button type="button" class="btn btn-default btn-sm cs-product-list-item-review-new-add"><?php echo label('addReview'); ?></a>
 		</div>
 	<?php endif; ?>

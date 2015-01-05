@@ -15,7 +15,6 @@ class ProductController extends MainController {
 	}
 	
 	private function addOffer() {
-		$this->assertUserIsLoggedIn();
 		$this->vars->saveGlobal('add_offer_id',SaveVars::T_NUMERIC_INT,SaveVars::G_POST,function(){
 			return NULL;
 		}, true);
@@ -25,14 +24,18 @@ class ProductController extends MainController {
 			if (!isset($offer)) {
 				throw new Exception('no active offer with this id.');
 			}
+			$this->assertUserIsLoggedIn();
 			$user = $this->getUser();
 			if ($user->hasOffer($offer)) {
-				throw new Exception('user already bought this.');
+				//throw new Exception('user already bought this.');
+				// show no error
+				return;
 			}
-			
 			$cart = ShoppingCart::getInstance();
 			if ($cart->containsOffer($offer)) {
-				throw new Exception('user already has this in his shopping cart.');
+				//throw new Exception('user already has this in his shopping cart.');
+				// show no error
+				return;
 			}
 			
 			// add to shopping cart

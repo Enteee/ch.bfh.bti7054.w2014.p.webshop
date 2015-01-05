@@ -34,8 +34,10 @@ class Offer extends BaseOffer implements JsonSerializable
 	}
 	
 	public function canBeOrdered() {
-		// TODO: check if this offer isn't already ordered or in shopping cart of the current user
-		return TRUE;
+		if (Session::getInstance()->isLoggedIn()) {
+			return TRUE;
+		}
+		return FALSE;
 	}
 	
 	public function getProgrammingLanguages() {

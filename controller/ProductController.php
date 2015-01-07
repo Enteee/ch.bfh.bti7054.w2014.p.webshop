@@ -60,13 +60,14 @@ class ProductController extends MainController {
 		if (!isset($product)) {
 			throw new NotFoundException();
 		}
-		
 		$product->setLocale($this->lang->getLocale());
+		
 		// set data for view
 		$data['pageTitle'] = label('products');
 		$data['product'] = $product;
 		$data['canOrder'] = TRUE;
 		$data['hasReviews'] = count($product->getReviews()) > 0;
+		$data['wiki'] = $product->getWikiExtract();
 		
 		// render template
 		$this->view('product_details', $data);

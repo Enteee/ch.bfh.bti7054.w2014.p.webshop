@@ -86,5 +86,4 @@ $config['css'][] = 'style.main.css';	// syling css
 /* Cookies */
 $config['cookie']['expire'] = 24 * 7 * 3600; // one week
 $config['cookie']['domain'] = '.codeshop.ch'; // also valid for subdomains
-
 ?>

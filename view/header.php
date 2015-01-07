@@ -48,7 +48,7 @@
 	<body>
 		<noscript>
 			<div class="noscript">
-				<p class="noscript">This page works better with enabled Javascript</p>
+				<p class="noscript"><?php echo label('noScript'); ?></p>
 			</div>
 		</noscript>
 		<!-- Javascript -->
@@ -67,7 +67,7 @@
 				<!-- logo -->
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-					<span class="sr-only">Toggle navigation</span>
+					<span class="sr-only"><?php echo label('toggleNavigation'); ?></span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
@@ -173,7 +173,7 @@
 							<li class="list-group-item list-group-item-info">
 								<div class="row">
 									<div class="col-xs-6 col-xs-offset-2">
-										Total
+										<?php echo label('total'); ?>
 									</div>
 									<div class="col-xs-4 text-right">
 										<b class="cs-shopping-cart-total-price"><?php echo $shoppingCartTotalPrice; ?></b>&cent;

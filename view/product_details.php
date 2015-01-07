@@ -12,6 +12,9 @@
 <?php foreach($product->getCategories() as $category): ?>
 				<span class="label label-default"><?php echo $category->getName(); ?></span>
 <?php endforeach; ?>
+<?php if (isset($wiki)): ?>
+			<p class="list-group-item-text"><br /><em><?php echo $wiki; ?><em></p>
+<?php endif; ?>
 		</div>
 	</div>
 	<!-- offers -->
@@ -28,9 +31,6 @@
 						<span class="label label-default"><?php echo $programmingLanguage->getName(); ?></span>
 	<?php endforeach; ?>
 					</div>
-					<!--<div class="col-xs-5 text-right">
-						<span><?php echo label('withComments'); ?>:</span><input type="checkbox" checked="checked"></input>
-					</div>-->
 					<div class="col-xs-2 text-right">
 						<b><?php echo $offer->getPrice(); ?></b>&cent;
 					</div>

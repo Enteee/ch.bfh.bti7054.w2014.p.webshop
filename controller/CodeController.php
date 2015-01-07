@@ -10,7 +10,7 @@ class CodeController extends Controller {
 	}
 
 	public function index() {
-		$this->get(0);
+		$this->download(0);
 	}
 	
 	public function download($codeId) {

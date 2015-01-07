@@ -58,4 +58,35 @@ class Product extends BaseProduct implements JsonSerializable
 		}
 		return 0;
 	}
+	
+	public function getWikiExtract() {
+		try {
+			// load wiki informations
+			$wiki = NULL;
+			$url = sprintf('http://en.wikipedia.org/w/api.php?format=json&action=query&titles=%s&prop=extracts&explaintext=1', urlencode($this->getName()));
+			$content = file_get_contents($url);
+			if (isset($content)) {
+				$obj = json_decode($content, TRUE);
+				if (isset($obj)) {
+					if (count($obj['query']['pages']) > 0) {
+						// take first page
+						$page = reset($obj['query']['pages']);
+						if (isset($page['extract'])) {
+							$extract = $page['extract'];
+							if (isset($extract)) {
+								$maxlen = 500;
+								if (strlen($extract) > $maxlen) {
+									$extract = trim(substr($extract, 0, $maxlen)) . '...';
+								}
+								return $extract;
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception $e) {
+			// ignore
+		}
+		return NULL;
+	}
 }

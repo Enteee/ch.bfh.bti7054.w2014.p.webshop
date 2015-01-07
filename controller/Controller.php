@@ -11,7 +11,6 @@ abstract class Controller {
 	protected $repo;
 	protected $vars;
 	protected $session;
-	private $gitkit;
 
 	public function __construct() {
 		global $config;

@@ -116,6 +116,18 @@
 		"en" : "order...",
 		"de" : "bestellen..."
 	},
+	"completeOrder": {
+		"en" : "Complete order",
+		"de" : "Bestellung abschliessen"
+	},
+	"noScript": {
+		"en" : "This page works better with enabled Javascript",
+		"de" : "JavaScript muss aktiviert sein, damit diese Seite korrekt funktioniert"
+	},
+	"toggleNavigation": {
+		"en" : "Toggle navigation",
+		"de" : "Navigation ein-/ausblenden"
+	},
 	"loadCredits": {
 		"en" : "load credits",
 		"de" : "Credits aufladen"
@@ -152,6 +164,10 @@
 		"en" : "starting from",
 		"de" : "ab"
 	},
+	"total": {
+		"en" : "Total",
+		"de" : "Total"
+	},
 	"credits": {
 		"en" : "Credits",
 		"de" : "Guthaben"
@@ -159,6 +175,18 @@
 	"codeFile": {
 		"en" : "Code file",
 		"de" : "Code Datei"
+	},
+	"confirmMailSubject": {
+		"en" : "CodeShop: Order confirmation",
+		"de" : "CodeShop: Bestellbestätigung"
+	},
+	"confirmMailBody": {
+		"en" : "Your successfully ordered code from CodeShop.",
+		"de" : "Ihre CodeShop-Bestellung wurde erfolgreich abgeschlossen."
+	},
+	"orderConfirmText": {
+		"en" : "Do you really want to order the listed products?",
+		"de" : "Wollen Sie die aufgelisteten Produkte wirklich bestellen?"
 	},
 	"errorTitle": {
 		"en" : "Error",

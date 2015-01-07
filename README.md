@@ -2,6 +2,10 @@
 
 ## Tasks
 
+### Task 1.1: Development Environment
+
+Code repository: https://github.com/Enteee/ch.bfh.bti7054.w2014.p.webshop
+
 ### Task 1.2: Web Shop Basics [done]
 
 #### Product
@@ -115,8 +119,8 @@ We're selling source code on our webshop. People can upload source code and othe
 
 ### Task 1.4: Design Principles [done]
 
-* simplicity
-* responsive design
+* Simplicity
+* Responsive design
 
 ### Task 2.1: General Design [done]
 
@@ -126,14 +130,15 @@ We're selling source code on our webshop. People can upload source code and othe
 
 #### Site map
 
-* item overview
-  * my code
-  * search results
-  * special offers
-  * shopping cart
-* profile, load credits
-* add code
-* contact/agb
+* Show products
+  * Search
+  * Browse by category
+* Show product details
+
+Only registered users:
+* My orders (only registered users)
+* My offers
+* Add offer
 
 ### Task 2.2: Main HTML Page [done]
 
@@ -147,6 +152,9 @@ We're selling source code on our webshop. People can upload source code and othe
 
 ### Task 4.2: Dynamic Navigation Menu [done]
 
+* Top navigation for registered user
+* Side navigation with product categories
+
 ### Task 4.3: List of Products [done]
 
 * Animated list with jquery
@@ -156,9 +164,12 @@ We're selling source code on our webshop. People can upload source code and othe
 
 ### Task 5.1: External PHP Files [done]
 
-* Composer autoloader integrated
+* CSS, JavaScript and PHP classes as external files
+* Classes are loaded by a class loader
 
 ### Task 5.2: Multi-Page PHP File [done]
+
+* MVC pattern used with controllers and methods to provide access over one single page
 
 ### Task 5.3: Multiple Languages [done]
 
@@ -171,81 +182,102 @@ We're selling source code on our webshop. People can upload source code and othe
 
 ### Task 6.2: Select Options [done]
 
-### Task 6.3: Shipping Address [open]
+* Different offers per product (by programming languages)
 
-* Do we really need this? Code is not 'shippable'.
+### Task 6.3: Shipping Address [done]
 
-### Task 6.4: Confirmation [open]
+* Feature not implemented, bought files are downloadable instead
 
-* Checkout shopping cart
- * Input customer data (form) + Validation
- * Confirmation email
-* Important: email sending
+### Task 6.4: Confirmation [done]
+
+* Checkout into shopping cart
+* Confirmation view before buy
+* Confirm email (only when send mail is configured correctly)
 
 ### Task 6.5: Refactoring and Code Beautification [done]
 
-* mvc pattern with controller classes and view templates [done]
-* uri routing: /{language}/{controller}/{method}
+* MVC pattern with controller classes and view templates
+* URI routing: /{language}/{controller}/{method}
 * SaveVars: typed superglobals
 
-### Task 7.1: Purchase Confirmation [open]
+### Task 7.1: Purchase Confirmation [done]
 
-### Task 7.2: Form Validation [open]
+* Confirm box in the confirm overview
 
-### Task 7.3: DHTML [open]
+### Task 7.2: Form Validation [done]
+
+* HTML 5 form validation in the "add code" form
+
+### Task 7.3: DHTML [done]
+
+* Rating of products
+* Adding reviews without reloading the page
 
 ### Task 8.1: Cookies [done]
 
-* language of user is stored in a cookie
+* Language of user is stored in a cookie
 * $_COOKIE wrapped in SaveVars
 
-### Task 8.2: Shopping Cart [progress]
+### Task 8.2: Shopping Cart [done]
 
-* Put into shopping cart
+* Shopping cart on the left side
+* Removing of items via AJAX
 
 ### Task 8.3: User Accounts [done]
 
-* problem solved by using *Google Identity Toolkit* no need for password saving
-* login with Gmail account
+* Problem solved by using *Google Identity Toolkit* no need for password saving
+* Login with Gmail account
 
 ### Task 9.1: OO Shopping Cart [done]
 
-* initial design
+* Initial design
 
 ### Task 9.2 : OO Product List [done]
 
+* Propel generated objects used
+
 ### Task 9.3: Even more OO [done]
+
+* Multiple classes for various functions (Language, Repository, Session...)
 
 ### Task 10.1: Database Schema Design [done]
 
 ### Task 10.2: Database Setup [done]
 
+* Database created and designed with MySQL Workbench
+
 ### Task 10.3: PHP Integration [done]
 
-* using propel orm
+* Code generated with Propel ORM
 
 ### Task 10.4: Administrator [done]
 
-* create database via propel generator
-* populate controller to insert data
-* Db administartion area
+* Populate controller to insert data
+* "Add code" form to add new products (no admin function, every user can add code)
 
-### Task 11.1: Web Service Integration [progress]
+### Task 11.1: Web Service Integration [done]
 
-* Do we really need this? The ajax controller is kind of a REST controller itself.
+* Integrated Wikipedia api for further product description
 
-### Task 12.1: XML
+### Task 12.1: AJAX [done]
 
-### Task 12.2: AJAX
+* Adding reviews works with AJAX
+* Removing items from shopping cart is also based on AJAX
 
-### Task 12.3: HTML Templates
+### Task 12.3: HTML Templates [done]
 
-### Task 12.4: Regular Expressions
+* Created own simple template system based on our MVC engine
 
-## Open issues
+### Task 12.4: Regular Expressions [done]
+
+* Validation of language and country codes
+* Parsing of user language over browser
+* Parsing of uri
+
+## Installation
 
 * Install script
- * zip extract (with password from form)
- * composer vendor libraries installation
- * populate database (populate controller)
- * document installation
+  * ZIP extract (with password from form)
+  * Composer vendor libraries installation
+  * Populate database (populate controller)
+  * Document installation

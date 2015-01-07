@@ -45,6 +45,9 @@ class OrderController extends MainController {
 		// clear shopping cart
 		$cart->clear();
 		
+		// send confirm mail
+		mail($user->getEmail(), label('confirmMailSubject'), label('confirmMailBody')); 
+		
 		// redirect
 		$this->redirect('products/orders');
 	}

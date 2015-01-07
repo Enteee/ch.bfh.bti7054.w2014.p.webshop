@@ -16,7 +16,7 @@
 		<li class="list-group-item list-group-item-info">
 			<div class="row">
 				<div class="col-xs-8">
-					Total
+					<?php echo label('total'); ?>
 				</div>
 				<div class="col-xs-4 text-right">
 					<b class="cs-shopping-cart-total-price"><?php echo $shoppingCartTotalPrice; ?></b>&cent;
@@ -26,7 +26,7 @@
 	</ul>
 	<?php if ($enoughtCredits): ?>
 	<form action="<?php echo lang(); ?>/order/finish" method="post">
-		<button class="btn btn-default" type="submit">Bestellen</button>
+		<button class="btn btn-default" type="submit" onclick="return confirm('<?php echo label('orderConfirmText'); ?>');"><?php echo label('completeOrder'); ?></button>
 	</form>
 	<?php else: ?>
 	<div class="alert alert-danger" role="alert"><?php echo label('notEnoughtCredits'); ?></div>

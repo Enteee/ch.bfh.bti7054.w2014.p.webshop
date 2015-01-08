@@ -29,6 +29,13 @@ $(document).ready(function() {
 		$(element).select2(options);
 	}
 	
+	function getLanguage() {
+		var name = 'Language';
+		match = document.cookie.match(new RegExp(name + '=([^;]+)'));
+		if (match) return match[1];
+		return null;
+	}
+	
 	/* ---------- ajax functions ---------- */
 	
 	function getProduct(productId) {
@@ -76,7 +83,6 @@ $(document).ready(function() {
 				type: 'POST',
 				url: '/json?type=review',
 				data: { 'object' : JSON.stringify(addNewReview) },
-				//context: productListItemDom,
 				dataType: 'json',
 			}).done(function(review){
 				appendReview(review);
@@ -177,9 +183,9 @@ $(document).ready(function() {
 	});
 	
 	/* autocompleter */
-	autocomplete('#product_id', '/de/json/products_select2', false, true, 0);
-	autocomplete('#product_categories', '/de/json/categories_select2', true, false, 0);
-	autocomplete('#product_programminglanguages', '/de/json/programminglanguages_select2', true, false, 1);
+	autocomplete('#product_id', '/' + getLanguage() + '/json/products_select2', false, true, 0);
+	autocomplete('#product_categories', '/' + getLanguage() + '/json/categories_select2', true, false, 0);
+	autocomplete('#product_programminglanguages', '/' + getLanguage() + '/json/programminglanguages_select2', true, false, 1);
 	
 	/* select product */
 	$('#product_id').on('select2-selecting', function (e) {

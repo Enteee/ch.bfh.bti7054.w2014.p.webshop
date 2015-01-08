@@ -61,6 +61,7 @@ class Repository {
 			return ProductQuery::create()
 				->useProductI18nQuery()
 					->filterByName('%' . $searchstring . '%')
+					->filterByLocale(Language::getInstance()->getLocale())
 				->endUse()
 				->groupBy('id')
 				->find();

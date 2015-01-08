@@ -127,15 +127,14 @@ class JsonController extends Controller {
 	public function products_select2() {
 		$products = $this->repo->getProductsBySearch($this->vars->search);
 		
-		$response = array();		
+		$response = array();
 		foreach ($products as $product) {
 			$product->setLocale($this->lang->getLocale());
 			$response[] = [
-				'id' => $product->getId(),			
+				'id' => $product->getId(),
 				'text' => $product->getName()
 			];
 		}
-			
 		$data['json'] = $response;
 
 		$this->view('json', $data);

@@ -121,18 +121,21 @@ class ProductController extends MainController {
 		$con->beginTransaction();
 		try {
 			$product = $this->vars->product;
-			foreach ($this->lang->getAllLocales() as $locale) {
-				$product
-					->setLocale($locale)
-						->setName($this->vars->product_name)
-						->setDescription($this->vars->product_description);
-			}
-			$categoryIds = split_to_ints($this->vars->product_categories);
-			if (count($categoryIds) > 0) {
-				foreach ($categoryIds as $categoryId) {
-					$category = TagQuery::create()->getCategory($categoryId);
-					if (isset($category)) {
-						$product->addTag($category);
+			$productId = $this->vars->product_id;
+			if ($productId <= 0) { // only new products
+				foreach ($this->lang->getAllLocales() as $locale) {
+					$product
+						->setLocale($locale)
+							->setName($this->vars->product_name)
+							->setDescription($this->vars->product_description);
+				}
+				$categoryIds = split_to_ints($this->vars->product_categories);
+				if (count($categoryIds) > 0) {
+					foreach ($categoryIds as $categoryId) {
+						$category = TagQuery::create()->getCategory($categoryId);
+						if (isset($category)) {
+							$product->addTag($category);
+						}
 					}
 				}
 			}

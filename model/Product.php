@@ -62,12 +62,11 @@ class Product extends BaseProduct implements JsonSerializable
 	public function getWikiExtract() {
 		try {
 			// load wiki informations
-			$wiki = NULL;
 			$url = sprintf('http://en.wikipedia.org/w/api.php?format=json&action=query&titles=%s&prop=extracts&explaintext=1&redirects', urlencode($this->getName()));
 			$content = file_get_contents($url);
 			if (isset($content)) {
 				$obj = json_decode($content, TRUE);
-				if (isset($obj)) {
+				if (isset($obj) && isset($obj['query']) && isset($obj['query']['pages'])) {
 					if (count($obj['query']['pages']) > 0) {
 						// take first page
 						$page = reset($obj['query']['pages']);

@@ -157,7 +157,9 @@ class ProductController extends MainController {
 				}
 				$offer->save();
 			}
-			
+			if(filesize($file['tmp_name']) <= 0){
+				throw new Exception('File empty');
+			}
 			// code
 			$code = new Code();
 			$code

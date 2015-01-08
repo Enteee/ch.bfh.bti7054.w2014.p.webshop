@@ -143,48 +143,252 @@ class PopulateController extends Controller {
 		$reviewHelloTest = (new Review())
 			->setUser($userTest)
 			->setProduct($helloWorld)
-			->setText('Sehr geiles Produkt! Kann ich nur weiterempfehlen.')
+			->setText('Super produkt.')
 			->setRating(5);
 		$reviewHelloTest->save();
 		$reviewHelloTest = (new Review())
 			->setUser($userTest)
 			->setProduct($helloWorld)
-			->setText('Sehr geiles Produkt! Kann ich nur weiterempfehlen.')
+			->setText('Schlecht.')
 			->setRating(1);
 		$reviewHelloTest->save();
 		$reviewHelloTest = (new Review())
 			->setUser($userTest)
 			->setProduct($helloWorld)
-			->setText('Sehr geiles Produkt! Kann ich nur weiterempfehlen.')
+			->setText('I don\'t like this product.')
 			->setRating(1);
 		$reviewHelloTest->save();
 		$reviewHelloTest = (new Review())
 			->setUser($userTest)
 			->setProduct($helloWorld)
-			->setText('Sehr geiles Produkt! Kann ich nur weiterempfehlen.')
+			->setText('Average... Could be better. Especially the C version.')
 			->setRating(3);
 		$reviewHelloTest->save();
 
 		/*Offers*/
-		$offer1 = (new Offer())
+		$offerHello = (new Offer())
 			->setProduct($helloWorld)
 			->addTag($programmingLanguages['C++'])
 			->addTag($programmingLanguages['C#'])
 			->setPrice(100);
-		$offer1->save();
+		$offerHello->save();
+
+		$offerHelloWs = (new Offer())
+			->setProduct($helloWorld)
+			->addTag($programmingLanguages['Whitespace'])
+			->setPrice(42);
+		$offerHelloWs->save();
 		
-		$offer2 = (new Offer())
+		$offerBubble = (new Offer())
 			->setProduct($bubbleSort)
-			->addTag($programmingLanguages['C'])
 			->addTag($programmingLanguages['Alice'])
 			->setPrice(1000);
-		$offer2->save();
-
-		$offer3 = (new Offer())
+		$offerBubble->save();
+		
+		$offerQuick = (new Offer())
 			->setProduct($quickSort)
-			->addTag($programmingLanguages['Dart'])
+			->addTag($programmingLanguages['Brainfuck'])
 			->setPrice(250);
-		$offer3->save();
+		$offerQuick->save();
+		
+		/*Code*/
+		$codeHello = (new Code())
+			->setOffer($offerHello)
+			->setUser($userTest)
+			->setFilename('helloworld.c')
+			->setMimetype('text/x-asm')
+			->setContent('/* Hello World program */
+#include<stdio.h>
+main(){
+    printf("Hello World");
+}')
+			->setFilesize(84)
+			->setActive(true);
+		$codeHello->save();
+
+		$codeHelloWs = (new Code())
+			->setOffer($offerHelloWs)
+			->setUser($userTest)
+			->setFilename('helloworld.ws')
+			->setMimetype('text/x-asm')
+			->setContent('Say hello.   
+   	  	   
+		    	
+   		  	 	
+		    	 
+   		 		  
+		    		
+   		 		  
+		    	  
+   		 				
+		    	 	
+   	 		  
+		    		 
+   	     
+		    			
+   			 			
+		    	   
+   		 				
+		    	  	
+   			  	 
+		    	 	 
+   		 		  
+		    	 		
+   		  	  
+		    		  
+   	     
+		    		 	
+   		 				
+		    			 
+   		  		 
+		    				
+   	     
+		    	    
+   			  		
+		    	   	
+   			    
+		    	  	 
+   		    	
+		    	  		
+   		   		
+		    	 	  
+   		  	 	
+		    	 	 	
+   			  		
+		    	 		 
+   	    	
+		    	 			
+    
+		     
+
+ 	 			 			 			  	  		 	  	 			 	   		  	 	
+
+ 	 		 			  		  	 	 			 			 		 		   		 	  	 		 			  		  	 	
+
+
+
+
+   		    	 		  	   		  	  
+	   
+	
+
+   			 			 			  	  		 	  	 			 	   		  	 	
+ 
+ 			 
+ 
+	  			 			 			  	  		 	  	 			 	   		  	 	 	 					 		  	 	 		 			  		  	  
+	
+     	
+	   
+ 
+ 			 			 			  	  		 	  	 			 	   		  	 	
+
+   			 			 			  	  		 	  	 			 	   		  	 	 	 					 		  	 	 		 			  		  	  
+ 
+
+ 
+
+
+	
+
+   			  	  		  	 	 		    	 		  	  
+ 
+  
+ 	
+	 			 
+    	 	 
+	  	
+	  			  	  		  	 	 		    	 		  	   	 					 		  	 	 		 			  		  	  
+ 
+
+   	
+	   
+ 
+ 			  	  		  	 	 		    	 		  	  
+
+   			  	  		  	 	 		    	 		  	   	 					 		  	 	 		 			  		  	  
+ 
+
+   	
+	       
+		 
+	
+
+   		 			  		  	 	 			 			 		 		   		 	  	 		 			  		  	 	
+   	 	 
+   		 	
+	
+  	
+  
+	')
+			->setFilesize(1297)
+			->setActive(true);
+		$codeHelloWs->save();
+
+		$codeBubble = (new Code())
+			->setOffer($offerBubble)
+			->setUser($userTest)
+			->setFilename('bubblesort.alice')
+			->setMimetype('text/x-asm')
+			->setContent('public void bubbleSortVisualArray ( ) {
+Object obj1 = <None> ; Object obj2 = <None> ; Number h1 = 1 ; Number h2 = 1 ; Number j = 1 ;
+  // Performs a bubble sort on the global visual array "arr"
+// A doubly nested loop [O(n^2)] that uses the height of the objects as the basis of sorting
+// Compares adjacent items - if out of order swaps them.
+//
+// For as many items as there are in the array
+// Get 0\'th element (obj1) and its height (h1)
+// For j going from 2nd index to index of last element
+// Get j\'th element (obj2) and its height (h2)
+// If h1>h2 (obj1 higher than object 2)
+// swap elements j and j-1 using the tmp variable
+// h1=h2 and obj1=obj2 (move along 1 in the array)
+for (int index = 0 ; index< 6 times ; index += 1 ){
+  obj1 .set( value , ( arr 0 ) );
+print( index );
+h1 .set( value , ( subject = obj1 .getHeight() ) );
+j .set( value , 1 );
+while ( ( j < 6 ) ) {
+  obj2 .set( value , ( arr j ) );
+print( j );
+h2 .set( value , ( subject = obj2 .getHeight() ) );
+if ( ( h2 < h1 ) ) {
+  tmp.Item .set( value , obj1 );
+arr ( ( j - 1 ) ) obj2
+arr j tmp.Item
+print( Swapped );
+} else {
+Do Nothing
+}
+obj1 .set( value , obj2 );
+h1 .set( value , h2 );
+j ++
+}
+}
+}')
+			->setFilesize(1173)
+			->setActive(true);
+		$codeBubble->save();
+
+		$codeQuick = (new Code())
+			->setOffer($offerQuick)
+			->setUser($userTest)
+			->setFilename('quicksort.bf')
+			->setMimetype('text/x-asm')
+			->setContent('>>>>>>>>,[>,]<[[>>>+<<<-]>[<+>-]<+<]>[<<<<<<<<+>>>>>>>>-]<<<<<<<<[[>>+
+>+>>+<<<<<-]>>[<<+>>-]<[>+>>+>>+<<<<<-]>[<+>-]>>>>[-<->]+<[>->+<<-[>>-
+<<[-]]]>[<+>-]>[<<+>>-]<+<[->-<<[-]<[-]<<[-]<[[>+<-]<]>>[>]<+>>>>]>[-<
+<+[-[>+<-]<-[>+<-]>>>>>>>>[<<<<<<<<+>>>>>>>>-]<<<<<<]<<[>>+<<-]>[>[>+>
+>+<<<-]>[<+>-]>>>>>>[<+<+>>-]<[>+<-]<<<[>+>[<-]<[<]>>[<<+>[-]+>-]>-<<-
+]>>[-]+<<<[->>+<<]>>[->-<<<<<[>+<-]<[>+<-]>>>>>>>>[<<<<<<<<+>>>>>>>>-]
+<<]>[[-]<<<<<<[>>+>>>>>+<<<<<<<-]>>[<<+>>-]>>>>>[-[>>[<<<+>>>-]<[>+<-]
+<-[>+<-]>]<<[[>>+<<-]<]]>]<<<<<<-]>[>>>>>>+<<<<<<-]<<[[>>>>>>>+<<<<<<<
+-]>[<+>-]<+<]<[[>>>>>>>>+<<<<<<<<-]>>[<+>-]<+<<]>+>[<-<<[>+<-]<[<]>[[<
++>-]>]>>>[<<<<+>>>>-]<<[<+>-]>>]<[-<<+>>]>>>]<<<<<<]>>>>>>>>>>>[.>]')
+			->setFilesize(707)
+			->setActive(true);
+		$codeQuick->save();
+
 	}
 	
 	public function addProgrammingLanguages($tagTypeProgrammingLanguage){
@@ -262,6 +466,7 @@ class PopulateController extends Controller {
 			'Boo',
 			'Boomerang',
 			'Bourne shell',
+			'Brainfuck',
 			'BREW',
 			'BPEL',
 			'C',
@@ -858,6 +1063,7 @@ class PopulateController extends Controller {
 			'WATFIV, WATFOR',
 			'WebDNA',
 			'WebQL',
+			'Whitespace',
 			'Windows PowerShell',
 			'Winbatch',
 			'Wolfram',

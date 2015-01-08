@@ -62,7 +62,8 @@ class Product extends BaseProduct implements JsonSerializable
 	public function getWikiExtract() {
 		try {
 			// load wiki informations
-			$url = sprintf('http://en.wikipedia.org/w/api.php?format=json&action=query&titles=%s&prop=extracts&explaintext=1&redirects', urlencode($this->getName()));
+			$lang = Language::getInstance()->getLanguage();
+			$url = sprintf('http://%s.wikipedia.org/w/api.php?format=json&action=query&titles=%s&prop=extracts&explaintext=1&redirects', $lang, urlencode($this->getName()));
 			$content = file_get_contents($url);
 			if (isset($content)) {
 				$obj = json_decode($content, TRUE);
